@@ -7,4 +7,5 @@
     <dimen name="bottom_bar_height">48dp</dimen>
     <dimen name="bottom_bar_width">50dp</dimen>
     <dimen name="bottom_text_padding_top">30dp</dimen>
+    <dimen name="itemSize">140dp</dimen>
 </resources>

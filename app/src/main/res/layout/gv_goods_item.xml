@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wnw.lovebaby.view.costom.GoodsSquareLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textSize="10sp"
+                android:text="宝贝衣柜"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="#e10b0b"
+                android:text="￥123"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</com.wnw.lovebaby.view.costom.GoodsSquareLayout>
