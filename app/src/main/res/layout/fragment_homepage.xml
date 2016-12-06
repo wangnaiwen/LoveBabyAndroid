@@ -1,112 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorHomePageBg">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ScrollView
+        <com.wnw.lovebaby.view.costom.HomepageScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#ffffff">
+                android:orientation="vertical">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/searchbar_height"
                     android:src="@drawable/searchbar"/>
-                <ImageView
+                <RelativeLayout
+                    android:id="@+id/slideView"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:src="@drawable/mine_v4_noshop_img"
-                    android:padding="10dp"/>
+                    android:layout_height="@dimen/viewpager_height" >
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/homepage_vp_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:id="@+id/dotLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="8dp" >
+
+                        <ImageView
+                            android:id="@+id/v_dot1"
+                            android:layout_width="@dimen/dot_width"
+                            android:layout_height="@dimen/dot_height"/>
+                        <ImageView
+                            android:id="@+id/v_dot2"
+                            android:layout_width="@dimen/dot_width"
+                            android:layout_height="@dimen/dot_height"
+                            android:layout_marginLeft="@dimen/dot_left_margin"/>
+                    </LinearLayout>
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/padding_dp10"
                     android:descendantFocusability="afterDescendants">
                     <LinearLayout
+                        android:id="@+id/homepage_menu_today_new_goods"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="@dimen/homepage_menu_height"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:clickable="true">
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/homepage_menu_icon_width"
+                            android:layout_height="@dimen/homepage_menu_icon_height"
                             android:src="@drawable/daily_new_product"
                             android:layout_gravity="center"/>
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
+                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
-                            android:text="今日上新"
-                            android:textSize="8sp"
+                            android:text="@string/today_new_goods"
+                            android:textSize="@dimen/homepage_menu_text_size"
                             android:textColor="@color/colorIconSelected"
                             android:gravity="center" />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/homepage_menu_classify"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="@dimen/homepage_menu_height"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:clickable="true">
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/homepage_menu_icon_width"
+                            android:layout_height="@dimen/homepage_menu_icon_height"
                             android:layout_gravity="center"
                             android:src="@drawable/classify_list"/>
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
+                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
-                            android:text="商品分类"
-                            android:textSize="8sp"
+                            android:text="@string/sort_of_goods"
+                            android:textSize="@dimen/homepage_menu_text_size"
                             android:textColor="@color/colorIconSelected"
                             android:gravity="center" />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/homepage_menu_myshop"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="@dimen/homepage_menu_height"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:clickable="true">
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/homepage_menu_icon_width"
+                            android:layout_height="@dimen/homepage_menu_icon_height"
                             android:layout_gravity="center"
                             android:src="@drawable/my_shop"/>
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
+                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
-                            android:text="我的店铺"
-                            android:textSize="8sp"
+                            android:text="@string/my_shop"
+                            android:textSize="@dimen/homepage_menu_text_size"
                             android:textColor="@color/colorIconSelected"
                             android:gravity="center" />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/homepage_menu_invite"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="@dimen/homepage_menu_height"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:clickable="true">
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/homepage_menu_icon_width"
+                            android:layout_height="@dimen/homepage_menu_icon_height"
                             android:layout_gravity="center"
                             android:src="@drawable/invite_open_shop"/>
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
+                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
-                            android:text="邀请开店"
-                            android:textSize="8sp"
+                            android:text="@string/invite_open_shop"
+                            android:textSize="@dimen/homepage_menu_text_size"
                             android:textColor="@color/colorIconSelected"
                             android:gravity="center" />
                     </LinearLayout>
@@ -132,6 +161,6 @@
                     android:stretchMode="columnWidth">
                 </com.wnw.lovebaby.view.costom.GoodsGridView>
             </LinearLayout>
-        </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </com.wnw.lovebaby.view.costom.HomepageScrollView>
+    </com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout>
 </RelativeLayout>

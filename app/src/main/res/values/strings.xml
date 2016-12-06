@@ -6,4 +6,8 @@
     <string name="shopping_car">购物车</string>
     <string name="my">我的</string>
     <string name="search">搜索</string>
+    <string name="today_new_goods">今日上新</string>
+    <string name="sort_of_goods">商品分类</string>
+    <string name="my_shop">我的店铺</string>
+    <string name="invite_open_shop">邀请开店</string>
 </resources>
