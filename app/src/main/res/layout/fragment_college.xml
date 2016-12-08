@@ -2,18 +2,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:text="This is fragment2"/>
-        <ImageView
-            android:layout_width="5dp"
-            android:layout_height="5dp"
-            android:src="@drawable/ic_page_indicator_focused"/>
+            android:text="微刊"
+            android:background="@color/colorIconSelected"
+            android:textColor="#ffffff"
+            android:textSize="15sp"/>
+        <com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.wnw.lovebaby.view.costom.HomepageScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/viewpager_height"
+                        android:layout_margin="10dp">
+
+                        <android.support.v4.view.ViewPager
+                            android:id="@+id/college_vp_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:id="@+id/college_dotLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="8dp" >
+
+                            <ImageView
+                                android:id="@+id/college_v_dot1"
+                                android:layout_width="@dimen/dot_width"
+                                android:layout_height="@dimen/dot_height"/>
+                            <ImageView
+                                android:id="@+id/college_v_dot2"
+                                android:layout_width="@dimen/dot_width"
+                                android:layout_height="@dimen/dot_height"
+                                android:layout_marginLeft="@dimen/dot_left_margin"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorIconDefault"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+                    <com.wnw.lovebaby.view.costom.CollegeListView
+                        android:id="@+id/college_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </com.wnw.lovebaby.view.costom.CollegeListView>
+                </LinearLayout>
+            </com.wnw.lovebaby.view.costom.HomepageScrollView>
+        </com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout>
     </LinearLayout>
 </RelativeLayout>

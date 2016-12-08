@@ -133,6 +133,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     public void initView(){
         searchBar = (RelativeLayout)view.findViewById(R.id.btn_search_bar);
         searchBar.setOnClickListener(this);
+
         mviewPager = (ViewPager)view.findViewById(R.id.homepage_vp_image);
         goodsGridView = (GoodsGridView)view.findViewById(R.id.gv_guess_goods) ;
         deadLineGoodsGridView = (GoodsGridView)view.findViewById(R.id.gv_deadline_goods);
