@@ -2,6 +2,7 @@ package com.wnw.lovebaby.view.costom;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -35,8 +36,8 @@ public class GoodsSquareLayout extends RelativeLayout {
         int childWidthSize = getMeasuredWidth();
         int childHeightSize = getMeasuredHeight();
         //height = width + 50dp
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);;
-        heightMeasureSpec = widthMeasureSpec + 50;
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
+        heightMeasureSpec = widthMeasureSpec + 80;
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

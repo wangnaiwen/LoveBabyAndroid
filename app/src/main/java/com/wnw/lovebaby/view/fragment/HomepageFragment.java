@@ -1,7 +1,7 @@
 package com.wnw.lovebaby.view.fragment;
-
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,12 +15,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.DepthPageTransformer;
+import com.wnw.lovebaby.adapter.GoodsCoverAdapter;
 import com.wnw.lovebaby.adapter.ImagePageAdapter;
-
+import com.wnw.lovebaby.bean.GoodsCoverItem;
+import com.wnw.lovebaby.view.activity.SearchGoodsActivity;
+import com.wnw.lovebaby.view.costom.GoodsGridView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -40,6 +43,11 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
             R.drawable.main_img4};
 
     /**
+     * search_bar
+     * */
+    private RelativeLayout searchBar;
+
+    /**
      * 4个menu
      * */
     private LinearLayout todayNewGoods;
@@ -47,11 +55,30 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     private LinearLayout myShop;
     private LinearLayout inviteOpenShop;
 
+    /**
+     * 猜你喜欢的内容
+     * */
+    private int imagesIcon[] = {R.mipmap.n1, R.mipmap.m2, R.mipmap.m3, R.mipmap.m4};
+    private String titles[] = {"奶粉1","奶粉2","奶粉3","奶粉4"};
+    private String prices[] = {"￥101","￥102","￥103","￥104"};
+    private GoodsGridView goodsGridView;
+    private GoodsCoverAdapter goodsCoverAdapter;
+    private List<GoodsCoverItem> goodsCoverItemList;
+
+    /**
+     * 限时抢购的内容
+     * */
+    private int imagesIcon2[] = {R.mipmap.b5,R.mipmap.b2, R.mipmap.b3,R.mipmap.b4};
+    private String titles2[] = {"宝宝宝宝1","宝宝宝宝2","宝宝宝宝3","宝宝宝宝4"};
+    private String price2[] = {"￥10000000","￥10000000","￥10000000","￥10000000"};
+    private GoodsGridView deadLineGoodsGridView;
+    private GoodsCoverAdapter deadLineGoodsCoverAdapter;
+    private List<GoodsCoverItem> deadlineGoodsCoverItemList;
+
     private View view;
     private LayoutInflater mInflater;
     private Context context;
     private ViewPager mviewPager;
-
 
     /**存放加载出来的图片*/
     private List<Integer> imageList;
@@ -80,9 +107,52 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    public void initView(){
-        mviewPager = (ViewPager)view.findViewById(R.id.homepage_vp_image);
 
+    private void buildGvData(){
+        goodsCoverItemList = new ArrayList<>();
+        deadlineGoodsCoverItemList = new ArrayList<>();
+        int count = Math.min(Math.min(imagesIcon.length, titles.length), Math.min(imagesIcon.length, prices.length));
+        for(int i = 0; i < count; i++){
+            GoodsCoverItem item = new GoodsCoverItem();
+            item.setImage(imagesIcon[i]);
+            item.setTitle(titles[i]);
+            item.setPrice(prices[i]);
+            goodsCoverItemList.add(item);
+        }
+
+        int count2 = Math.min(Math.min(imagesIcon2.length, titles2.length), Math.min(imagesIcon2.length, price2.length));
+        for(int i = 0; i < count2; i++){
+            GoodsCoverItem item = new GoodsCoverItem();
+            item.setImage(imagesIcon2[i]);
+            item.setTitle(titles2[i]);
+            item.setPrice(price2[i]);
+            deadlineGoodsCoverItemList.add(item);
+        }
+    }
+
+    public void initView(){
+        searchBar = (RelativeLayout)view.findViewById(R.id.btn_search_bar);
+        searchBar.setOnClickListener(this);
+        mviewPager = (ViewPager)view.findViewById(R.id.homepage_vp_image);
+        goodsGridView = (GoodsGridView)view.findViewById(R.id.gv_guess_goods) ;
+        deadLineGoodsGridView = (GoodsGridView)view.findViewById(R.id.gv_deadline_goods);
+        buildGvData();
+        goodsCoverAdapter = new GoodsCoverAdapter(context, goodsCoverItemList);
+        goodsGridView.setAdapter(goodsCoverAdapter);
+        goodsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(context, "item="+i, Toast.LENGTH_SHORT).show();
+            }
+        });
+        deadLineGoodsCoverAdapter = new GoodsCoverAdapter(context, deadlineGoodsCoverItemList);
+        deadLineGoodsGridView.setAdapter(deadLineGoodsCoverAdapter);
+        deadLineGoodsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(context, "item="+i, Toast.LENGTH_SHORT).show();
+            }
+        });
         dotLayout = (LinearLayout)view.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
 
@@ -272,8 +342,16 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
             case R.id.homepage_menu_invite:
                 Toast.makeText(context, "邀请开店", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_search_bar:
+                Intent intent = new Intent(context, SearchGoodsActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
+    }
+
+    private void setGuessYouLoveImages(List<GoodsCoverItem> guessYouLoveImages){
+        this.goodsCoverItemList = guessYouLoveImages;
     }
 }
