@@ -53,7 +53,8 @@
                 android:textSize="14sp"
                 android:maxLines="1"
                 android:hint="请输入你想要查找的宝贝"
-                android:background="@null" />
+                android:background="@null"
+                android:imeOptions="actionSearch"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/btn_search"
@@ -71,4 +72,43 @@
             android:visibility="gone"
             android:clickable="true"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="热门搜索词"
+        android:gravity="center_vertical"
+        android:paddingLeft="30dp"/>
+    <com.wnw.lovebaby.view.costom.FlowViewGroup
+        android:id="@+id/flow_layout_hot_keyword"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp">
+    </com.wnw.lovebaby.view.costom.FlowViewGroup>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="历史搜索"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:layout_alignParentStart="true"/>
+        <ImageView
+            android:id="@+id/clear_history_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/searchbar_clear_text_normal"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <com.wnw.lovebaby.view.costom.FlowViewGroup
+        android:id="@+id/flow_layout_history_keyword"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp">
+    </com.wnw.lovebaby.view.costom.FlowViewGroup>
 </LinearLayout>
