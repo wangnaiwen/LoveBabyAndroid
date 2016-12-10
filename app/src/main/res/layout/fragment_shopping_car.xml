@@ -3,8 +3,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/shopping_car_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="购物车"
+        android:background="@color/colorIconSelected"
+        android:textColor="#ffffff"
+        android:textSize="15sp"/>
+
+    <LinearLayout
+        android:id="@+id/btn_sum_price"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/grid_line">
+        <ImageView
+            android:id="@+id/all_checked"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/checkbox_normal"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="全选"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="应付总额："
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥1234.00"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorIconSelected"
+            android:textSize="18sp"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="结算"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:background="@drawable/bg_close_an_ancount"
+                android:textColor="@color/colorIconSelected"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_margin="8dp"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lv_shopping_car"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/shopping_car_title"
+        android:layout_above="@id/btn_sum_price"/>
+
+    <TextView
+        android:id="@+id/shopping_car_nothing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="没有任何宝宝"
         android:gravity="center"
-        android:text="This is fragment3"/>
+        android:visibility="gone"
+        android:layout_below="@id/shopping_car_title"
+        android:layout_above="@id/btn_sum_price"/>
 </RelativeLayout>

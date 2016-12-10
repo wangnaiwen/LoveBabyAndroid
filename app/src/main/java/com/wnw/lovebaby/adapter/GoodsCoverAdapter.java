@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wnw.lovebaby.bean.GoodsCoverItem;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.costom.GoodsSquareLayout;
 
 import java.util.List;
@@ -62,7 +63,9 @@ public class GoodsCoverAdapter extends BaseAdapter {
         }
         goodsCoverHolder.goodsCoverIcon.setImageResource(goodsCoverItemList.get(position).getImage());
         goodsCoverHolder.titleTextView.setText(goodsCoverItemList.get(position).getTitle());
-        goodsCoverHolder.priceTextView.setText(goodsCoverItemList.get(position).getPrice());
+
+        TypeConverters converters = new TypeConverters();
+        goodsCoverHolder.priceTextView.setText(converters.IntConvertToString(goodsCoverItemList.get(position).getPrice()));
         return convertView;
     }
 

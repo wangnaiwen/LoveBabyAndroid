@@ -1,11 +1,8 @@
 package com.wnw.lovebaby.view.activity;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.wnw.lovebaby.R;
 
 /**
@@ -13,11 +10,13 @@ import com.wnw.lovebaby.R;
  */
 
 public class SearchResultActivity extends Activity implements View.OnClickListener{
+
     private ImageView searchRelBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+        initView();
     }
 
     private void initView(){
@@ -28,7 +27,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.search_back:
+            case R.id.search_result_back:
                 finish();
                 break;
             default:

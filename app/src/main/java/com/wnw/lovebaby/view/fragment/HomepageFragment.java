@@ -60,7 +60,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
      * */
     private int imagesIcon[] = {R.mipmap.n1, R.mipmap.m2, R.mipmap.m3, R.mipmap.m4};
     private String titles[] = {"奶粉1","奶粉2","奶粉3","奶粉4"};
-    private String prices[] = {"￥101","￥102","￥103","￥104"};
+    private int prices[] = {10100,10199,10388,10409};
     private GoodsGridView goodsGridView;
     private GoodsCoverAdapter goodsCoverAdapter;
     private List<GoodsCoverItem> goodsCoverItemList;
@@ -70,7 +70,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
      * */
     private int imagesIcon2[] = {R.mipmap.b5,R.mipmap.b2, R.mipmap.b3,R.mipmap.b4};
     private String titles2[] = {"宝宝宝宝1","宝宝宝宝2","宝宝宝宝3","宝宝宝宝4"};
-    private String price2[] = {"￥10000000","￥10000000","￥10000000","￥10000000"};
+    private int price2[] = {10000000,10000000,10000000,10000000};
     private GoodsGridView deadLineGoodsGridView;
     private GoodsCoverAdapter deadLineGoodsCoverAdapter;
     private List<GoodsCoverItem> deadlineGoodsCoverItemList;
