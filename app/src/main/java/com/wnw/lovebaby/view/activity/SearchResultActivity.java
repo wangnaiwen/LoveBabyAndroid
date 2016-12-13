@@ -29,6 +29,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         switch (view.getId()){
             case R.id.search_result_back:
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 break;
             default:
 

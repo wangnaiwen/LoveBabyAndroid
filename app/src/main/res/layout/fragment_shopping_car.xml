@@ -21,11 +21,12 @@
         android:background="@drawable/grid_line">
         <ImageView
             android:id="@+id/all_checked"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/checkbox_normal"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -37,19 +38,13 @@
             android:text="应付总额："
             android:gravity="center_vertical"
             android:paddingLeft="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="￥1234.00"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorIconSelected"
-            android:textSize="18sp"/>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_close_an_account"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:text="结算"
                 android:textSize="15sp"
@@ -61,6 +56,15 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:layout_margin="8dp"/>
+
+            <TextView
+                android:id="@+id/amounts_payable"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="￥0.00"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorIconSelected"
+                android:textSize="18sp"/>
         </RelativeLayout>
     </LinearLayout>
     <ListView
@@ -70,13 +74,27 @@
         android:layout_below="@id/shopping_car_title"
         android:layout_above="@id/btn_sum_price"/>
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/shopping_car_nothing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="没有任何宝宝"
-        android:gravity="center"
-        android:visibility="gone"
         android:layout_below="@id/shopping_car_title"
-        android:layout_above="@id/btn_sum_price"/>
+        android:background="#efefef"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/icon_shopping_car_nothing"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/icon_shopping_car_nothing"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="购物车里没有任何宝宝"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/icon_shopping_car_nothing"/>
+    </RelativeLayout>
+
 </RelativeLayout>
