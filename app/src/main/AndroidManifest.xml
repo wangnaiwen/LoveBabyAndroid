@@ -24,6 +24,8 @@
         <activity android:name=".view.activity.AddressListActivity"/>
         <activity android:name=".view.activity.AddReceAddressActivity"/>
         <activity android:name=".view.activity.EditReceAddressActivity"/>
+        <activity android:name=".view.activity.TodayNewGoodsActivity"/>
+        <activity android:name=".view.activity.InviteOpenShopActivity"/>
     </application>
 
 </manifest>

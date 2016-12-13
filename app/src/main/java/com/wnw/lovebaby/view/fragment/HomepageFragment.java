@@ -1,5 +1,6 @@
 package com.wnw.lovebaby.view.fragment;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,13 +23,17 @@ import com.wnw.lovebaby.adapter.DepthPageTransformer;
 import com.wnw.lovebaby.adapter.GoodsCoverAdapter;
 import com.wnw.lovebaby.adapter.ImagePageAdapter;
 import com.wnw.lovebaby.bean.GoodsCoverItem;
+import com.wnw.lovebaby.view.activity.InviteOpenShopActivity;
 import com.wnw.lovebaby.view.activity.SearchGoodsActivity;
+import com.wnw.lovebaby.view.activity.TodayNewGoodsActivity;
 import com.wnw.lovebaby.view.costom.GoodsGridView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by wnw on 2016/12/1.
@@ -146,6 +151,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(context, "item="+i, Toast.LENGTH_SHORT).show();
             }
         });
+
         deadLineGoodsCoverAdapter = new GoodsCoverAdapter(context, deadlineGoodsCoverItemList);
         deadLineGoodsGridView.setAdapter(deadLineGoodsCoverAdapter);
         deadLineGoodsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -332,7 +338,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.homepage_menu_today_new_goods:
-                Toast.makeText(context, "今日上新", Toast.LENGTH_SHORT).show();
+                startAnotherAty(TodayNewGoodsActivity.class);
                 break;
             case R.id.homepage_menu_classify:
                 Toast.makeText(context, "商品类别", Toast.LENGTH_SHORT).show();
@@ -341,7 +347,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(context, "我的店铺", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.homepage_menu_invite:
-                Toast.makeText(context, "邀请开店", Toast.LENGTH_SHORT).show();
+                startAnotherAty(InviteOpenShopActivity.class);
                 break;
             case R.id.btn_search_bar:
                 Intent intent = new Intent(context, SearchGoodsActivity.class);
@@ -350,6 +356,15 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
             default:
                 break;
         }
+    }
+
+    /**
+     *  start another activity , need'nt return the data
+     * */
+    private void startAnotherAty(Class<?> aty){
+        Intent intent = new Intent(context, aty );
+        startActivity(intent);
+        ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     private void setGuessYouLoveImages(List<GoodsCoverItem> guessYouLoveImages){

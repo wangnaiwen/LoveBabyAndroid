@@ -236,16 +236,15 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
     }
 
     /**
-     * show the dialog of delete the address
+     * show the dialog of delete the goods from shopping car
      * */
     private void showDeleteAddressDialog(final int index){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("删除地址");
-        builder.setMessage("是否删除这个收货地址？");
+        builder.setTitle("删除宝贝");
+        builder.setMessage("是否从购物车中移除这个宝贝？");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i("wnw","index=" + index);
                 shoppingCarItemList.remove(index);
                 updateData();
             }
