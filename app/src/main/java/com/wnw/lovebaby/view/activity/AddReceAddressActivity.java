@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
 
@@ -21,6 +22,7 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
     private EditText addRecePhone;
     private LinearLayout pickReceAddressCity;
     private EditText addReceAddressHouseNum;
+    private EditText addPostcode;
     private Button finishAddReceAddress;
 
     @Override
@@ -36,6 +38,7 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
         addRecePhone = (EditText)findViewById(R.id.et_add_address_phone);
         addReceAddressHouseNum = (EditText)findViewById(R.id.et_add_address_house_num);
         pickReceAddressCity = (LinearLayout)findViewById(R.id.pick_address_dialog);
+        addPostcode = (EditText) findViewById(R.id.et_add_address_postcode);
         finishAddReceAddress = (Button)findViewById(R.id.finish_add_address);
 
         backAddReceAddress.setOnClickListener(this);

@@ -4,10 +4,49 @@
     android:layout_height="match_parent"
     android:background="@color/colorHomePageBg"
     android:focusableInTouchMode="true">
+    <FrameLayout
+        android:id="@+id/search_area"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/searchbar_height"
+        android:background="@color/colorIconSelected">
+        <RelativeLayout
+            android:id="@+id/btn_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:background="@drawable/searchbar_bg"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:descendantFocusability="afterDescendants"
+            android:clickable="true">
+            <ImageView
+                android:id="@+id/search_image_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/index_search_img"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@id/search_image_icon"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:text="请输入你想要查找的宝贝"/>
+        </RelativeLayout>
+    </FrameLayout>
+    <TextView
+        android:id="@+id/homepage_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/search_area"
+        android:background="@color/colorIconDefault"/>
 
     <com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/homepage_divider">
         <com.wnw.lovebaby.view.costom.HomepageScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -16,41 +55,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/searchbar_height"
-                    android:background="@color/colorIconSelected">
-                    <RelativeLayout
-                        android:id="@+id/btn_search_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="28dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/searchbar_bg"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:descendantFocusability="afterDescendants"
-                        android:clickable="true">
-                        <ImageView
-                            android:id="@+id/search_image_icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/index_search_img"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginLeft="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:layout_toRightOf="@id/search_image_icon"
-                            android:gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:text="请输入你想要查找的宝贝"/>
-                    </RelativeLayout>
-                </FrameLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/colorIconDefault"/>
                 <RelativeLayout
                     android:id="@+id/slideView"
                     android:layout_width="match_parent"

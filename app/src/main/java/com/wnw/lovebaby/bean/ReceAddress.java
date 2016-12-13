@@ -9,8 +9,11 @@ public class ReceAddress {
     private int id;
     private int userId;
     private String receiver;
-    private String address;
     private String phone;
+    private String province;
+    private String city;
+    private String district;
+    private String detailAddress;
     private int postcode;
 
     public int getId() {
@@ -37,12 +40,36 @@ public class ReceAddress {
         this.receiver = receiver;
     }
 
-    public String getAddress() {
-        return address;
+    public String getProvince() {
+        return province;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
     }
 
     public String getPhone() {

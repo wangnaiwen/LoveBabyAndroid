@@ -35,7 +35,7 @@ public class ReceAddressAdapter extends BaseAdapter {
         this.receAddressList = receAddresses;
     }
 
-    private void setReceAddressList(List<ReceAddress> receAddresses){
+    public void setReceAddressList(List<ReceAddress> receAddresses){
         this.receAddressList = receAddresses;
     }
 
@@ -73,7 +73,8 @@ public class ReceAddressAdapter extends BaseAdapter {
         ReceAddress receAddress = receAddressList.get(i);
         receAddressHolder.receiver.setText(receAddress.getReceiver());
         receAddressHolder.phone.setText(receAddress.getPhone());
-        receAddressHolder.address.setText(receAddress.getAddress());
+        receAddressHolder.address.setText(receAddress.getProvince()+" "+ receAddress.getCity()
+                + " " + receAddress.getDistrict()+" " + receAddress.getDetailAddress());
 
         final int index = i;
         receAddressHolder.receAddress.setOnClickListener(new View.OnClickListener() {

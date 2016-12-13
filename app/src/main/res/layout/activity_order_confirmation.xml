@@ -86,6 +86,7 @@
                         android:layout_height="35dp"
                         android:orientation="horizontal">
                         <TextView
+                            android:id="@+id/order_tv_receiver"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -94,6 +95,7 @@
                             android:maxLines="1"
                             android:ellipsize="end"/>
                         <TextView
+                            android:id="@+id/order_tv_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -103,6 +105,7 @@
                             android:layout_marginLeft="30dp"/>
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/order_tv_address"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:gravity="center_vertical"
@@ -152,7 +155,7 @@
                 android:background="#ffff"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:focusable="false"/>
+                android:focusableInTouchMode="true"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

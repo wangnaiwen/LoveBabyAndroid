@@ -14,7 +14,10 @@ import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.OrderLvAdapter;
+import com.wnw.lovebaby.bean.ReceAddress;
 import com.wnw.lovebaby.bean.ShoppingCarItem;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,9 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
     private ImageView backOrder;
     private TextView orderSumPrice;
     private TextView orderPay;
+    private TextView orderReceiver;
+    private TextView orderRecePhone;
+    private TextView orderReceAddress;
 
     private OrderLvAdapter orderLvAdapter;
     private List<ShoppingCarItem> shoppingCarItemList;
@@ -50,6 +56,9 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         backOrder = (ImageView)findViewById(R.id.back_order);
         orderSumPrice = (TextView)findViewById(R.id.order_sum_price);
         orderPay = (TextView)findViewById(R.id.order_to_pay);
+        orderReceiver = (TextView)findViewById(R.id.order_tv_receiver);
+        orderRecePhone = (TextView)findViewById(R.id.order_tv_phone);
+        orderReceAddress = (TextView)findViewById(R.id.order_tv_address);
 
         pickAddress.setOnClickListener(this);
         changeAddress.setOnClickListener(this);
@@ -79,14 +88,10 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.pick_address_normal:
-                Intent intent = new Intent(this, AddressListActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startAddressListActivity();
                 break;
             case R.id.change_address:
-                Intent intent1 = new Intent(this, AddressListActivity.class);
-                startActivity(intent1);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startAddressListActivity();
                 break;
             case R.id.back_order:
                 finish();
@@ -97,6 +102,41 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * start the address list activity
+     * */
+    public static int REQUEST_CODE = 1;
+    private void startAddressListActivity(){
+        Intent intent = new Intent(this, AddressListActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    private ReceAddress receAddress ;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == AddressListActivity.RESULT_CODE){
+            Intent intent = data;
+            receAddress = new ReceAddress();
+            receAddress.setId(intent.getIntExtra("id", Integer.MIN_VALUE));
+            receAddress.setUserId(intent.getIntExtra("userId", Integer.MIN_VALUE));
+            receAddress.setReceiver(intent.getStringExtra("receiver"));
+            receAddress.setPhone(intent.getStringExtra("phone"));
+            receAddress.setProvince(intent.getStringExtra("province"));
+            receAddress.setCity(intent.getStringExtra("city"));
+            receAddress.setDistrict(intent.getStringExtra("district"));
+            receAddress.setDetailAddress(intent.getStringExtra("detailAddress"));
+            receAddress.setPostcode(intent.getIntExtra("postcode", Integer.MIN_VALUE));
+
+            pickAddress.setVisibility(View.GONE);
+            changeAddress.setVisibility(View.VISIBLE);
+            orderReceiver.setText(receAddress.getReceiver());
+            orderRecePhone.setText(receAddress.getPhone());
+            orderReceAddress.setText(receAddress.getProvince()+" " +receAddress.getCity() + " "
+            + receAddress.getDistrict() + " " + receAddress.getDetailAddress());
         }
     }
 }

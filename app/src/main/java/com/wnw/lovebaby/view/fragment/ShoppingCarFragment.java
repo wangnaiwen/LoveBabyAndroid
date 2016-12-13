@@ -2,12 +2,14 @@ package com.wnw.lovebaby.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,11 +106,11 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
                 case ShoppingCarAdapter.GOODS_SUB:
                     int goodsNum = shoppingCarItemList.get(index).getGoodsNum();
                     if(goodsNum == 1){
-                        shoppingCarItemList.remove(index);
+                        showDeleteAddressDialog(index);
                     }else{
                         shoppingCarItemList.get(index).setGoodsNum(goodsNum-1);
+                        updateData();
                     }
-                    updateData();
                     break;
                 default:
                     break;
@@ -170,7 +172,7 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
         int num  = shoppingCarItemList.size();
         for(int i = 0 ;i < num; i ++){
             if(shoppingCarItemList.get(i).isChecked()){
-                sumPrice += shoppingCarItemList.get(i).getGoodsPrice();
+                sumPrice += shoppingCarItemList.get(i).getGoodsPrice() * shoppingCarItemList.get(i).getGoodsNum();
             }
         }
         TypeConverters converters = new TypeConverters();
@@ -231,5 +233,31 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
         Intent intent = new Intent(context, OrderConfirmationActivity.class);
         startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+    }
+
+    /**
+     * show the dialog of delete the address
+     * */
+    private void showDeleteAddressDialog(final int index){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("删除地址");
+        builder.setMessage("是否删除这个收货地址？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i("wnw","index=" + index);
+                shoppingCarItemList.remove(index);
+                updateData();
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog deleteDialog = builder.create();
+        deleteDialog.show();
     }
 }
