@@ -1,6 +1,7 @@
 package com.wnw.lovebaby.view.fragment;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * Created by wnw on 2016/12/1.
  */
 
-public class CollegeFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class CollegeFragment extends Fragment implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
     public static int[] images = {
             R.drawable.main_img1,
             R.drawable.main_img2,
@@ -58,7 +60,13 @@ public class CollegeFragment extends Fragment implements AdapterView.OnItemClick
     /**用于存放轮播效果图片*/
     private List<ImageView> list;
 
-    LinearLayout dotLayout;
+    private LinearLayout dotLayout;
+
+    /**
+     * 下拉刷新
+     * */
+    private SwipeRefreshLayout collegeSwipeRefresh;
+
 
     private int currentItem  = 0;//当前页面
 
@@ -82,6 +90,10 @@ public class CollegeFragment extends Fragment implements AdapterView.OnItemClick
     }
 
     private void initView(){
+        collegeSwipeRefresh = (SwipeRefreshLayout)view.findViewById(R.id.college_swiperefresh_layout);
+        collegeSwipeRefresh.setColorSchemeResources(R.color.colorIconSelected);
+        collegeSwipeRefresh.setOnRefreshListener(this);
+
         viewPager = (ViewPager) view.findViewById(R.id.college_vp_image);
         dotLayout = (LinearLayout)view.findViewById(R.id.college_dotLayout);
         dotLayout.removeAllViews();
@@ -278,5 +290,40 @@ public class CollegeFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Toast.makeText(context, i +"", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 下拉刷新，重新加载数据
+     * */
+    @Override
+    public void onRefresh() {
+        refreshCollegeFragment();
+    }
+
+
+    /**
+     * 下拉刷新，重新加载数据
+     * */
+    private void refreshCollegeFragment(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**
+                         * 重新加载数据
+                         * */
+                        collegeSwipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
     }
 }

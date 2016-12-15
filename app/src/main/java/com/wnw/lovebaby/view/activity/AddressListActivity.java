@@ -56,6 +56,7 @@ public class AddressListActivity extends Activity implements View.OnClickListene
     private void startEditReceAddressAty(int index){
         Intent intent = new Intent(AddressListActivity.this, EditReceAddressActivity.class);
         ReceAddress receAddress = receAddressList.get(index);
+        intent.putExtra("receAddress_data", receAddress);/*
         intent.putExtra("id", receAddress.getId());
         intent.putExtra("userId", receAddress.getUserId());
         intent.putExtra("receiver", receAddress.getReceiver());
@@ -64,7 +65,7 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         intent.putExtra("city",receAddress.getCity());
         intent.putExtra("district", receAddress.getDistrict());
         intent.putExtra("detailAddress",receAddress.getDetailAddress());
-        intent.putExtra("postcode",receAddress.getPostcode());
+        intent.putExtra("postcode",receAddress.getPostcode());*/
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
@@ -161,7 +162,7 @@ public class AddressListActivity extends Activity implements View.OnClickListene
     private void forResultActivity(int index){
         Intent intent = new Intent();
         ReceAddress receAddress = receAddressList.get(index);
-        intent.putExtra("id", receAddress.getId());
+        /*intent.putExtra("id", receAddress.getId());
         intent.putExtra("userId", receAddress.getUserId());
         intent.putExtra("receiver", receAddress.getReceiver());
         intent.putExtra("phone", receAddress.getPhone());
@@ -169,7 +170,8 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         intent.putExtra("city",receAddress.getCity());
         intent.putExtra("district", receAddress.getDistrict());
         intent.putExtra("detailAddress",receAddress.getDetailAddress());
-        intent.putExtra("postcode",receAddress.getPostcode());
+        intent.putExtra("postcode",receAddress.getPostcode());*/
+        intent.putExtra("receAddress_data", receAddress);
         setResult(RESULT_CODE, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

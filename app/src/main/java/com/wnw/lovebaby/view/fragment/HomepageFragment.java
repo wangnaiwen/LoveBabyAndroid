@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
  * Created by wnw on 2016/12/1.
  */
 
-public class HomepageFragment extends Fragment implements View.OnClickListener{
+public class HomepageFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     public static int[] images = {
             R.drawable.main_img1,
@@ -94,7 +95,15 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     /**用于存放轮播效果图片*/
     private List<ImageView> list;
 
+    /**
+     * 点的布局
+     * */
     LinearLayout dotLayout;
+
+    /**
+     * 下拉刷新
+     * */
+    SwipeRefreshLayout homepageSwipRefresh;
 
     private int currentItem  = 0;//当前页面
 
@@ -136,6 +145,10 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     }
 
     public void initView(){
+        homepageSwipRefresh = (SwipeRefreshLayout)view.findViewById(R.id.homepage_swiperefresh_layout);
+        homepageSwipRefresh.setColorSchemeResources(R.color.colorIconSelected);
+        homepageSwipRefresh.setOnRefreshListener(this);
+
         searchBar = (RelativeLayout)view.findViewById(R.id.btn_search_bar);
         searchBar.setOnClickListener(this);
 
@@ -358,6 +371,11 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onRefresh() {
+        refreshHomePage();
+    }
+
     /**
      *  start another activity , need'nt return the data
      * */
@@ -369,5 +387,31 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
 
     private void setGuessYouLoveImages(List<GoodsCoverItem> guessYouLoveImages){
         this.goodsCoverItemList = guessYouLoveImages;
+    }
+
+
+    /**
+     *
+     * 下拉刷新后，在这里重新获取数据，然后再次加载
+     * */
+    private void refreshHomePage(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+
+                ((Activity)context).runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        //重新加载数据，设置为SwipeRefreshLayout为false
+                        homepageSwipRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
     }
 }

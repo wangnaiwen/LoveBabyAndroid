@@ -120,8 +120,9 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE && resultCode == AddressListActivity.RESULT_CODE){
             Intent intent = data;
-            receAddress = new ReceAddress();
-            receAddress.setId(intent.getIntExtra("id", Integer.MIN_VALUE));
+
+            receAddress = (ReceAddress)intent.getSerializableExtra("receAddress_data");
+            /*receAddress.setId(intent.getIntExtra("id", Integer.MIN_VALUE));
             receAddress.setUserId(intent.getIntExtra("userId", Integer.MIN_VALUE));
             receAddress.setReceiver(intent.getStringExtra("receiver"));
             receAddress.setPhone(intent.getStringExtra("phone"));
@@ -129,14 +130,15 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
             receAddress.setCity(intent.getStringExtra("city"));
             receAddress.setDistrict(intent.getStringExtra("district"));
             receAddress.setDetailAddress(intent.getStringExtra("detailAddress"));
-            receAddress.setPostcode(intent.getIntExtra("postcode", Integer.MIN_VALUE));
-
-            pickAddress.setVisibility(View.GONE);
-            changeAddress.setVisibility(View.VISIBLE);
-            orderReceiver.setText(receAddress.getReceiver());
-            orderRecePhone.setText(receAddress.getPhone());
-            orderReceAddress.setText(receAddress.getProvince()+" " +receAddress.getCity() + " "
-            + receAddress.getDistrict() + " " + receAddress.getDetailAddress());
+            receAddress.setPostcode(intent.getIntExtra("postcode", Integer.MIN_VALUE));*/
+            if(receAddress != null){
+                pickAddress.setVisibility(View.GONE);
+                changeAddress.setVisibility(View.VISIBLE);
+                orderReceiver.setText(receAddress.getReceiver());
+                orderRecePhone.setText(receAddress.getPhone());
+                orderReceAddress.setText(receAddress.getProvince()+" " +receAddress.getCity() + " "
+                        + receAddress.getDistrict() + " " + receAddress.getDetailAddress());
+            }
         }
     }
 }

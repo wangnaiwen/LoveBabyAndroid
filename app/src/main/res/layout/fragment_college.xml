@@ -16,6 +16,7 @@
             android:textColor="#ffffff"
             android:textSize="15sp"/>
         <com.wnw.lovebaby.view.costom.HomepageSwipeRefreshLayout
+            android:id="@+id/college_swiperefresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.wnw.lovebaby.view.costom.HomepageScrollView

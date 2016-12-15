@@ -1,10 +1,12 @@
 package com.wnw.lovebaby.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by wnw on 2016/12/11.
  */
 
-public class ReceAddress {
+public class ReceAddress implements Serializable{
 
     private int id;
     private int userId;

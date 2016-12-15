@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.bean.ReceAddress;
+import com.wnw.lovebaby.util.LogUtil;
 
 /**
  * Created by wnw on 2016/12/13.
@@ -52,24 +54,13 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
 
     private void setDefaultData(){
         Intent intent = getIntent();
-        int id = intent.getIntExtra("id", Integer.MIN_VALUE);
-        int userId = intent.getIntExtra("userId", Integer.MIN_VALUE);
-        String receiver = intent.getStringExtra("receiver");
-        String phone = intent.getStringExtra("phone");
-        String province = intent.getStringExtra("province");
-        String city = intent.getStringExtra("city");
-        String district = intent.getStringExtra("district");
-        String detailAddress = intent.getStringExtra("detailAddress");
-        int postcode = intent.getIntExtra("postcode", Integer.MIN_VALUE);
+        ReceAddress receAddress = (ReceAddress)intent.getSerializableExtra("receAddress_data");
 
-        Log.i("wnw", id + " "  + userId + " " + receiver + " " + phone + " " + province + " " +city
-        + " " +district + " " +detailAddress +" " + postcode);
-
-        editReceiver.setText(receiver);
-        editRecePhone.setText(phone);
-        displayAddress.setText(province + " " + city + " " + district);
-        editReceAddressHouseNum.setText(detailAddress);
-        editPostcode.setText(postcode+ "");
+        editReceiver.setText(receAddress.getReceiver());
+        editRecePhone.setText(receAddress.getPhone());
+        displayAddress.setText(receAddress.getProvince() + " " + receAddress.getCity() + " " + receAddress.getDistrict());
+        editReceAddressHouseNum.setText(receAddress.getDetailAddress());
+        editPostcode.setText(receAddress.getPostcode()+ "");
     }
 
     @Override
