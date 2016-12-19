@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,7 +28,6 @@ import com.wnw.lovebaby.bean.ArticleCoverItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -299,7 +297,6 @@ public class CollegeFragment extends Fragment implements AdapterView.OnItemClick
     public void onRefresh() {
         refreshCollegeFragment();
     }
-
 
     /**
      * 下拉刷新，重新加载数据

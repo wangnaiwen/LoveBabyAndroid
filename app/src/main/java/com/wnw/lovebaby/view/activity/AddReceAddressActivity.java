@@ -20,6 +20,7 @@ import com.wnw.lovebaby.bean.ReceAddress;
 import com.wnw.lovebaby.bean.address.City;
 import com.wnw.lovebaby.bean.address.County;
 import com.wnw.lovebaby.bean.address.Province;
+import com.wnw.lovebaby.util.LogUtil;
 import com.wnw.lovebaby.util.Util;
 import com.wnw.lovebaby.view.dialog.CityPickerDialog;
 
@@ -85,7 +86,7 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
                 }
                 break;
             case R.id.finish_add_address:
-
+                finishAddress();
                 break;
             default:
 
@@ -95,25 +96,31 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
     }
 
     private void showAddressDialog() {
-        new CityPickerDialog(this, provinces, null, null, null,
-                new CityPickerDialog.onCityPickedListener() {
+        new CityPickerDialog(this, provinces, null, null, null, new CityPickerDialog.onCityPickedListener() {
 
-                    @Override
-                    public void onPicked(Province selectProvince,
-                                         City selectCity, County selectCounty) {
-                        receAddress.setProvince(selectProvince != null ? selectProvince.getAreaName() : "");
-                        receAddress.setCity(selectCity != null ? selectCity.getAreaName() : "");
-                        receAddress.setDistrict(selectCounty != null ? selectCounty.getAreaName() : "");
-                        StringBuilder address = new StringBuilder();
-                        address.append(
-                               receAddress.getProvince())
-                                .append(" ")
-                                .append(receAddress.getCity())
-                                .append(" ")
-                                .append(receAddress.getDistrict());
-                        displayAddress.setText(address.toString());
+            @Override
+            public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
+                receAddress.setProvince(selectProvince != null ? selectProvince.getAreaName() : "");
+                receAddress.setCity(selectCity != null ? selectCity.getAreaName() : "");
+                if(selectCounty != null){
+                    LogUtil.i("wnw", "!=null");
+                    receAddress.setDistrict(selectCounty.getAreaName());
+                    if(selectCounty.getAreaName() == null){
+                        receAddress.setDistrict("");
                     }
-                }).show();
+                }else {
+                    receAddress.setDistrict("");
+                }
+                //receAddress.setDistrict(selectCounty != null ? selectCounty.getAreaName() : "");
+                StringBuilder address = new StringBuilder();
+                address.append(receAddress.getProvince())
+                        .append(" ")
+                        .append(receAddress.getCity())
+                        .append(" ")
+                        .append(receAddress.getDistrict());
+                displayAddress.setText(address.toString());
+            }
+        }).show();
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
@@ -174,5 +181,25 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
             }
             return false;
         }
+    }
+
+    private void finishAddress(){
+        if(addReceiver.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "请输入收件人",Toast.LENGTH_SHORT).show();
+        }else if(addRecePhone.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "请输入收件人联系方式",Toast.LENGTH_SHORT).show();
+        }else if (addReceAddressHouseNum.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "请选择地址",Toast.LENGTH_SHORT).show();
+        }else if(displayAddress.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "请输入详细地址",Toast.LENGTH_SHORT).show();
+        }else {
+            addReceAddressToDB();
+            finish();
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        }
+    }
+
+    private void addReceAddressToDB(){
+
     }
 }

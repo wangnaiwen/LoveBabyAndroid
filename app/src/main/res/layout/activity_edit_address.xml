@@ -72,7 +72,8 @@
                     android:textSize="14sp"
                     android:background="@null"
                     android:maxLines="1"
-                    android:ellipsize="end"/>
+                    android:ellipsize="end"
+                    android:inputType="phone"/>
             </LinearLayout>
             <include layout="@layout/divider_line"/>
             <LinearLayout
@@ -135,7 +136,8 @@
                     android:textSize="14sp"
                     android:background="@null"
                     android:maxLines="1"
-                    android:ellipsize="end"/>
+                    android:ellipsize="end"
+                    android:inputType="number"/>
             </LinearLayout>
             <include layout="@layout/divider_line"/>
             <Button

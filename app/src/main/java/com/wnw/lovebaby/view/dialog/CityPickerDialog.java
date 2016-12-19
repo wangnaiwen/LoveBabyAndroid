@@ -10,8 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.LinearLayout;
-
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.bean.address.City;
 import com.wnw.lovebaby.bean.address.County;
@@ -20,8 +18,6 @@ import com.wnw.lovebaby.wheel.OnWheelChangedListener;
 import com.wnw.lovebaby.wheel.OnWheelClickedListener;
 import com.wnw.lovebaby.wheel.WheelView;
 import com.wnw.lovebaby.wheel.adapter.AbstractWheelTextAdapter;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +74,8 @@ public class CityPickerDialog extends Dialog {
         }
     };
 
-    public static interface  onCityPickedListener{
-        public void onPicked(Province selectProvince, City selectCity, County selectCounty);
+    public interface  onCityPickedListener{
+         void onPicked(Province selectProvince, City selectCity, County selectCounty);
     }
 
     public CityPickerDialog(Activity context, List<Province> provinces, Province defaultProvince,

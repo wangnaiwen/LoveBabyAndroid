@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -153,6 +154,8 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         });
         AlertDialog deleteDialog = builder.create();
         deleteDialog.show();
+        Window window = deleteDialog.getWindow();
+        window.setWindowAnimations(R.style.dialog_anim);
     }
 
 
