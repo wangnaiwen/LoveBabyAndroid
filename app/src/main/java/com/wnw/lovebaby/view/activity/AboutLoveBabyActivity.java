@@ -1,42 +1,36 @@
 package com.wnw.lovebaby.view.activity;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.wnw.lovebaby.R;
 
 /**
- * Created by wnw on 2016/12/8.
+ * Created by wnw on 2017/2/18.
  */
 
-public class SearchResultActivity extends Activity implements View.OnClickListener{
+public class AboutLoveBabyActivity extends Activity implements View.OnClickListener{
+    private ImageView back;
 
-    private ImageView searchRelBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
-        initView();
-    }
-
-    private void initView(){
-        searchRelBack = (ImageView) findViewById(R.id.search_result_back);
-        searchRelBack.setOnClickListener(this);
+        setContentView(R.layout.activity_about_lovebaby);
+        back = (ImageView)findViewById(R.id.about_lovebaby_back);
+        back.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.search_result_back:
+            case R.id.about_lovebaby_back:
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 break;
-            default:
-
-                break;
         }
     }
-
 
     @Override
     public void onBackPressed() {

@@ -141,4 +141,11 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
             }
         }
     }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
 }

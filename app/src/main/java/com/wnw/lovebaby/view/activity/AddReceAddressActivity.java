@@ -202,4 +202,10 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
     private void addReceAddressToDB(){
 
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
 }

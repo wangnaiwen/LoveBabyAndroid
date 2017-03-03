@@ -154,8 +154,8 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         });
         AlertDialog deleteDialog = builder.create();
         deleteDialog.show();
-        Window window = deleteDialog.getWindow();
-        window.setWindowAnimations(R.style.dialog_anim);
+        //Window window = deleteDialog.getWindow();
+       // window.setWindowAnimations(R.style.dialog_anim);
     }
 
 
@@ -178,5 +178,12 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         setResult(RESULT_CODE, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }

@@ -83,4 +83,12 @@ public class TodayNewGoodsActivity extends Activity implements View.OnClickListe
                 break;
         }
     }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
+
 }

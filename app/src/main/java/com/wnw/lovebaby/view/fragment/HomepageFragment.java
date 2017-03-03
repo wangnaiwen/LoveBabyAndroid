@@ -26,6 +26,7 @@ import com.wnw.lovebaby.adapter.ImagePageAdapter;
 import com.wnw.lovebaby.bean.GoodsCoverItem;
 import com.wnw.lovebaby.view.activity.InviteOpenShopActivity;
 import com.wnw.lovebaby.view.activity.SearchGoodsActivity;
+import com.wnw.lovebaby.view.activity.SortListActivity;
 import com.wnw.lovebaby.view.activity.TodayNewGoodsActivity;
 import com.wnw.lovebaby.view.costom.GoodsGridView;
 import java.util.ArrayList;
@@ -33,8 +34,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by wnw on 2016/12/1.
@@ -354,7 +353,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
                 startAnotherAty(TodayNewGoodsActivity.class);
                 break;
             case R.id.homepage_menu_classify:
-                Toast.makeText(context, "商品类别", Toast.LENGTH_SHORT).show();
+                startAnotherAty(SortListActivity.class);
                 break;
             case R.id.homepage_menu_myshop:
                 Toast.makeText(context, "我的店铺", Toast.LENGTH_SHORT).show();

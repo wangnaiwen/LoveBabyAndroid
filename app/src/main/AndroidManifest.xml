@@ -26,6 +26,14 @@
         <activity android:name=".view.activity.EditReceAddressActivity"/>
         <activity android:name=".view.activity.TodayNewGoodsActivity"/>
         <activity android:name=".view.activity.InviteOpenShopActivity"/>
+        <activity android:name=".view.activity.SortListActivity"/>
+        <activity android:name=".view.activity.AboutLoveBabyActivity"/>
+        <activity android:name=".view.activity.SettingActivity"/>
+        <activity android:name=".view.activity.UserInfoActivity"/>
+        <activity android:name=".view.activity.EditEmailActivity"/>
+        <activity android:name=".view.activity.EditNickNameActivity"/>
+        <activity android:name=".view.activity.EditHobbyActivity"/>
+        <activity android:name=".view.activity.EditSignatureActivity"/>
     </application>
 
 </manifest>

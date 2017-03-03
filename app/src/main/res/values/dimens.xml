@@ -21,4 +21,5 @@
     <dimen name="homepage_menu_text_width">50dp</dimen>
     <dimen name="homepage_menu_text_height">30dp</dimen>
     <dimen name="homepage_menu_text_size">12sp</dimen>
+    <dimen name="sort_list_gv_item_size">70dp</dimen>
 </resources>
