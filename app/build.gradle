@@ -17,7 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+
+    repositories{
+        flatDir{
+            dirs 'libs'
+        }
+    }}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -30,4 +35,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.httpcomponents:httpcore:4.4.4'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    compile name:'SMSSDK-2.0.2',ext:'aar'
+    compile name:'SMSSDKGUI-2.0.2',ext:'aar'
+    compile files('libs/MobCommons-2016.0303.1229.jar')
+    compile 'com.android.volley:volley:1.0.0'
+
 }

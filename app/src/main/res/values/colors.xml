@@ -7,4 +7,9 @@
     <color name="colorIconDefault">#d1ccc4</color>
     <color name="colorHomePageBg">#ffffff</color>
     <color name="aaa">#6b6868</color>
+
+    <color name="text_color_no">#9e9c9c</color>
+    <color name="text_color_yes">#ffffff</color>
+    <color name="btn_color_no">#ebd7d5d5</color>
+    <color name="btn_color_yes">#FF4081</color>
 </resources>
