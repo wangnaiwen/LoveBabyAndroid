@@ -1,9 +1,7 @@
-package com.wnw.lovebaby.model;
+package com.wnw.lovebaby.model.modelImpl;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -11,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.domain.User;
+import com.wnw.lovebaby.model.modelInterface.ILoginModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,35 +18,30 @@ import org.json.JSONObject;
  * Created by wnw on 2016/10/17.
  */
 
-public class RegisterModelImp implements IRegisterModel {
+public class LoginModelImp implements ILoginModel {
 
     private Context context;
-    private UserRegisterListener userRegisterListener;
-    private boolean returnData = false;
+    private User user;
+    private UserLoadingListener userLoadingListener;
 
     @Override
-    public void registerNetUser(Context context, User user, UserRegisterListener userRegisterListener) {
-        this.context =context;
-        this.userRegisterListener = userRegisterListener;
+    public void loadUser(Context context, User user, UserLoadingListener loadingListener) {
+        this.context = context;
         sendRequestWithVolley(user.getPhone(), user.getPassword());
-    }
-
-    private void retData(){
-        if(userRegisterListener != null){
-            userRegisterListener.complete(returnData);
-        }
+        this.userLoadingListener = loadingListener;
     }
 
     /**
      * use volley to get the data
      * */
+
     private void sendRequestWithVolley(String phone, String password){
-        String url = "http://119.29.182.235:8080/babyTest/register?phone="+ phone
-               +"&password=" + password;
+        String url = "http://119.29.182.235:8080/babyTest/login?phone=" + phone+"&password="+password;
+        Log.d("wnwUser",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response){
                 parseNetUserWithJSON(response);
             }
         }, new Response.ErrorListener() {
@@ -62,12 +56,13 @@ public class RegisterModelImp implements IRegisterModel {
     private void parseNetUserWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            boolean isExist = jsonObject.getBoolean("exist");
-            if(isExist){
-                Toast.makeText(context, "该用户已经存在", Toast.LENGTH_SHORT).show();
-            }else {
-                returnData = jsonObject.getBoolean("register");
-                retData();
+            JSONObject resultObject = jsonObject.getJSONObject("user");
+            if(resultObject != null){
+                user = new User();
+                user.setId(resultObject.getInt("id"));
+                user.setPhone(resultObject.getString("phone"));
+                user.setPassword(resultObject.getString("password"));
+                user.setType(resultObject.getInt("type"));
             }
         }catch (JSONException e){
             e.printStackTrace();
@@ -75,5 +70,16 @@ public class RegisterModelImp implements IRegisterModel {
         /**
          * 解析完后返回数据
          * */
+        retData();
+    }
+
+    /***
+     * return data
+     */
+
+    private void retData(){
+        if(userLoadingListener != null){
+            userLoadingListener.complete(user);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.wnw.lovebaby.model;
+package com.wnw.lovebaby.model.modelInterface;
 
 import android.content.Context;
 import com.wnw.lovebaby.domain.User;

@@ -3,7 +3,7 @@ package com.wnw.lovebaby.view.viewInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.wnw.lovebaby.presenter.BasePresenter;
+import com.wnw.lovebaby.presenter.base.BasePresenter;
 
 /**
  * Created by wnw on 2016/10/17.

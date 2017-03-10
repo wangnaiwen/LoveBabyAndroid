@@ -2,9 +2,8 @@ package com.wnw.lovebaby.view.viewInterface;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-import com.wnw.lovebaby.presenter.RegisterBasePresenter;
+import com.wnw.lovebaby.presenter.base.RegisterBasePresenter;
 
 
 /**

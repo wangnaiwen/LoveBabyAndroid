@@ -3,9 +3,9 @@ package com.wnw.lovebaby.presenter;
 import android.content.Context;
 
 import com.wnw.lovebaby.domain.User;
-import com.wnw.lovebaby.model.IRegisterModel;
-import com.wnw.lovebaby.model.IUpdatePasswordModel;
-import com.wnw.lovebaby.model.UpdatePasswordModelImp;
+import com.wnw.lovebaby.model.modelInterface.IUpdatePasswordModel;
+import com.wnw.lovebaby.model.modelImpl.UpdatePasswordModelImp;
+import com.wnw.lovebaby.presenter.base.FindPasswordBasePresenter;
 import com.wnw.lovebaby.view.viewInterface.IFindPasswordView;
 
 /**

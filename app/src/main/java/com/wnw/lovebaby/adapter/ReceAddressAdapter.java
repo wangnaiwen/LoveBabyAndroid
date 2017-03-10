@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
-import com.wnw.lovebaby.bean.ReceAddress;
+import com.wnw.lovebaby.domain.ReceAddress;
 
 import java.util.List;
 

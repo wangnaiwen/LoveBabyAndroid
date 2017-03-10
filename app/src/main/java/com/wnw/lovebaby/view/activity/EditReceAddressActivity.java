@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.wnw.lovebaby.R;
-import com.wnw.lovebaby.bean.ReceAddress;
+import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.bean.address.City;
 import com.wnw.lovebaby.bean.address.County;
 import com.wnw.lovebaby.bean.address.Province;

@@ -3,7 +3,7 @@ package com.wnw.lovebaby.login;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.wnw.lovebaby.presenter.FindPasswordBasePresenter;
+import com.wnw.lovebaby.presenter.base.FindPasswordBasePresenter;
 
 /**
  * Created by wnw on 2017/3/7.

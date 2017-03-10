@@ -7,14 +7,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.ReceAddressAdapter;
-import com.wnw.lovebaby.bean.ReceAddress;
+import com.wnw.lovebaby.domain.ReceAddress;
 
 import java.util.ArrayList;
 import java.util.List;

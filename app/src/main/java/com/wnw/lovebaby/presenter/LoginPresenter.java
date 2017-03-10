@@ -3,8 +3,9 @@ package com.wnw.lovebaby.presenter;
 import android.content.Context;
 
 import com.wnw.lovebaby.domain.User;
-import com.wnw.lovebaby.model.ILoginModel;
-import com.wnw.lovebaby.model.LoginModelImp;
+import com.wnw.lovebaby.model.modelInterface.ILoginModel;
+import com.wnw.lovebaby.model.modelImpl.LoginModelImp;
+import com.wnw.lovebaby.presenter.base.BasePresenter;
 import com.wnw.lovebaby.view.viewInterface.ILoginView;
 
 

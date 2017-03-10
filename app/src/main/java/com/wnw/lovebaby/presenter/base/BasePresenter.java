@@ -1,12 +1,15 @@
-package com.wnw.lovebaby.presenter;
+
+package com.wnw.lovebaby.presenter.base;
 
 import java.lang.ref.WeakReference;
 
+
 /**
- * Created by wnw on 2017/3/7.
+ * Created by wnw on 2016/9/7.
  */
 
-public abstract class FindPasswordBasePresenter<T> {
+
+public abstract class BasePresenter<T>  {
     //当内存不足时，就释放
     protected WeakReference<T> mWeakReference;
 
@@ -28,3 +31,4 @@ public abstract class FindPasswordBasePresenter<T> {
         return mWeakReference.get();
     }
 }
+
