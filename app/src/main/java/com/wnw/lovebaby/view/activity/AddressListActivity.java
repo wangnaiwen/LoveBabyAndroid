@@ -1,7 +1,7 @@
 package com.wnw.lovebaby.view.activity;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,19 +10,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.ReceAddressAdapter;
 import com.wnw.lovebaby.domain.ReceAddress;
-
-import java.util.ArrayList;
+import com.wnw.lovebaby.presenter.DeleteReceAddressPresenter;
+import com.wnw.lovebaby.presenter.FindReceAddressPresenter;
+import com.wnw.lovebaby.view.viewInterface.IDeleteReceAddressView;
+import com.wnw.lovebaby.view.viewInterface.IFindReceAddressView;
+import com.wnw.lovebaby.view.viewInterface.MvpBaseActivity;
 import java.util.List;
 
 /**
  * Created by wnw on 2016/12/11.
  */
 
-public class AddressListActivity extends Activity implements View.OnClickListener{
+public class AddressListActivity extends MvpBaseActivity<IFindReceAddressView, FindReceAddressPresenter>
+        implements View.OnClickListener, IFindReceAddressView{
 
     public static int RESULT_CODE = 2;
 
@@ -32,6 +37,11 @@ public class AddressListActivity extends Activity implements View.OnClickListene
 
     private ReceAddressAdapter receAddressAdapter;
     private List<ReceAddress> receAddressList;
+
+    private int userId;
+
+    private int editIndex;   //选中哪一个编辑
+    private int deleteIndex; //选中哪一个删除
 
     private Handler handler = new Handler(){
         @Override
@@ -54,20 +64,36 @@ public class AddressListActivity extends Activity implements View.OnClickListene
      * start edit address activity
      * */
     private void startEditReceAddressAty(int index){
+        editIndex = index;
         Intent intent = new Intent(AddressListActivity.this, EditReceAddressActivity.class);
         ReceAddress receAddress = receAddressList.get(index);
-        intent.putExtra("receAddress_data", receAddress);/*
-        intent.putExtra("id", receAddress.getId());
-        intent.putExtra("userId", receAddress.getUserId());
-        intent.putExtra("receiver", receAddress.getReceiver());
-        intent.putExtra("phone", receAddress.getPhone());
-        intent.putExtra("province", receAddress.getProvince());
-        intent.putExtra("city",receAddress.getCity());
-        intent.putExtra("district", receAddress.getDistrict());
-        intent.putExtra("detailAddress",receAddress.getDetailAddress());
-        intent.putExtra("postcode",receAddress.getPostcode());*/
-        startActivity(intent);
+        intent.putExtra("receAddress_data", receAddress);
+        startActivityForResult(intent, 1);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if(resultCode == RESULT_OK){
+                    //得到返回的数据
+                    ReceAddress address = (ReceAddress)data.getSerializableExtra("address");
+                    receAddressList.remove(editIndex);
+                    receAddressList.add(0, address);
+                    refreshView();
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK){
+                    ReceAddress address = (ReceAddress)data.getSerializableExtra("address");
+                    receAddressList.add(0, address);
+                    refreshView();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -75,42 +101,44 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_list);
         initView();
-        setAdapter();
+        loadData();
+    }
+
+    private void loadData(){
+        SharedPreferences preferences = getSharedPreferences("account", MODE_PRIVATE);
+        userId = preferences.getInt("id", 0);
+        mPresenter.findReceAddress(this, userId);
+    }
+
+    private void refreshView(){
+        receAddressAdapter.setReceAddressList(receAddressList);
+        receAddressAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showDialog() {
+        Toast.makeText(this, "正在努力中", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void findReceAdress(List<ReceAddress> addressList) {
+        if(addressList != null ){
+            receAddressList = addressList;
+            setAdapter();
+        }else {
+            Toast.makeText(this, "暂无收货地址", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setAdapter(){
-        receAddressList = new ArrayList<>();
-        for(int i = 0; i < 5; i++){
-            ReceAddress receAddress = new ReceAddress();
-            receAddress.setId(i);
-            receAddress.setUserId(i);
-            receAddress.setReceiver("小高"+i);
-            receAddress.setPhone("1567730144"+i);
-            receAddress.setProvince("广西");
-            receAddress.setCity("桂林市");
-            receAddress.setDistrict("灵川县");
-            receAddress.setDetailAddress("桂林电子科技大学花江校区");
-            receAddress.setPostcode(541004);
-            receAddressList.add(receAddress);
-        }
         receAddressAdapter = new ReceAddressAdapter(this, handler, receAddressList);
         receAddressListView.setAdapter(receAddressAdapter);
-    }
-
-
-    /**
-     * update the adapter
-     * */
-    private void updateAdapter(){
-        receAddressAdapter.setReceAddressList(receAddressList);
-        receAddressAdapter.notifyDataSetChanged();
     }
 
     private void initView(){
         addressBack = (ImageView)findViewById(R.id.back_address_list);
         receAddressListView = (ListView)findViewById(R.id.lv_rece_address);
         addReceAddress = (RelativeLayout)findViewById(R.id.add_address);
-
         addReceAddress.setOnClickListener(this);
         addressBack.setOnClickListener(this);
     }
@@ -124,7 +152,8 @@ public class AddressListActivity extends Activity implements View.OnClickListene
                 break;
             case R.id.add_address:
                 Intent intent = new Intent(this, AddReceAddressActivity.class);
-                startActivity(intent);
+                intent.putExtra("userId", userId);
+                startActivityForResult(intent, 2);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
@@ -140,8 +169,8 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                receAddressList.remove(index);
-                updateAdapter();
+                deleteIndex = index;
+                mPresenter.deleteReceAddress(AddressListActivity.this,receAddressList.get(index).getId());
             }
         });
 
@@ -153,10 +182,17 @@ public class AddressListActivity extends Activity implements View.OnClickListene
         });
         AlertDialog deleteDialog = builder.create();
         deleteDialog.show();
-        //Window window = deleteDialog.getWindow();
-       // window.setWindowAnimations(R.style.dialog_anim);
     }
 
+    @Override
+    public void deleteReceAddress(boolean isSuccess) {
+        if (isSuccess){
+            receAddressList.remove(deleteIndex);
+            refreshView();
+        }else {
+            Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * start activity for result
@@ -164,15 +200,6 @@ public class AddressListActivity extends Activity implements View.OnClickListene
     private void forResultActivity(int index){
         Intent intent = new Intent();
         ReceAddress receAddress = receAddressList.get(index);
-        /*intent.putExtra("id", receAddress.getId());
-        intent.putExtra("userId", receAddress.getUserId());
-        intent.putExtra("receiver", receAddress.getReceiver());
-        intent.putExtra("phone", receAddress.getPhone());
-        intent.putExtra("province", receAddress.getProvince());
-        intent.putExtra("city",receAddress.getCity());
-        intent.putExtra("district", receAddress.getDistrict());
-        intent.putExtra("detailAddress",receAddress.getDetailAddress());
-        intent.putExtra("postcode",receAddress.getPostcode());*/
         intent.putExtra("receAddress_data", receAddress);
         setResult(RESULT_CODE, intent);
         finish();
@@ -184,5 +211,10 @@ public class AddressListActivity extends Activity implements View.OnClickListene
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
+
+    @Override
+    protected FindReceAddressPresenter createPresenter() {
+        return new FindReceAddressPresenter();
     }
 }

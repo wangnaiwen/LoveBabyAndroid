@@ -39,6 +39,7 @@ public class EditEmailActivity extends Activity implements View.OnClickListener 
 
         backEmail.setOnClickListener(this);
         saveEmail.setOnClickListener(this);
+        editEmailView.setText(email);
     }
 
     @Override
@@ -48,11 +49,13 @@ public class EditEmailActivity extends Activity implements View.OnClickListener 
                 onBackPressed();
                 break;
             case R.id.email_save:
-                if(editEmailView.getText().toString().trim().isEmpty()){
+                String newEmail = editEmailView.getText().toString().trim();
+                if(newEmail.isEmpty()){
                     Toast.makeText(this, "邮箱为空", Toast.LENGTH_SHORT).show();
-                }else if (editEmailView.getText().toString().trim().equals(email)){
+                }else if (newEmail.equals(email)){
                     Toast.makeText(this, "邮箱没有改变", Toast.LENGTH_SHORT).show();
                 }else {
+                    email = newEmail;
                     saveEmail();
                 }
                 break;
@@ -66,6 +69,9 @@ public class EditEmailActivity extends Activity implements View.OnClickListener 
     }
 
     private void saveEmail(){
+        Intent intent = new Intent();
+        intent.putExtra("email", email);
+        setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }

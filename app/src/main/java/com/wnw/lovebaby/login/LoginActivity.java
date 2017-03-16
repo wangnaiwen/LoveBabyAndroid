@@ -119,13 +119,10 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
         SharedPreferences.Editor editor = getSharedPreferences("account",
                 MODE_PRIVATE).edit();
         editor.clear();
-        /*editor.putInt("id", netUser.getId());
-        editor.putString("name", netUser.getName());
-        editor.putString("phone", netUser.getPhone());
-        editor.putString("password", netUser.getPassword());
-        editor.putString("phone2", netUser.getPhone2());
-        editor.putString("email", netUser.getEmail());
-        editor.apply();*/
+        editor.putInt("id", user.getId());
+        editor.putString("phone",user.getPhone());
+        editor.putInt("type", user.getType());
+        editor.apply();
     }
 
     @Override
@@ -141,7 +138,7 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
             /**
              * 保存这个账号的SharePreference
              * */
-            //saveAccount();
+            saveAccount();
             openMainAty();
         }
     }

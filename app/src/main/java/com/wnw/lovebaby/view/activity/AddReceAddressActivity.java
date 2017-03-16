@@ -3,8 +3,10 @@ package com.wnw.lovebaby.view.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,9 +21,12 @@ import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.bean.address.City;
 import com.wnw.lovebaby.bean.address.County;
 import com.wnw.lovebaby.bean.address.Province;
+import com.wnw.lovebaby.presenter.InsertReceAddressPresenter;
 import com.wnw.lovebaby.util.LogUtil;
 import com.wnw.lovebaby.util.Util;
 import com.wnw.lovebaby.view.dialog.CityPickerDialog;
+import com.wnw.lovebaby.view.viewInterface.IInsertReceAddressView;
+import com.wnw.lovebaby.view.viewInterface.MvpBaseActivity;
 
 import org.json.JSONArray;
 
@@ -33,7 +38,8 @@ import java.util.ArrayList;
  * Created by wnw on 2016/12/13.
  */
 
-public class AddReceAddressActivity extends Activity implements View.OnClickListener {
+public class AddReceAddressActivity extends MvpBaseActivity<IInsertReceAddressView, InsertReceAddressPresenter>
+        implements IInsertReceAddressView, View.OnClickListener {
 
     private ImageView backAddReceAddress;
     private EditText addReceiver;
@@ -48,11 +54,15 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
 
     private ArrayList<Province> provinces = new ArrayList<Province>();
 
+    private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
         intiView();
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("userId", 0);
+        LogUtil.d("wnwI", userId+"");
     }
 
     private void intiView(){
@@ -102,21 +112,19 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
                 receAddress.setProvince(selectProvince != null ? selectProvince.getAreaName() : "");
                 receAddress.setCity(selectCity != null ? selectCity.getAreaName() : "");
                 if(selectCounty != null){
-                    LogUtil.i("wnw", "!=null");
-                    receAddress.setDistrict(selectCounty.getAreaName());
+                    receAddress.setCounty(selectCounty.getAreaName());
                     if(selectCounty.getAreaName() == null){
-                        receAddress.setDistrict("");
+                        receAddress.setCounty("");
                     }
                 }else {
-                    receAddress.setDistrict("");
+                    receAddress.setCounty("");
                 }
-                //receAddress.setDistrict(selectCounty != null ? selectCounty.getAreaName() : "");
                 StringBuilder address = new StringBuilder();
                 address.append(receAddress.getProvince())
                         .append(" ")
                         .append(receAddress.getCity())
                         .append(" ")
-                        .append(receAddress.getDistrict());
+                        .append(receAddress.getCounty());
                 displayAddress.setText(address.toString());
             }
         }).show();
@@ -175,6 +183,7 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
                     try {
                         in.close();
                     } catch (IOException e) {
+
                     }
                 }
             }
@@ -187,19 +196,50 @@ public class AddReceAddressActivity extends Activity implements View.OnClickList
             Toast.makeText(this, "请输入收件人",Toast.LENGTH_SHORT).show();
         }else if(addRecePhone.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "请输入收件人联系方式",Toast.LENGTH_SHORT).show();
-        }else if (addReceAddressHouseNum.getText().toString().trim().isEmpty()){
-            Toast.makeText(this, "请选择地址",Toast.LENGTH_SHORT).show();
         }else if(displayAddress.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "请选择地址",Toast.LENGTH_SHORT).show();
+        }else if (addReceAddressHouseNum.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "请输入详细地址",Toast.LENGTH_SHORT).show();
         }else {
+            receAddress.setUserId(userId);
+            receAddress.setReceiver(addReceiver.getText().toString().trim());
+            receAddress.setPhone(addRecePhone.getText().toString().trim());
+            receAddress.setDetailAddress(addReceAddressHouseNum.getText().toString().trim());
+            if(addPostcode.getText().toString().trim().isEmpty()){
+
+            }else {
+                receAddress.setPostcode(Integer.parseInt(addPostcode.getText().toString().trim()));
+            }
             addReceAddressToDB();
+        }
+    }
+
+    private void addReceAddressToDB(){
+        mPresenter.insertReceAddresss(this, receAddress);
+    }
+
+    @Override
+    public void showDialog() {
+        Toast.makeText(this, "正在保存", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void insertReceAddress(ReceAddress address) {
+        if (address == null){
+            Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
+        }else {
+            LogUtil.d("wnwI", address.getId()+address.getProvince()+address.getCity());
+            Intent intent = new Intent();
+            intent.putExtra("address", address);
+            setResult(RESULT_OK, intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
     }
 
-    private void addReceAddressToDB(){
-
+    @Override
+    protected InsertReceAddressPresenter createPresenter() {
+        return new InsertReceAddressPresenter();
     }
 
     @Override

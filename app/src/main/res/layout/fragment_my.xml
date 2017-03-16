@@ -4,7 +4,9 @@
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:fadingEdge="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,6 +33,7 @@
                         android:layout_toRightOf="@id/mine_icon_user"
                         android:layout_centerVertical="true">
                         <TextView
+                            android:id="@+id/mine_dis_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:gravity="center"
@@ -41,8 +44,8 @@
                             android:layout_marginTop="20dp"/>
                         <ImageView
                             android:id="@+id/mine_edit_my_info"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="25dp"
+                            android:layout_height="32dp"
                             android:layout_marginLeft="15dp"
                             android:src="@drawable/mine_v4_infor_edit_img"/>
                     </LinearLayout>

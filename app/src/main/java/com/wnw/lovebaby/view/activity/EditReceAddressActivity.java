@@ -20,9 +20,12 @@ import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.bean.address.City;
 import com.wnw.lovebaby.bean.address.County;
 import com.wnw.lovebaby.bean.address.Province;
+import com.wnw.lovebaby.presenter.UpdateReceAddressPresenter;
 import com.wnw.lovebaby.util.LogUtil;
 import com.wnw.lovebaby.util.Util;
 import com.wnw.lovebaby.view.dialog.CityPickerDialog;
+import com.wnw.lovebaby.view.viewInterface.IUpdateReceAddressView;
+import com.wnw.lovebaby.view.viewInterface.MvpBaseActivity;
 
 import org.apache.http.util.EncodingUtils;
 import org.json.JSONArray;
@@ -35,7 +38,8 @@ import java.util.ArrayList;
  * Created by wnw on 2016/12/13.
  */
 
-public class EditReceAddressActivity extends Activity implements View.OnClickListener{
+public class EditReceAddressActivity extends MvpBaseActivity<IUpdateReceAddressView, UpdateReceAddressPresenter>
+        implements View.OnClickListener, IUpdateReceAddressView{
     private ImageView backEditReceAddress;
     private EditText editReceiver;
     private EditText editRecePhone;
@@ -75,11 +79,10 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
 
     private void setDefaultData(){
         Intent intent = getIntent();
-        ReceAddress receAddress = (ReceAddress)intent.getSerializableExtra("receAddress_data");
-
+        receAddress = (ReceAddress)intent.getSerializableExtra("receAddress_data");
         editReceiver.setText(receAddress.getReceiver());
         editRecePhone.setText(receAddress.getPhone());
-        displayAddress.setText(receAddress.getProvince() + " " + receAddress.getCity() + " " + receAddress.getDistrict());
+        displayAddress.setText(receAddress.getProvince() + " " + receAddress.getCity() + " " + receAddress.getCounty());
         editReceAddressHouseNum.setText(receAddress.getDetailAddress());
         editPostcode.setText(receAddress.getPostcode()+ "");
     }
@@ -108,6 +111,30 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void showDialog() {
+        Toast.makeText(this, "正在保存修改", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateReceAddress(boolean isSuccess) {
+        if(isSuccess){
+            Toast.makeText(this, "成功保存", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.putExtra("address", receAddress);
+            setResult(RESULT_OK, intent);
+            finish();
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        }else {
+            Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected UpdateReceAddressPresenter createPresenter() {
+        return new UpdateReceAddressPresenter();
+    }
+
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, null, null, null, new CityPickerDialog.onCityPickedListener() {
 
@@ -117,19 +144,19 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
                 receAddress.setCity(selectCity != null ? selectCity.getAreaName() : "");
                 if(selectCounty != null){
                     LogUtil.i("wnw", "!=null");
-                    receAddress.setDistrict(selectCounty.getAreaName());
+                    receAddress.setCounty(selectCounty.getAreaName());
                     if(selectCounty.getAreaName() == null){
-                        receAddress.setDistrict("");
+                        receAddress.setCounty("");
                     }
                 }else {
-                    receAddress.setDistrict("");
+                    receAddress.setCounty("");
                 }
                 StringBuilder address = new StringBuilder();
                 address.append(receAddress.getProvince())
                         .append(" ")
                         .append(receAddress.getCity())
                         .append(" ")
-                        .append(receAddress.getDistrict());
+                        .append(receAddress.getCounty());
                 displayAddress.setText(address.toString());
             }
         }).show();
@@ -149,7 +176,6 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
 
         @Override
         protected void onPreExecute() {
-
             progressDialog.show();
         }
 
@@ -205,14 +231,20 @@ public class EditReceAddressActivity extends Activity implements View.OnClickLis
         }else if(displayAddress.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "请输入详细地址",Toast.LENGTH_SHORT).show();
         }else {
-            updateReceAddressToDB();
-            finish();
-            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+            receAddress.setReceiver(editReceiver.getText().toString().trim());
+            receAddress.setPhone(editRecePhone.getText().toString().trim());
+            receAddress.setDetailAddress(editReceAddressHouseNum.getText().toString().trim());
+            if(editPostcode.getText().toString().trim().isEmpty()){
+
+            }else {
+                receAddress.setPostcode(Integer.parseInt(editPostcode.getText().toString().trim()));
+            }
+            updateReceAddress();
         }
     }
 
-    private void updateReceAddressToDB(){
-
+    private void updateReceAddress(){
+        mPresenter.updateReceAddresss(this, receAddress);
     }
 
 

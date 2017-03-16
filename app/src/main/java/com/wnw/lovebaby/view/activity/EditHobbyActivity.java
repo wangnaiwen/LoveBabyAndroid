@@ -39,6 +39,7 @@ public class EditHobbyActivity extends Activity implements View.OnClickListener 
 
         backHobby.setOnClickListener(this);
         saveHobby.setOnClickListener(this);
+        editHobbyView.setText(hobby);
     }
 
     @Override
@@ -48,11 +49,13 @@ public class EditHobbyActivity extends Activity implements View.OnClickListener 
                 onBackPressed();
                 break;
             case R.id.hobby_save:
-                if(editHobbyView.getText().toString().trim().isEmpty()){
+                String newHobby = editHobbyView.getText().toString().trim();
+                if(newHobby.isEmpty()){
                     Toast.makeText(this, "兴趣为空", Toast.LENGTH_SHORT).show();
-                }else if (editHobbyView.getText().toString().trim().equals(hobby)){
+                }else if (newHobby.equals(hobby)){
                     Toast.makeText(this, "兴趣没有改变", Toast.LENGTH_SHORT).show();
                 }else {
+                    this.hobby = newHobby;
                     saveHobby();
                 }
                 break;
@@ -66,6 +69,9 @@ public class EditHobbyActivity extends Activity implements View.OnClickListener 
     }
 
     private void saveHobby(){
+        Intent intent = new Intent();
+        intent.putExtra("hobby", hobby);
+        setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }

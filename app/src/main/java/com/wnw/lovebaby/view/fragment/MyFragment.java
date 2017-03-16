@@ -3,6 +3,7 @@ package com.wnw.lovebaby.view.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.view.activity.SettingActivity;
@@ -36,6 +38,9 @@ public class MyFragment extends Fragment implements View.OnClickListener{
     private LinearLayout beEvaluatedView;
     private LinearLayout rerundsView;
     private ImageView joinUsView;
+    private TextView disPhone;
+
+    private String phone;
 
     @Nullable
     @Override
@@ -44,6 +49,7 @@ public class MyFragment extends Fragment implements View.OnClickListener{
         mContext = inflater.getContext();
         mInflater = inflater;
         initView();
+        getUserLoginInfo();
         return mView;
     }
 
@@ -57,6 +63,7 @@ public class MyFragment extends Fragment implements View.OnClickListener{
         beEvaluatedView = (LinearLayout)mView.findViewById(R.id.mine_be_evaluated);
         rerundsView = (LinearLayout)mView.findViewById(R.id.mine_refunds);
         joinUsView = (ImageView)mView.findViewById(R.id.mine_join_us);
+        disPhone = (TextView)mView.findViewById(R.id.mine_dis_phone);
 
         settingView.setOnClickListener(this);
         editMyInfoViewView.setOnClickListener(this);
@@ -67,6 +74,12 @@ public class MyFragment extends Fragment implements View.OnClickListener{
         beEvaluatedView.setOnClickListener(this);
         rerundsView.setOnClickListener(this);
         joinUsView.setOnClickListener(this);
+    }
+
+    private void getUserLoginInfo(){
+        SharedPreferences preferences = mContext.getSharedPreferences("account", mContext.MODE_PRIVATE);
+        phone = preferences.getString("phone","");
+        disPhone.setText(phone);
     }
 
     @Override

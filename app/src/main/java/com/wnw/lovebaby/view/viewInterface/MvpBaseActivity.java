@@ -1,5 +1,6 @@
 package com.wnw.lovebaby.view.viewInterface;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,7 +10,7 @@ import com.wnw.lovebaby.presenter.base.BasePresenter;
  * Created by wnw on 2016/10/17.
  */
 
-public abstract class MvpBaseActivity<V,T extends BasePresenter<V>> extends AppCompatActivity {
+public abstract class MvpBaseActivity<V,T extends BasePresenter<V>> extends Activity {
     protected T mPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

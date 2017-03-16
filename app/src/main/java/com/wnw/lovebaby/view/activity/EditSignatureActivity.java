@@ -39,6 +39,7 @@ public class EditSignatureActivity  extends Activity implements View.OnClickList
 
         backSignature.setOnClickListener(this);
         saveSignature.setOnClickListener(this);
+        editSignatureView.setText(signature);
     }
 
     @Override
@@ -48,11 +49,13 @@ public class EditSignatureActivity  extends Activity implements View.OnClickList
                 onBackPressed();
                 break;
             case R.id.signature_save:
-                if(editSignatureView.getText().toString().trim().isEmpty()){
+                String newSignature = editSignatureView.getText().toString().trim();
+                if(newSignature.isEmpty()){
                     Toast.makeText(this, "个性签名为空", Toast.LENGTH_SHORT).show();
-                }else if (editSignatureView.getText().toString().trim().equals(signature)){
+                }else if (newSignature.equals(signature)){
                     Toast.makeText(this, "个性签名没有改变", Toast.LENGTH_SHORT).show();
                 }else {
+                    this.signature = newSignature;
                     saveSignature();
                 }
                 break;
@@ -66,6 +69,9 @@ public class EditSignatureActivity  extends Activity implements View.OnClickList
     }
 
     private void saveSignature(){
+        Intent intent = new Intent();
+        intent.putExtra("signature", signature);
+        setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }

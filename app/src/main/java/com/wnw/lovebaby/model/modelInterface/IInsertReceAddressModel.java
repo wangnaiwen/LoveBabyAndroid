@@ -18,6 +18,6 @@ public interface IInsertReceAddressModel {
      * completed
      * */
     interface ReceAddressInsertListener{
-        void complete(boolean isSuccess);
+        void complete(ReceAddress address);
     }
 }

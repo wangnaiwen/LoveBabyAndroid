@@ -134,7 +134,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
                 orderReceiver.setText(receAddress.getReceiver());
                 orderRecePhone.setText(receAddress.getPhone());
                 orderReceAddress.setText(receAddress.getProvince()+" " +receAddress.getCity() + " "
-                        + receAddress.getDistrict() + " " + receAddress.getDetailAddress());
+                        + receAddress.getCounty() + " " + receAddress.getDetailAddress());
             }
         }
     }

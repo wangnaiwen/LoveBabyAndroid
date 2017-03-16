@@ -29,8 +29,6 @@ public class FindUserInfoModelImp implements IFindUserInfoModel{
     private UserInfoLoadingListener userInfoLoadingListener;
     private UserInfo userInfo;
 
-    private String url = "http://119.29.182.235:8080/babyTest/findUserInfoByUserId?";
-
     @Override
     public void FindUserInfo(Context context, int id, UserInfoLoadingListener userInfoLoadingListener) {
         this.context = context;
@@ -41,6 +39,7 @@ public class FindUserInfoModelImp implements IFindUserInfoModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int userId){
+        String url = "http://119.29.182.235:8080/babyTest/findUserInfoByUserId?";
         url = url + "userId="+userId;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -71,7 +70,7 @@ public class FindUserInfoModelImp implements IFindUserInfoModel{
                 userInfo.setUserImg(object.getString("userImg"));
                 userInfo.setHobby(object.getString("hobby"));
                 userInfo.setEmail(object.getString("email"));
-                userInfo.setPersonalizedSignature("personalizedSignature");
+                userInfo.setPersonalizedSignature(object.getString("personalizedSignature"));
             }else {
                 Toast.makeText(context, "加载失败",Toast.LENGTH_SHORT).show();
             }

@@ -37,7 +37,7 @@ public class UpdateReceAddressModelImp implements IUpdateReceAddressModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(ReceAddress address){
-        url = url + "id="+address.getId() + "userId="+ address.getUserId() +"&receiver="+ address.getReceiver() +"&province="+ address.getProvince()
+        url = url +"id="+address.getId()+ "&userId="+ address.getUserId() +"&receiver="+ address.getReceiver() +"&province="+ address.getProvince()
                 +"&city=" + address.getCity() +"&county="+ address.getCounty() +"&detailAddress="+ address.getDetailAddress()
                 +"&phone=" + address.getPhone() +"&postcode="+ address.getPostcode();
         RequestQueue queue = Volley.newRequestQueue(context);

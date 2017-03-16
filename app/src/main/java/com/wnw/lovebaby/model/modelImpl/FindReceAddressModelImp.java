@@ -12,6 +12,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.model.modelInterface.IFindReceAddressModel;
+import com.wnw.lovebaby.util.LogUtil;
+import com.wnw.lovebaby.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +45,7 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
      * */
     private void sendRequestWithVolley(int userId){
         url = url + "userId="+ userId;
+        LogUtil.d("www", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -72,7 +75,7 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
                     address.setUserId(object.getInt("userId"));
                     address.setReceiver(object.getString("receiver"));
                     address.setProvince(object.getString("province"));
-                    address.setProvince(object.getString("city"));
+                    address.setCity(object.getString("city"));
                     address.setCounty(object.getString("county"));
                     address.setDetailAddress(object.getString("detailAddress"));
                     address.setPhone(object.getString("phone"));
@@ -82,6 +85,13 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
             }else {
                 Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
+            /*if(object1 == null){
+
+            }else {
+
+
+            }*/
+
         }catch (JSONException e){
             e.printStackTrace();
         }

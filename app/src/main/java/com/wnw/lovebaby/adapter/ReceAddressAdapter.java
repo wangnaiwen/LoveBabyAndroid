@@ -74,7 +74,7 @@ public class ReceAddressAdapter extends BaseAdapter {
         receAddressHolder.receiver.setText(receAddress.getReceiver());
         receAddressHolder.phone.setText(receAddress.getPhone());
         receAddressHolder.address.setText(receAddress.getProvince()+" "+ receAddress.getCity()
-                + " " + receAddress.getDistrict()+" " + receAddress.getDetailAddress());
+                + " " + receAddress.getCounty()+" " + receAddress.getDetailAddress());
 
         final int index = i;
         receAddressHolder.receAddress.setOnClickListener(new View.OnClickListener() {

@@ -37,18 +37,19 @@ public class EditNickNameActivity extends Activity implements View.OnClickListen
 
         saveNickName.setOnClickListener(this);
         backNickName.setOnClickListener(this);
-
         editNickName.setText(nickName);
     }
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.nickname_save:
-                if(editNickName.getText().toString().trim().isEmpty()){
+                String newNickName = editNickName.getText().toString().trim();
+                if(newNickName.isEmpty()){
                     Toast.makeText(this, "昵称为空", Toast.LENGTH_SHORT).show();
-                }else if (editNickName.getText().toString().trim().equals(nickName)){
+                }else if (newNickName.equals(nickName)){
                     Toast.makeText(this, "昵称没有改变", Toast.LENGTH_SHORT).show();
                 }else {
+                    nickName = newNickName;
                     saveNickName();
                 }
                 break;
@@ -67,6 +68,9 @@ public class EditNickNameActivity extends Activity implements View.OnClickListen
     }
 
     private void saveNickName(){
+        Intent intent = new Intent();
+        intent.putExtra("nickName", nickName);
+        setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }

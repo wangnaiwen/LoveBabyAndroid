@@ -26,7 +26,6 @@ public class DeleteReceAddressModelImp implements IDeleteReceAddressModel{
     private Context context;
     private boolean returnData = false;
     private ReceAddressDeleteListener receAddressDeleteListener;
-    private String url = "http://119.29.182.235:8080/babyTest/deleteReceAddress?";
 
     @Override
     public void deleteReceAddress(Context context, int id, ReceAddressDeleteListener receAddressDeleteListener) {
@@ -39,7 +38,7 @@ public class DeleteReceAddressModelImp implements IDeleteReceAddressModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int id){
-
+        String url = "http://119.29.182.235:8080/babyTest/deleteReceAddress?";
         url = url + "id="+id;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

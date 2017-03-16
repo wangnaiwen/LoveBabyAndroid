@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.domain.UserInfo;
+import com.wnw.lovebaby.presenter.FindUserInfoPresenter;
+import com.wnw.lovebaby.presenter.UpdateUserInfoPresenter;
+import com.wnw.lovebaby.view.viewInterface.IFindUserInfoView;
+import com.wnw.lovebaby.view.viewInterface.MvpBaseActivity;
 
 import java.util.Calendar;
 
@@ -23,7 +29,8 @@ import java.util.Calendar;
  * Created by wnw on 2017/2/19.
  */
 
-public class UserInfoActivity extends Activity implements View.OnClickListener{
+public class UserInfoActivity extends MvpBaseActivity<IFindUserInfoView, FindUserInfoPresenter>
+        implements View.OnClickListener, IFindUserInfoView{
     private RelativeLayout nickNameView;
     private RelativeLayout sexView;
     private RelativeLayout emailView;
@@ -38,13 +45,15 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
     private TextView disSex;
     private TextView saveInfo;
 
-
+    private int userId;
+    private UserInfo mUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         initView();
+        getUserId();
     }
 
     private void initView(){
@@ -73,6 +82,42 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
         backUserInfo.setOnClickListener(this);
     }
 
+    private void getUserId(){
+        SharedPreferences sharedPreferences = getSharedPreferences("account",MODE_PRIVATE);
+        userId = sharedPreferences.getInt("id", 0);
+
+        mPresenter.findUserInfo(this, userId);
+    }
+
+    @Override
+    public void showDialog() {
+        Toast.makeText(this, "正在努力中...", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void findUserInfo(UserInfo userInfo) {
+        this.mUserInfo = userInfo;
+        disNickName.setText(mUserInfo.getNickName());
+        disSex.setText(mUserInfo.getSex());
+        disBirthday.setText(mUserInfo.getBirthday());
+    }
+
+    @Override
+    public void updateUserInfo(boolean isSuccess) {
+        if (isSuccess){
+            Toast.makeText(this, "成功保存修改", Toast.LENGTH_SHORT).show();
+            finish();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }else {
+            Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected FindUserInfoPresenter createPresenter() {
+        return new FindUserInfoPresenter();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -81,8 +126,8 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.user_info_nickname:
                 Intent intent = new Intent(this, EditNickNameActivity.class);
-                intent.putExtra("nickName","nickName");
-                startActivity(intent);
+                intent.putExtra("nickName",mUserInfo.getNickName());
+                startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.user_info_birthday:
@@ -90,8 +135,8 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.user_info_email:
                 Intent intent1 = new Intent(this, EditEmailActivity.class);
-                intent1.putExtra("email", "email");
-                startActivity(intent1);
+                intent1.putExtra("email", mUserInfo.getEmail());
+                startActivityForResult(intent1, 1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.user_info_sex:
@@ -99,18 +144,47 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.user_info_hobby:
                 Intent intent2 = new Intent(this, EditHobbyActivity.class);
-                intent2.putExtra("hobby", "hobby");
-                startActivity(intent2);
+                intent2.putExtra("hobby", mUserInfo.getHobby());
+                startActivityForResult(intent2,2);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.user_info_signature:
                 Intent intent3 = new Intent(this, EditSignatureActivity.class);
-                intent3.putExtra("signature", "signature");
-                startActivity(intent3);
+                intent3.putExtra("signature", mUserInfo.getPersonalizedSignature());
+                startActivityForResult(intent3, 3);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.save_info:
+                mPresenter.updateUserInfo(this, mUserInfo);
+                break;
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 0:
+                if(resultCode == RESULT_OK){
+                    mUserInfo.setNickName(data.getStringExtra("nickName"));
+                    disNickName.setText(mUserInfo.getNickName());
+                }
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    mUserInfo.setEmail(data.getStringExtra("email"));
+                }
+                break;
+            case 2:
+                if(resultCode == RESULT_OK){
+                    mUserInfo.setHobby(data.getStringExtra("hobby"));
+                }
+                break;
+            case 3:
+                if(resultCode == RESULT_OK){
+                    mUserInfo.setPersonalizedSignature(data.getStringExtra("signature"));
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -133,6 +207,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
             public void onClick(DialogInterface dialog, int which)
             {
                 disSex.setText(cities[which]);
+                mUserInfo.setSex(cities[which]);
             }
         });
         builder.show();
@@ -148,7 +223,8 @@ public class UserInfoActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        disBirthday.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                        disBirthday.setText(year+""+monthOfYear+""+dayOfMonth);
+                        mUserInfo.setBirthday(year+""+monthOfYear+""+dayOfMonth);
                     }
                 },
                 // 设置初始日期

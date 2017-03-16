@@ -27,8 +27,6 @@ public class UpdateUserInfoMoelImp implements IUpdateUserInfoModel{
     private UserInfoUpdateListener userInfoUpdateListener;
     private boolean reData;
 
-   private String url = "http://119.29.182.235:8080/babyTest/updateUserInfo?";
-
     @Override
     public void updateUserInfo(Context context, UserInfo userInfo, UserInfoUpdateListener userInfoUpdateListener) {
         this.context = context;
@@ -40,7 +38,8 @@ public class UpdateUserInfoMoelImp implements IUpdateUserInfoModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(UserInfo userInfo){
-        url = url + "id="+userInfo.getId() + "userId="+ userInfo.getUserId() +"&sex="+ userInfo.getSex() +"&userImg="+ userInfo.getUserImg()
+        String url = "http://119.29.182.235:8080/babyTest/updateUserInfo?";
+        url = url + "id="+userInfo.getId() + "&userId="+ userInfo.getUserId() +"&sex="+ userInfo.getSex() +"&userImg="+ userInfo.getUserImg()
                 +"&nickName=" + userInfo.getNickName()+"&birthday="+ userInfo.getBirthday() +"&email="+ userInfo.getEmail()
                 +"&hobby=" + userInfo.getHobby() +"&personalizedSignature="+ userInfo.getPersonalizedSignature();
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -72,7 +71,6 @@ public class UpdateUserInfoMoelImp implements IUpdateUserInfoModel{
             e.printStackTrace();
         }
         retData();
-
     }
 
     private void retData(){
