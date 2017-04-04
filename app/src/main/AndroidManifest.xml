@@ -44,7 +44,8 @@
         <activity android:name=".login.ResetPasswordActivity"/>
         <activity android:name=".login.RecoverPasswordActivity"/>
         <activity android:name=".login.RecoverPasswordGetCodeActivity"/>
-
+        <activity android:name=".view.activity.ProductDetailActivity"/>
+        <activity android:name=".view.activity.ProductReviewActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

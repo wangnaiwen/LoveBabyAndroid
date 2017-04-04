@@ -19,16 +19,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.DepthPageTransformer;
-import com.wnw.lovebaby.adapter.GoodsCoverAdapter;
 import com.wnw.lovebaby.adapter.ImagePageAdapter;
-import com.wnw.lovebaby.bean.GoodsCoverItem;
+import com.wnw.lovebaby.adapter.ProductAdapter;
+import com.wnw.lovebaby.domain.Product;
+import com.wnw.lovebaby.presenter.FindHotSalePresenter;
+import com.wnw.lovebaby.presenter.FindNewProductPresenter;
+import com.wnw.lovebaby.presenter.FindSpecialPricePresenter;
 import com.wnw.lovebaby.view.activity.InviteOpenShopActivity;
+import com.wnw.lovebaby.view.activity.ProductDetailActivity;
 import com.wnw.lovebaby.view.activity.SearchGoodsActivity;
 import com.wnw.lovebaby.view.activity.SortListActivity;
 import com.wnw.lovebaby.view.activity.TodayNewGoodsActivity;
 import com.wnw.lovebaby.view.costom.GoodsGridView;
+import com.wnw.lovebaby.view.viewInterface.IFindHotSaleView;
+import com.wnw.lovebaby.view.viewInterface.IFindNewProductView;
+import com.wnw.lovebaby.view.viewInterface.IFindSpecialPriceView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -39,14 +48,11 @@ import java.util.concurrent.TimeUnit;
  * Created by wnw on 2016/12/1.
  */
 
-public class HomepageFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
+public class HomepageFragment extends Fragment implements View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
+        IFindHotSaleView, IFindSpecialPriceView,IFindNewProductView{
 
-    public static int[] images = {
-            R.drawable.main_img1,
-            R.drawable.main_img2,
-            R.drawable.main_img3,
-            R.drawable.main_img4};
-
+    public static int IMAGE_PAGER = 1;   //图片轮播的Handler发送的消息
     /**
      * search_bar
      * */
@@ -63,52 +69,36 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
     /**
      * 猜你喜欢的内容
      * */
-    private int imagesIcon[] = {R.mipmap.n1, R.mipmap.m2, R.mipmap.m3, R.mipmap.m4};
-    private String titles[] = {"奶粉1","奶粉2","奶粉3","奶粉4"};
-    private int prices[] = {10100,10199,10388,10409};
-    private GoodsGridView goodsGridView;
-    private GoodsCoverAdapter goodsCoverAdapter;
-    private List<GoodsCoverItem> goodsCoverItemList;
+    private GoodsGridView youLoveProductView = null;        //猜你喜欢商品区
+    private ProductAdapter youLoveProductAdapter = null;    //猜你喜欢商品的Adapter
+    List<Product> youLoveProductList = null;                //猜你喜欢商品
+    FindNewProductPresenter youLovePricePresenter = null;  //猜你喜欢商品Presenter
 
     /**
      * 限时抢购的内容
      * */
-    private int imagesIcon2[] = {R.mipmap.b5,R.mipmap.b2, R.mipmap.b3,R.mipmap.b4};
-    private String titles2[] = {"宝宝宝宝1","宝宝宝宝2","宝宝宝宝3","宝宝宝宝4"};
-    private int price2[] = {10000000,10000000,10000000,10000000};
-    private GoodsGridView deadLineGoodsGridView;
-    private GoodsCoverAdapter deadLineGoodsCoverAdapter;
-    private List<GoodsCoverItem> deadlineGoodsCoverItemList;
+    private GoodsGridView specialPriceProductView = null;        //特价商品区
+    private ProductAdapter specialPriceProductAdapter = null;    //特价商品的Adapter
+    List<Product> specialPriceProductList = null;                //特价商品
+    FindSpecialPricePresenter findSpecialPricePresenter = null;  //特价商品Presenter
 
     private View view;
     private LayoutInflater mInflater;
     private Context context;
     private ViewPager mviewPager;
 
-    /**存放加载出来的图片*/
-    private List<Integer> imageList;
+    //private List<Integer> imageList;
+    private List<ImageView> dotViewList;      //用于小圆点图片
+    private List<ImageView> list;            //用于存放轮播效果图片
+    LinearLayout dotLayout;                  //点布局
+    SwipeRefreshLayout homepageSwipRefresh;  //下拉刷新
 
-    /**用于小圆点图片*/
-    private List<ImageView> dotViewList;
-
-    /**用于存放轮播效果图片*/
-    private List<ImageView> list;
-
-    /**
-     * 点的布局
-     * */
-    LinearLayout dotLayout;
-
-    /**
-     * 下拉刷新
-     * */
-    SwipeRefreshLayout homepageSwipRefresh;
-
-    private int currentItem  = 0;//当前页面
-
-    boolean isAutoPlay = true;//是否自动轮播
-
+    private int currentItem  = 0;            //当前页面
+    boolean isAutoPlay = true;               //是否自动轮播
     private ScheduledExecutorService scheduledExecutorService;
+    private ImagePageAdapter imagePageAdapter = null; //热卖商品图片轮播的Adapter
+    List<Product> hotSaleProductList = null;          //热卖商品，在轮播中查看
+    FindHotSalePresenter findHotSalePresenter = null; //热卖商品Presenter
 
     @Nullable
     @Override
@@ -116,31 +106,12 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
         mInflater = inflater;
         context = inflater.getContext();
         view = inflater.inflate(R.layout.fragment_homepage, container, false);
+
+        //初始化界面，初始化Presenter，用Presenter加载数据
         initView();
+        initPresenter();
+        loadData();
         return view;
-    }
-
-
-    private void buildGvData(){
-        goodsCoverItemList = new ArrayList<>();
-        deadlineGoodsCoverItemList = new ArrayList<>();
-        int count = Math.min(Math.min(imagesIcon.length, titles.length), Math.min(imagesIcon.length, prices.length));
-        for(int i = 0; i < count; i++){
-            GoodsCoverItem item = new GoodsCoverItem();
-            item.setImage(imagesIcon[i]);
-            item.setTitle(titles[i]);
-            item.setPrice(prices[i]);
-            goodsCoverItemList.add(item);
-        }
-
-        int count2 = Math.min(Math.min(imagesIcon2.length, titles2.length), Math.min(imagesIcon2.length, price2.length));
-        for(int i = 0; i < count2; i++){
-            GoodsCoverItem item = new GoodsCoverItem();
-            item.setImage(imagesIcon2[i]);
-            item.setTitle(titles2[i]);
-            item.setPrice(price2[i]);
-            deadlineGoodsCoverItemList.add(item);
-        }
     }
 
     public void initView(){
@@ -152,36 +123,11 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
         searchBar.setOnClickListener(this);
 
         mviewPager = (ViewPager)view.findViewById(R.id.homepage_vp_image);
-        goodsGridView = (GoodsGridView)view.findViewById(R.id.gv_guess_goods) ;
-        deadLineGoodsGridView = (GoodsGridView)view.findViewById(R.id.gv_deadline_goods);
-        buildGvData();
-        goodsCoverAdapter = new GoodsCoverAdapter(context, goodsCoverItemList);
-        goodsGridView.setAdapter(goodsCoverAdapter);
-        goodsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(context, "item="+i, Toast.LENGTH_SHORT).show();
-            }
-        });
+        youLoveProductView = (GoodsGridView)view.findViewById(R.id.gv_guess_goods) ;
+        specialPriceProductView = (GoodsGridView)view.findViewById(R.id.gv_deadline_goods);
 
-        deadLineGoodsCoverAdapter = new GoodsCoverAdapter(context, deadlineGoodsCoverItemList);
-        deadLineGoodsGridView.setAdapter(deadLineGoodsCoverAdapter);
-        deadLineGoodsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(context, "item="+i, Toast.LENGTH_SHORT).show();
-            }
-        });
         dotLayout = (LinearLayout)view.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
-
-        dotViewList = new ArrayList<ImageView>();
-        list = new ArrayList<ImageView>();
-
-        setImageList(images);
-        setImageViewList();
-        setDotView();
-        setViewPageAtr();
 
         todayNewGoods = (LinearLayout)view.findViewById(R.id.homepage_menu_today_new_goods);
         classify = (LinearLayout)view.findViewById(R.id.homepage_menu_classify);
@@ -192,38 +138,78 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
         classify.setOnClickListener(this);
         myShop.setOnClickListener(this);
         inviteOpenShop.setOnClickListener(this);
+
+        specialPriceProductView.setOnItemClickListener(this);
+        youLoveProductView.setOnItemClickListener(this);
+
     }
 
     /**
-     *  加载完成后，设置这个ImageList
+     * 初始化Presenter
      * */
-    private void setImageList(List<Integer> imageList){
-        this.imageList = imageList;
+    private void initPresenter(){
+        findHotSalePresenter = new FindHotSalePresenter(context,this);
+        findSpecialPricePresenter = new FindSpecialPricePresenter(context,this);
+        youLovePricePresenter = new FindNewProductPresenter(context,this);
     }
 
-    private void setImageList(int[] images){
-        imageList = new ArrayList<>();
-        int count = images.length;
-        for(int i = 0; i < count; i++){
-            imageList.add(images[i]);
+    /**
+     * 加载数据
+     * */
+    private void loadData(){
+        findHotSalePresenter.load();
+        findSpecialPricePresenter.load();
+        youLovePricePresenter.load();
+    }
+
+    @Override
+    public void showLoading() {
+        //Toast.makeText(context, "正在加载中...",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showHotSale(List<Product> products) {
+        this.hotSaleProductList = products;
+        if(products == null){
+            Toast.makeText(context,"暂无法加载更多", Toast.LENGTH_SHORT).show();
+        }else{
+            setImagePagerList();   //设置图片轮播开始
         }
     }
+
+    @Override
+    public void showSpecialPrice(List<Product> products) {
+        this.specialPriceProductList = products;
+        if(products == null){
+            Toast.makeText(context,"暂无法加载更多", Toast.LENGTH_SHORT).show();
+        }else {
+            setSpecialPriceProductAdapter();
+        }
+    }
+
+    @Override
+    public void showNewProduct(List<Product> products) {
+        this.youLoveProductList = products;
+        if(products == null){
+            Toast.makeText(context,"暂无法加载更多", Toast.LENGTH_SHORT).show();
+        }else {
+            setYouLoveProductAdapter();
+        }
+    }
+
     /**
-     * 得到图片后开始装载ImageView 和DotView
+     * 得到热卖商品的图片后开始装载ImageView 和DotView
      * */
-    private void setImageViewList(){
-        int count = imageList.size();
+    private void setImagePagerList(){
+        dotViewList = new ArrayList<ImageView>();
+        list = new ArrayList<ImageView>();
+        int count = hotSaleProductList.size();
         for(int i = 0; i < count; i++){
             ImageView img = (ImageView) mInflater.inflate(R.layout.vp_image_item, null);
-            img.setBackgroundResource(imageList.get(i));
+            Glide.with(context).load(hotSaleProductList.get(i).getCoverImg()).into(img);
             list.add(img);
         }
-    }
-    /**
-     * setDotView
-     * */
-    private void setDotView(){
-        int count = list.size();
+        //设置小圆点
         for (int i = 0; i < count; i++) {
             ImageView dotView = new ImageView(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ActionBar.LayoutParams(
@@ -243,20 +229,42 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
             dotLayout.addView(dotView, params);
             dotViewList.add(dotView);
         }
-    }
 
-    /**
-     * 图片和点都准备好了，开始加载Viewpager的属性并且设置它
-     *
-     * */
-    private void setViewPageAtr(){
-        ImagePageAdapter adapter = new ImagePageAdapter((ArrayList)list);
-        mviewPager.setAdapter(adapter);
-        mviewPager.setCurrentItem(0);
-        mviewPager.setOnPageChangeListener(new MyPageChangeListener());
-        mviewPager.setPageTransformer(true, new DepthPageTransformer());
+        //图片和点都准备好了，开始加载Viewpager的属性并且设置它
+        if(imagePageAdapter == null) {
+            imagePageAdapter = new ImagePageAdapter(context,handler,(ArrayList) list);
+            mviewPager.setAdapter(imagePageAdapter);
+            mviewPager.setCurrentItem(0);
+            mviewPager.setOnPageChangeListener(new MyPageChangeListener());
+            mviewPager.setPageTransformer(true, new DepthPageTransformer());
+        }else{
+            imagePageAdapter.setImageViewList(list);
+            imagePageAdapter.notifyDataSetChanged();
+        }
         if(isAutoPlay){
             startPlay();
+        }
+    }
+
+    //设置特价商品区的Adapter
+    private void setSpecialPriceProductAdapter(){
+        if(specialPriceProductAdapter == null){
+            specialPriceProductAdapter = new ProductAdapter(context, specialPriceProductList);
+            specialPriceProductView.setAdapter(specialPriceProductAdapter);
+        }else {
+            specialPriceProductAdapter.setDatas(specialPriceProductList);
+            specialPriceProductAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //设置猜你喜欢商品区的Adapter
+    private void setYouLoveProductAdapter(){
+        if(youLoveProductAdapter == null){
+            youLoveProductAdapter = new ProductAdapter(context, youLoveProductList);
+            youLoveProductView.setAdapter(youLoveProductAdapter);
+        }else {
+            youLoveProductAdapter.setDatas(youLoveProductList);
+            youLoveProductAdapter.notifyDataSetChanged();
         }
     }
 
@@ -266,6 +274,13 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
             super.handleMessage(msg);
             if(msg.what == 100){
                 mviewPager.setCurrentItem(currentItem);
+            }else if(msg.what == IMAGE_PAGER){ //图片轮播里的点击事件传递出来
+                int position = msg.arg1;
+                Toast.makeText(context, position+"", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("product",hotSaleProductList.get(position));
+                context.startActivity(intent);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         }
     };
@@ -371,6 +386,27 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()){
+            case R.id.gv_deadline_goods:
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("product", specialPriceProductList.get(i));
+                startActivity(intent);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                Toast.makeText(context, ""+i, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.gv_guess_goods:
+                Intent intent1 = new Intent(context, ProductDetailActivity.class);
+                intent1.putExtra("product", youLoveProductList.get(i));
+                startActivity(intent1);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                Toast.makeText(context, ""+i, Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+    }
+
+    @Override
     public void onRefresh() {
         refreshHomePage();
     }
@@ -383,11 +419,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener, 
         startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
-
-    private void setGuessYouLoveImages(List<GoodsCoverItem> guessYouLoveImages){
-        this.goodsCoverItemList = guessYouLoveImages;
-    }
-
 
     /**
      *

@@ -106,7 +106,7 @@
                             android:src="@drawable/daily_new_product"
                             android:layout_gravity="center"/>
                         <TextView
-                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
                             android:text="@string/today_new_goods"
@@ -127,7 +127,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/classify_list"/>
                         <TextView
-                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
                             android:text="@string/sort_of_goods"
@@ -148,7 +148,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/my_shop"/>
                         <TextView
-                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
                             android:text="@string/my_shop"
@@ -169,7 +169,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/invite_open_shop"/>
                         <TextView
-                            android:layout_width="@dimen/homepage_menu_text_width"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/homepage_menu_text_height"
                             android:layout_gravity="center"
                             android:text="@string/invite_open_shop"
@@ -202,7 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="#b1f7f6f6"
-                    android:text="限时抢购"
+                    android:text="特价商品"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:paddingLeft="10dp"/>

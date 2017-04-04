@@ -12,7 +12,6 @@ import com.wnw.lovebaby.bean.GoodsCoverItem;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.costom.GoodsSquareLayout;
-
 import java.util.List;
 
 /**

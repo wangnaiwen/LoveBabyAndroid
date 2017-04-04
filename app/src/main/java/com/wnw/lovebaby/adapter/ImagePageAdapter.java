@@ -1,5 +1,9 @@
 package com.wnw.lovebaby.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -8,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.wnw.lovebaby.view.activity.ProductDetailActivity;
 
 import java.util.List;
 
@@ -18,11 +24,18 @@ import java.util.List;
 public class ImagePageAdapter extends PagerAdapter{
 
     private List<ImageView> imageViewList;
+    private Context context;
+    private Handler handler;
 
-    public ImagePageAdapter(List<ImageView> list){
+    public ImagePageAdapter(Context context,Handler handler, List<ImageView> list){
+        this.context = context;
+        this.handler = handler;
         this.imageViewList = list;
     }
 
+    public void setImageViewList(List<ImageView> imageViews){
+        this.imageViewList = imageViews;
+    }
     @Override
     public int getCount() {
         return imageViewList.size();
@@ -49,7 +62,16 @@ public class ImagePageAdapter extends PagerAdapter{
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("wnw", "item=" + position);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Message message = new Message();
+                        message.what = 1;
+                        message.arg1 = position;
+                        handler.sendMessage(message);
+                    }
+                }).start();
             }
         });
         ViewParent vp =  view.getParent();

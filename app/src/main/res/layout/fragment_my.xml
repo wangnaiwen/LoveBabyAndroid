@@ -115,7 +115,7 @@
                         android:src="@drawable/img_mine_orderunpay"
                         android:layout_gravity="center"/>
                     <TextView
-                        android:layout_width="@dimen/homepage_menu_text_width"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/homepage_menu_text_height"
                         android:layout_gravity="center"
                         android:text="待付款"
@@ -130,13 +130,16 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:clickable="true">
+
                     <ImageView
                         android:layout_width="@dimen/homepage_menu_icon_width"
                         android:layout_height="@dimen/homepage_menu_icon_height"
                         android:layout_gravity="center"
-                        android:src="@drawable/img_mine_orderunsend"/>
+                        android:src="@drawable/img_mine_orderunsend"
+                        android:id="@+id/imageView" />
+
                     <TextView
-                        android:layout_width="@dimen/homepage_menu_text_width"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/homepage_menu_text_height"
                         android:layout_gravity="center"
                         android:text="待发货"
@@ -157,7 +160,7 @@
                         android:layout_gravity="center"
                         android:src="@drawable/img_mine_orderunreceipt"/>
                     <TextView
-                        android:layout_width="@dimen/homepage_menu_text_width"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/homepage_menu_text_height"
                         android:layout_gravity="center"
                         android:text="待收货"
@@ -178,7 +181,7 @@
                         android:layout_gravity="center"
                         android:src="@drawable/mine_v4_assess_img"/>
                     <TextView
-                        android:layout_width="@dimen/homepage_menu_text_width"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/homepage_menu_text_height"
                         android:layout_gravity="center"
                         android:text="待评价"
@@ -200,7 +203,7 @@
                         android:layout_gravity="center"
                         android:src="@drawable/mine_after_sale_img"/>
                     <TextView
-                        android:layout_width="@dimen/homepage_menu_text_width"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/homepage_menu_text_height"
                         android:layout_gravity="center"
                         android:text="退款"

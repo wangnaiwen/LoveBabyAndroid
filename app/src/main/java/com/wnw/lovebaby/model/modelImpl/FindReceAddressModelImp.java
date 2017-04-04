@@ -85,13 +85,6 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
             }else {
                 Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
-            /*if(object1 == null){
-
-            }else {
-
-
-            }*/
-
         }catch (JSONException e){
             e.printStackTrace();
         }

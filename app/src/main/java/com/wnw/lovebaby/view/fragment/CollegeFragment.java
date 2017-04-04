@@ -165,7 +165,7 @@ public class CollegeFragment extends Fragment implements AdapterView.OnItemClick
      *
      * */
     private void setViewPageAtr(){
-        ImagePageAdapter adapter = new ImagePageAdapter((ArrayList)list);
+        ImagePageAdapter adapter = new ImagePageAdapter(context, handler,(ArrayList)list);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
         viewPager.setOnPageChangeListener(new MyPageChangeListener());
