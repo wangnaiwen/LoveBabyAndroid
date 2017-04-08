@@ -71,7 +71,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
             ShoppingCarItem shoppingCarItem = new ShoppingCarItem();
             shoppingCarItem.setId(i);
             shoppingCarItem.setChecked(true);
-            shoppingCarItem.setGoodsImg(R.mipmap.b1);
+            shoppingCarItem.setGoodsImg("http://119.29.182.235:8080/ssh_contacts/images/join_us.jpg");
             shoppingCarItem.setGoodsNum(1);
             shoppingCarItem.setGoodsPrice(400000);
             shoppingCarItem.setGoodsTitle("特价宝宝，冬天免费出租，免费暖被窝，免费倒洗脚水");

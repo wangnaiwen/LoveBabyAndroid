@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.bean.ShoppingCarItem;
 import com.wnw.lovebaby.util.TypeConverters;
@@ -82,10 +84,9 @@ public class ShoppingCarAdapter extends BaseAdapter {
         }else{
             shoppingCarHolder.goodsChecked.setImageResource(R.drawable.checkbox_normal);
         }
-        shoppingCarHolder.goodsIcon.setImageResource(shoppingCarItem.getGoodsImg());
+        Glide.with(context).load(shoppingCarItem.getGoodsImg()).into(shoppingCarHolder.goodsIcon);
         shoppingCarHolder.goodsTitle.setText(shoppingCarItem.getGoodsTitle());
-        TypeConverters converters = new TypeConverters();
-        shoppingCarHolder.goodsPrice.setText(converters.IntConvertToString(shoppingCarItem.getGoodsPrice()));
+        shoppingCarHolder.goodsPrice.setText(TypeConverters.IntConvertToString(shoppingCarItem.getGoodsPrice()));
         shoppingCarHolder.goodsNum.setText(shoppingCarItem.getGoodsNum()+"");
 
         shoppingCarHolder.goodsChecked.setOnClickListener(new View.OnClickListener() {

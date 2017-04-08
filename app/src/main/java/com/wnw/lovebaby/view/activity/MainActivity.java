@@ -130,21 +130,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * change the fragment
-     * */
-    private void changeFragment(Fragment to){
-        FragmentTransaction transaction = fragmentManager.beginTransaction().setCustomAnimations(
-                android.R.anim.fade_in, android.R.anim.fade_out);
-
-        if (!to.isAdded()) {	// 先判断是否被add过
-            transaction.hide(currentFragment).add(R.id.fragment_pager, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
-        } else {
-            transaction.hide(currentFragment).show(to).commit(); // 隐藏当前的fragment，显示下一个
-        }
-        currentFragment = to;
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -195,5 +180,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    /**
+     * change the fragment
+     * */
+    private void changeFragment(Fragment to){
+        FragmentTransaction transaction = fragmentManager.beginTransaction().setCustomAnimations(
+                android.R.anim.fade_in, android.R.anim.fade_out);
+        if (!to.isAdded()) {	// 先判断是否被add过
+            transaction.hide(currentFragment).add(R.id.fragment_pager, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
+        } else {
+            transaction.hide(currentFragment).show(to).commit(); // 隐藏当前的fragment，显示下一个
+        }
+        currentFragment = to;
     }
 }

@@ -77,7 +77,7 @@ public class ReviewAdapter extends BaseAdapter {
         prHorder.productScoreImg.setImageResource(starImg[pr.getProductScore()]);
         prHorder.serviceScoreImg.setImageResource(starImg[pr.getServiceScore()]);
         prHorder.logisticsScoreImg.setImageResource(starImg[pr.getLogisticsScore()]);
-        prHorder.deatailReviewTv.setText(pr.getEvalution());
+        prHorder.deatailReviewTv.setText(pr.getEvaluation());
         return view;
     }
 

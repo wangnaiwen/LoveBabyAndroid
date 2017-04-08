@@ -11,6 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.model.modelInterface.IFindShoppingByUserIdModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +42,7 @@ public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdMo
     private void sendRequestWithVolley(int userId){
         String url = "http://119.29.182.235:8080/babyTest/findShoppingCarByUserId?";
         url = url + "userId="+userId;
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -63,12 +65,15 @@ public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdMo
             if(jsonArray != null){
                 shoppingCarList = new ArrayList<>();
                 int length = jsonArray.length();
-                for(int i = 0 ; i < length; i++){
+
+                //数据翻过来装，这样显示最新的数据就可以放在最前面了
+                for(int i = length-1 ; i >= 0; i--){
                     JSONObject object = jsonArray.getJSONObject(i);
                     ShoppingCar car = new ShoppingCar();
                     car.setId(object.getInt("id"));
                     car.setUserId(object.getInt("userId"));
                     car.setProductId(object.getInt("productId"));
+                    car.setRetailPrice(object.getInt("retailPrice"));
                     car.setProductCover(object.getString("productCover"));
                     car.setProductName(object.getString("productName"));
                     car.setProductCount(object.getInt("productCount"));

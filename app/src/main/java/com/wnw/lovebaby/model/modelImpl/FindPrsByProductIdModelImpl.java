@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.domain.Pr;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.model.modelInterface.IFindPrsByProductIdModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +40,9 @@ public class FindPrsByProductIdModelImpl implements IFindPrsByProductIdModel {
     }
 
     private void sendRequestWithVolley(int productId, int number){
-        String url = "http://119.29.182.235:8080/babyTest/findPrsByProductId";
+        String url = "http://119.29.182.235:8080/babyTest/findPrsByProductId?";
         url = url + "productId=" + productId + "&number="+number;
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -75,7 +77,7 @@ public class FindPrsByProductIdModelImpl implements IFindPrsByProductIdModel {
                     pr.setProductScore(object.getInt("productScore"));
                     pr.setLogisticsScore(object.getInt("logisticsScore"));
                     pr.setServiceScore(object.getInt("serviceScore"));
-                    pr.setEvaluation(object.getString("evaluation"));
+                    pr.setEvaluation(object.getString("evalution"));
                     pr.setTime(object.getString("time"));
 
                     prList.add(pr);

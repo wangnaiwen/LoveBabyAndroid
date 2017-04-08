@@ -38,7 +38,7 @@ public class FindPrsByUserIdModelImpl implements IFindPrsByUserIdModel{
 
 
     private void sendRequestWithVolley(int userId,int number){
-        String url = "http://119.29.182.235:8080/babyTest/findPrsByUserId";
+        String url = "http://119.29.182.235:8080/babyTest/findPrsByUserId?";
         url = url + "userId=" + userId + "&number="+number;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -74,7 +74,7 @@ public class FindPrsByUserIdModelImpl implements IFindPrsByUserIdModel{
                     pr.setProductScore(object.getInt("productScore"));
                     pr.setLogisticsScore(object.getInt("logisticsScore"));
                     pr.setServiceScore(object.getInt("serviceScore"));
-                    pr.setEvaluation(object.getString("evaluation"));
+                    pr.setEvaluation(object.getString("evalution"));
                     pr.setTime(object.getString("time"));
 
                     prList.add(pr);

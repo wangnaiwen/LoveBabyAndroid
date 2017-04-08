@@ -67,13 +67,18 @@
                 android:textSize="18sp"/>
         </RelativeLayout>
     </LinearLayout>
-    <ListView
-        android:id="@+id/lv_shopping_car"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/shopping_car_swiperefresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/shopping_car_title"
-        android:layout_above="@id/btn_sum_price"/>
-
+        android:layout_above="@id/btn_sum_price">
+        <ListView
+            android:id="@+id/lv_shopping_car"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
     <RelativeLayout
         android:id="@+id/shopping_car_nothing"
         android:layout_width="match_parent"

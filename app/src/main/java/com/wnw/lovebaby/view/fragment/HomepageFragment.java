@@ -329,7 +329,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                     break;
                 case 0:// 滑动结束，即切换完毕或者加载完毕
                     // 当前为最后一张，此时从右向左滑，则切换到第一张
-                    Log.d("wnw", mviewPager.getAdapter().getCount()+" "+mviewPager.getCurrentItem());
                     if (mviewPager.getCurrentItem() == mviewPager.getAdapter().getCount() - 1 && !isAutoPlay) {
                         mviewPager.setCurrentItem(0);
                     }
@@ -393,14 +392,12 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("product", specialPriceProductList.get(i));
                 startActivity(intent);
                 ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                Toast.makeText(context, ""+i, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.gv_guess_goods:
                 Intent intent1 = new Intent(context, ProductDetailActivity.class);
                 intent1.putExtra("product", youLoveProductList.get(i));
                 startActivity(intent1);
                 ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                Toast.makeText(context, ""+i, Toast.LENGTH_SHORT).show();
                 break;
 
         }

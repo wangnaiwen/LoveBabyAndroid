@@ -7,7 +7,7 @@ package com.wnw.lovebaby.bean;
 public class ShoppingCarItem {
     private int id;
     private boolean checked;
-    private int goodsImg;
+    private String goodsImg;
     private String goodsTitle;
     private int goodsPrice;
     private int goodsNum;
@@ -28,11 +28,11 @@ public class ShoppingCarItem {
         this.checked = checked;
     }
 
-    public int getGoodsImg() {
+    public String getGoodsImg() {
         return goodsImg;
     }
 
-    public void setGoodsImg(int goodsImg) {
+    public void setGoodsImg(String goodsImg) {
         this.goodsImg = goodsImg;
     }
 

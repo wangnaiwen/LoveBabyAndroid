@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.bean.ShoppingCarItem;
 import com.wnw.lovebaby.util.TypeConverters;
@@ -63,8 +64,7 @@ public class OrderLvAdapter extends BaseAdapter {
         }
 
         ShoppingCarItem shoppingCarItem = shoppingCarItemList.get(i);
-
-        orderLvHolder.orderIcon.setImageResource(shoppingCarItem.getGoodsImg());
+        Glide.with(context).load(shoppingCarItem.getGoodsImg()).into(orderLvHolder.orderIcon);
         orderLvHolder.orderTitle.setText(shoppingCarItem.getGoodsTitle());
         TypeConverters typeConverters = new TypeConverters();
         orderLvHolder.unitPrice.setText(typeConverters.IntConvertToString(shoppingCarItem.getGoodsPrice()));
