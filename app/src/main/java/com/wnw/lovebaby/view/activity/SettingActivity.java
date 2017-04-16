@@ -57,7 +57,9 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.my_rece_address:
-                startActivity(new Intent(this, AddressListActivity.class));
+                Intent intent1 = new Intent(this, AddressListActivity.class);
+                intent1.putExtra("lastAty", 1);
+                startActivity(intent1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.my_shop:

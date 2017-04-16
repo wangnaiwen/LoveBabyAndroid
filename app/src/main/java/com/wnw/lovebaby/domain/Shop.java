@@ -9,6 +9,7 @@ public class Shop {
 	private long money;
 	private String idCard;
 	private int reviewType;
+	private int invitee;
 	public int getId() {
 		return id;
 	}
@@ -57,6 +58,12 @@ public class Shop {
 	public void setReviewType(int reviewType) {
 		this.reviewType = reviewType;
 	}
-	
-	
+
+	public int getInvitee() {
+		return invitee;
+	}
+
+	public void setInvitee(int invitee) {
+		this.invitee = invitee;
+	}
 }

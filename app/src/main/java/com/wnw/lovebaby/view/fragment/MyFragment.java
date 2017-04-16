@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.view.activity.MyOrderActivity;
 import com.wnw.lovebaby.view.activity.SettingActivity;
 import com.wnw.lovebaby.view.activity.UserInfoActivity;
 
@@ -94,19 +95,19 @@ public class MyFragment extends Fragment implements View.OnClickListener{
                 ((Activity)mContext).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.mine_all_order:
-
+                openMyOrderActivity(0);
                 break;
             case R.id.mine_be_pad:
-
+                openMyOrderActivity(1);
                 break;
             case R.id.mine_be_sent:
-
+                openMyOrderActivity(2);
                 break;
             case R.id.mine_be_received:
-
+                openMyOrderActivity(3);
                 break;
             case R.id.mine_be_evaluated:
-
+                openMyOrderActivity(4);
                 break;
             case R.id.mine_refunds:
 
@@ -114,7 +115,13 @@ public class MyFragment extends Fragment implements View.OnClickListener{
             case R.id.mine_join_us:
 
                 break;
-
         }
+    }
+
+    private void openMyOrderActivity(int position){
+        Intent intent = new Intent(getContext(), MyOrderActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
+        ((Activity)getContext()).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

@@ -1,5 +1,6 @@
 package com.wnw.lovebaby.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.domain.User;
+import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.FindPasswordPresenter;
 import com.wnw.lovebaby.view.activity.MainActivity;
 import com.wnw.lovebaby.view.viewInterface.IFindPasswordView;
@@ -107,7 +109,7 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
         switch (v.getId()) {
             case R.id.password_recover_setpasswd_ok:
                 if(judgePasswdEqual()){
-                    mPresenter.findPassword(this, phoneNum, login_edit_setpasswd.getText().toString().trim());
+                    startFindPassword();
                 }else{
                     Toast.makeText(this, "输入的两次密码不一致",Toast.LENGTH_SHORT).show();
                 }
@@ -121,6 +123,31 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
                 break;
         }
     }
+
+    //找回密码
+    private void startFindPassword(){
+        if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络不可用",Toast.LENGTH_SHORT).show();
+        }else{
+            mPresenter.findPassword(this, phoneNum, login_edit_setpasswd.getText().toString().trim());
+        }
+    }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        dialog.show();
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
 
     /**
      * 判断两次密码输入是否相同
@@ -159,6 +186,7 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
 
     @Override
     public void findPassword(User user) {
+        dismissDialogs();
         if(user == null){
             Toast.makeText(this, "找回密码失败！", Toast.LENGTH_SHORT).show();
         }else {
@@ -173,6 +201,6 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
 
     @Override
     public void showDialog() {
-        Toast.makeText(this, "正在拼命登录中...", Toast.LENGTH_SHORT).show();
+        showDialogs();
     }
 }

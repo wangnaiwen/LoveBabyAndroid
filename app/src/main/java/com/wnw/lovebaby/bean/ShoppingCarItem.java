@@ -1,16 +1,19 @@
 package com.wnw.lovebaby.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by wnw on 2016/12/10.
  */
 
-public class ShoppingCarItem {
+public class ShoppingCarItem implements Serializable{
     private int id;
     private boolean checked;
     private String goodsImg;
     private String goodsTitle;
     private int goodsPrice;
     private int goodsNum;
+    private int productId;
 
     public int getId() {
         return id;
@@ -58,5 +61,13 @@ public class ShoppingCarItem {
 
     public void setGoodsNum(int goodsNum) {
         this.goodsNum = goodsNum;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 }

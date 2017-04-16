@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.model.modelInterface.IDeleteShoppingCarModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ public class DeleteShoppingCarModelImpl implements IDeleteShoppingCarModel {
     private void sendRequestWithVolley(int id){
         String url = "http://119.29.182.235:8080/babyTest/deleteShoppingCar?";
         url = url + "id=" +id;
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

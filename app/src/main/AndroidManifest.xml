@@ -14,6 +14,22 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
+        <activity android:name=".login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".login.RegisterEditNumAty"/>
+        <activity android:name=".login.LoginGetCodesAty"/>
+        <activity android:name=".login.LoginSetPasswdAty"/>
+        <activity android:name=".login.ResetPasswordActivity"/>
+        <activity android:name=".login.RecoverPasswordActivity"/>
+        <activity android:name=".login.RecoverPasswordGetCodeActivity"/>
+        <activity android:name=".view.activity.ProductDetailActivity"/>
+        <activity android:name=".view.activity.ProductReviewActivity"/>
         <activity android:name=".view.activity.SearchGoodsActivity"/>
         <activity android:name=".view.activity.SearchResultActivity"/>
         <activity android:name=".view.activity.OrderConfirmationActivity"/>
@@ -30,22 +46,11 @@
         <activity android:name=".view.activity.EditNickNameActivity"/>
         <activity android:name=".view.activity.EditHobbyActivity"/>
         <activity android:name=".view.activity.EditSignatureActivity"/>
+        <activity android:name=".view.activity.MyShopActivity"/>
+        <activity android:name=".view.activity.PickShopActivity"/>
+        <activity android:name=".view.activity.PayActivity"/>
+        <activity android:name=".view.activity.MyOrderActivity"/>
 
-        <activity android:name=".login.RegisterEditNumAty"/>
-        <activity android:name=".login.LoginGetCodesAty"/>
-        <activity android:name=".login.LoginSetPasswdAty"/>
-        <activity android:name=".login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".login.ResetPasswordActivity"/>
-        <activity android:name=".login.RecoverPasswordActivity"/>
-        <activity android:name=".login.RecoverPasswordGetCodeActivity"/>
-        <activity android:name=".view.activity.ProductDetailActivity"/>
-        <activity android:name=".view.activity.ProductReviewActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

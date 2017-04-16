@@ -68,7 +68,6 @@ public class RegisterModelImp implements IRegisterModel {
                 Toast.makeText(context, "该用户已经存在", Toast.LENGTH_SHORT).show();
             }else {
                 returnData = jsonObject.getBoolean("register");
-                retData();
             }
         }catch (JSONException e){
             e.printStackTrace();
@@ -76,5 +75,6 @@ public class RegisterModelImp implements IRegisterModel {
         /**
          * 解析完后返回数据
          * */
+        retData();
     }
 }

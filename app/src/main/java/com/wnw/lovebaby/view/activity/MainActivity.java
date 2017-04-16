@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.view.fragment.CollegeFragment;
@@ -194,5 +196,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.hide(currentFragment).show(to).commit(); // 隐藏当前的fragment，显示下一个
         }
         currentFragment = to;
+    }
+
+    //双击退出桌面
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            /**
+             * 当侧边栏处于展开状态时，按下返回键，关闭侧边栏
+             * */
+
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

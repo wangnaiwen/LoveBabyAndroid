@@ -43,12 +43,17 @@ public class AddressListActivity extends MvpBaseActivity<IFindReceAddressView, F
     private int editIndex;   //选中哪一个编辑
     private int deleteIndex; //选中哪一个删除
 
+    //得到上一个Activity是什么，如果是设置:1，就是用户点击地址，不能返回，如果是订单确认:0，这点击返回
+    private int lastAty = 0;
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case ReceAddressAdapter.SELECT_RECE_ADDRESS:
-                    forResultActivity(msg.arg1);
+                    if(lastAty == 0){
+                        forResultActivity(msg.arg1);
+                    }
                     break;
                 case ReceAddressAdapter.EDIT_RECE_ADDRESS:
                     startEditReceAddressAty(msg.arg1);
@@ -101,8 +106,15 @@ public class AddressListActivity extends MvpBaseActivity<IFindReceAddressView, F
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_list);
         initView();
+        getLastAty();
         loadData();
     }
+
+    private void getLastAty(){
+        Intent intent = getIntent();
+        lastAty = intent.getIntExtra("lastAty", 0);
+    }
+
 
     private void loadData(){
         SharedPreferences preferences = getSharedPreferences("account", MODE_PRIVATE);

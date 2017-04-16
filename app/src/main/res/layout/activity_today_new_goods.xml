@@ -34,4 +34,11 @@
         android:scrollbarStyle="insideOverlay"
         android:stretchMode="columnWidth">
     </com.wnw.lovebaby.view.costom.GoodsGridView>
+    <TextView
+        android:id="@+id/net_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="网络错误\n点击屏幕进行刷新"
+        android:visibility="gone"/>
 </LinearLayout>

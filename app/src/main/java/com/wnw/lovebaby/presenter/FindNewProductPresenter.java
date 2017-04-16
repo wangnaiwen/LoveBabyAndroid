@@ -27,6 +27,10 @@ public class FindNewProductPresenter {
         this.newProductView = findNewProductView;
     }
 
+    public void setNewProductView(IFindNewProductView findNewProductView){
+        this.newProductView = findNewProductView;
+    }
+
     //加载数据
     public void load() {
         //加载进度条

@@ -26,6 +26,10 @@ public class FindHotSalePresenter {
         this.hotSaleView = hotSaleView;
     }
 
+    public void setHotSaleView(IFindHotSaleView hotSaleView){
+        this.hotSaleView = hotSaleView;
+    }
+
     //加载数据
     public void load() {
         //加载进度条

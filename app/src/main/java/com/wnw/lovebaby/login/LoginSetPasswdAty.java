@@ -1,4 +1,5 @@
 package com.wnw.lovebaby.login;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.domain.User;
+import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.RegisterPresenter;
 import com.wnw.lovebaby.view.activity.MainActivity;
 import com.wnw.lovebaby.view.viewInterface.IRegisterView;
@@ -121,7 +123,8 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
                     user = new User();
                     user.setPhone(phoneNum);
                     user.setPassword(login_edit_setpasswd.getText().toString().trim());
-                    mPresenter.register(this, user);
+                    startRegisterPresenter();
+
                 }else{
                     Toast.makeText(this, "输入的两次密码不一致",Toast.LENGTH_SHORT).show();
                 }
@@ -133,6 +136,15 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
 
             default:
                 break;
+        }
+    }
+
+    //开始调用Presenter去注册
+    private void startRegisterPresenter(){
+        if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络不可用",Toast.LENGTH_SHORT).show();
+        }else{
+            mPresenter.register(this, user);
         }
     }
 
@@ -174,11 +186,26 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
 
     @Override
     public void showDialog() {
-        Toast.makeText(this, "正在拼命注册中", Toast.LENGTH_SHORT).show();
+        showDialogs();
+    }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        dialog.show();
+    }
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
     }
 
     @Override
     public void register(boolean isSuccess) {
+        dismissDialogs();
         if(isSuccess){
             Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
             ActivityCollector.finishAllActivity();

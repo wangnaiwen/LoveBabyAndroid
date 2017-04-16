@@ -1,6 +1,7 @@
 package com.wnw.lovebaby.login;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.domain.User;
+import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.LoginPresenter;
 import com.wnw.lovebaby.view.activity.MainActivity;
 import com.wnw.lovebaby.view.viewInterface.ILoginView;
@@ -70,7 +72,7 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
                     //验证密码
                     user.setPhone(phone.getText().toString().trim());
                     user.setPassword(password.getText().toString().trim());
-                    mPresenter.validate(this, user);   //开始获得数据
+                    startLoginPresenter();
                 }
                 break;
             case R.id.login_new_user:
@@ -88,6 +90,15 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
         }
     }
 
+    //开始调用Presenter去登录
+    private void startLoginPresenter(){
+        if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络不可用",Toast.LENGTH_SHORT).show();
+        }else{
+            mPresenter.validate(this, user);   //开始获得数据
+        }
+    }
+
     /**
      * 验证两个EditText是否都已经不为空了
      * */
@@ -96,7 +107,6 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
     }
 
     private void openMainAty(){
-
         Intent intent = new Intent(this, MainActivity.class);
         //intent.putExtra("netUser",netUser);
         startActivity(intent);
@@ -112,7 +122,21 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
 
     public void showDialog() {
         //在这里显示进度条
-        Toast.makeText(this, "正在拼命登录中", Toast.LENGTH_SHORT).show();
+        showDialogs();
+    }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        dialog.show();
+    }
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
     }
 
     private void saveAccount(){
@@ -128,7 +152,7 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
     @Override
     public void validate(User user) {
         //在这里得到返回的数据
-
+        dismissDialogs();
         if(user == null){
             Toast.makeText(this, "手机或密码错误", Toast.LENGTH_SHORT).show();
         }else {

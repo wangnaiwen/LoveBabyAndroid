@@ -27,6 +27,10 @@ public class FindSpecialPricePresenter {
         this.specialPriceView = specialPriceView;
     }
 
+    public void setSpecialPriceView(IFindSpecialPriceView specialPriceView){
+        this.specialPriceView = specialPriceView;
+    }
+
     //加载数据
     public void load() {
         //加载进度条

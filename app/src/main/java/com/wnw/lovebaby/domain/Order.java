@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.domain;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable{
 	private int id;
 	private int shopId;
 	private int userId;
@@ -9,6 +11,8 @@ public class Order {
 	private String createTime;
 	private String payTime;
 	private String finishTime;
+	private int addressId;
+	private String remark;
 	public int getId() {
 		return id;
 	}
@@ -57,5 +61,20 @@ public class Order {
 	public void setFinishTime(String finishTime) {
 		this.finishTime = finishTime;
 	}
-	
+
+	public int getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

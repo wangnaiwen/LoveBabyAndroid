@@ -1,6 +1,7 @@
 package com.wnw.lovebaby.view.fragment;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.wnw.lovebaby.adapter.DepthPageTransformer;
 import com.wnw.lovebaby.adapter.ImagePageAdapter;
 import com.wnw.lovebaby.adapter.ProductAdapter;
 import com.wnw.lovebaby.domain.Product;
+import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.FindHotSalePresenter;
 import com.wnw.lovebaby.presenter.FindNewProductPresenter;
 import com.wnw.lovebaby.presenter.FindSpecialPricePresenter;
@@ -157,15 +159,37 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
      * 加载数据
      * */
     private void loadData(){
-        findHotSalePresenter.load();
-        findSpecialPricePresenter.load();
-        youLovePricePresenter.load();
+        if(NetUtil.getNetworkState(context) == NetUtil.NETWORN_NONE){
+            Toast.makeText(context, "网络不可用",Toast.LENGTH_SHORT).show();
+        }else{
+            findHotSalePresenter.load();
+            findSpecialPricePresenter.load();
+            youLovePricePresenter.load();
+        }
     }
 
     @Override
     public void showLoading() {
-        //Toast.makeText(context, "正在加载中...",Toast.LENGTH_SHORT).show();
+        showDialogs();
     }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("正在努力中...");
+        }
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
 
     @Override
     public void showHotSale(List<Product> products) {
@@ -189,6 +213,10 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void showNewProduct(List<Product> products) {
+        dismissDialogs();
+        if(homepageSwipRefresh.isRefreshing()){
+            homepageSwipRefresh.setRefreshing(false);
+        }
         this.youLoveProductList = products;
         if(products == null){
             Toast.makeText(context,"暂无法加载更多", Toast.LENGTH_SHORT).show();
@@ -412,7 +440,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
      *  start another activity , need'nt return the data
      * */
     private void startAnotherAty(Class<?> aty){
-        Intent intent = new Intent(context, aty );
+        Intent intent = new Intent(context, aty);
         startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
@@ -422,7 +450,8 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
      * 下拉刷新后，在这里重新获取数据，然后再次加载
      * */
     private void refreshHomePage(){
-        new Thread(new Runnable() {
+        loadData();
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -439,6 +468,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                     }
                 });
             }
-        }).start();
+        }).start();*/
     }
 }

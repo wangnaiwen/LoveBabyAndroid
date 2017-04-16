@@ -27,7 +27,6 @@ import java.util.List;
 public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdModel{
     private Context context;
     private ShoppingFindByUserIdListener shoppingFindByUserIdListener;
-    private List<ShoppingCar> shoppingCarList;
 
     @Override
     public void findShoppingCarByUserId(Context context, int userId, ShoppingFindByUserIdListener shoppingFindByUserIdListener) {
@@ -59,11 +58,12 @@ public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdMo
     }
 
     private void parseWithJSON(String response){
+        List<ShoppingCar> shoppingCarList = new ArrayList<>() ;
+
         try{
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("findShoppingCarByUserId");
             if(jsonArray != null){
-                shoppingCarList = new ArrayList<>();
                 int length = jsonArray.length();
 
                 //数据翻过来装，这样显示最新的数据就可以放在最前面了
@@ -85,12 +85,13 @@ public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdMo
         }catch (JSONException e){
             e.printStackTrace();
         }
-        retData();
-    }
-
-    private void retData(){
         if(shoppingFindByUserIdListener != null){
-            shoppingFindByUserIdListener.complete(shoppingCarList);
+            if(shoppingCarList.size() == 0){
+                shoppingFindByUserIdListener.complete(null);
+            }else{
+                shoppingFindByUserIdListener.complete(shoppingCarList);
+            }
         }
     }
+
 }

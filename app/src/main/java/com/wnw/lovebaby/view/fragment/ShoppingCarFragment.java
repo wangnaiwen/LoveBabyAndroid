@@ -43,6 +43,7 @@ import com.wnw.lovebaby.view.viewInterface.IDeleteShoppingCarView;
 import com.wnw.lovebaby.view.viewInterface.IFindShoppingCarByUserIdView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateShoppingCarProductCountView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -272,7 +273,6 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
     }
 
 
-
     ProgressDialog dialog = null;
     private void showDialogs(){
         if(dialog == null){
@@ -311,6 +311,7 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
             ShoppingCarItem shoppingCarItem = new ShoppingCarItem();
             ShoppingCar car = shoppingCarList.get(i);
             shoppingCarItem.setId(car.getId());
+            shoppingCarItem.setProductId(car.getProductId());
             shoppingCarItem.setChecked(true);
             shoppingCarItem.setGoodsImg(car.getProductCover());
             shoppingCarItem.setGoodsNum(car.getProductCount());
@@ -430,10 +431,23 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
     }
 
     /***
+     * get the list of checked
      * start the order confirmation activity
      * */
     private void startConfirmationActivity(){
         Intent intent = new Intent(context, OrderConfirmationActivity.class);
+        List<ShoppingCar> checkedShoppingCarList = new ArrayList<>();
+        List<ShoppingCarItem> checkedShoppingCatItemList = new ArrayList<>();
+        int length = shoppingCarItemList.size();
+        for(int i = 0; i < length; i++){
+            if(shoppingCarItemList.get(i).isChecked()){
+                checkedShoppingCarList.add(shoppingCarList.get(i));
+                checkedShoppingCatItemList.add(shoppingCarItemList.get(i));
+            }
+        }
+        intent.putExtra("checkedShoppingCarItemList", (Serializable)checkedShoppingCatItemList);
+        intent.putExtra("checkedShoppingCarList",(Serializable)checkedShoppingCarList);
+        intent.putExtra("sumPrice", sumPrice);
         startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
