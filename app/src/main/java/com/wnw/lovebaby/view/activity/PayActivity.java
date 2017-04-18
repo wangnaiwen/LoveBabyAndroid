@@ -40,6 +40,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
 
     private int userId;
 
+    private int tag = 0;
     private Order order;
     private int sumPrice;
 
@@ -66,6 +67,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
     //get data from order confirmation activity
     private void getData(){
         Intent intent = getIntent();
+        tag = intent.getIntExtra("tag",0);
         order = (Order)intent.getSerializableExtra("order");
         sumPrice = intent.getIntExtra("sumPrice",0);
         payNumberTv.setText(TypeConverters.IntConvertToString(sumPrice));
@@ -179,7 +181,12 @@ public class PayActivity extends Activity implements View.OnClickListener,
         dismissDialogs();
         if(isSuccess){
             //支付成功
-            Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+            if (tag == 1){
+                //返回订单列表
+                Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+            }
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }else{

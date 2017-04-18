@@ -66,7 +66,7 @@ public class FindOrderByUserIdModelImpl implements IFindOrderByUserIdModel {
             if(jsonArray != null){
                 returnData = new ArrayList<>();
                 int length = jsonArray.length();
-                for(int i = 0 ; i < length; i++){
+                for(int i = length-1 ; i >= 0 ; i--){
                     JSONObject object = jsonArray.getJSONObject(i);
                     Order order = new Order();
                     order.setId(object.getInt("id"));

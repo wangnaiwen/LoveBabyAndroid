@@ -32,4 +32,11 @@ public class NetConfig {
     public final static String SUB_WALLET_MONEY = "subWalletMoney?";
     public final static String VALITE_WALLET = "valiteWallet?";
     public final static String FIND_WALLET_MONEY_BY_USERID = "findWalletMoneyByUserId?";
+
+    //address
+    public final static String FIND_RECE_ADDRESS_BY_ID = "findReceAddress?";
+
+    //product
+    public final static String FIND_PRODUCT_BY_ID = "findProductById?";
+    public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
 }

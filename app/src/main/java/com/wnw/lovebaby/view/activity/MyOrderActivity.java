@@ -1,6 +1,9 @@
 package com.wnw.lovebaby.view.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,14 +12,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.TabAdapter;
-import com.wnw.lovebaby.view.fragment.TabAllOrder;
-import com.wnw.lovebaby.view.fragment.TabBeEvaluated;
-import com.wnw.lovebaby.view.fragment.TabBePay;
-import com.wnw.lovebaby.view.fragment.TabBeReceived;
-import com.wnw.lovebaby.view.fragment.TabBeSent;
+import com.wnw.lovebaby.domain.Order;
+import com.wnw.lovebaby.net.NetUtil;
+import com.wnw.lovebaby.presenter.FindOrderByUserIdPresenter;
+import com.wnw.lovebaby.view.fragment.TabOrder;
+import com.wnw.lovebaby.view.viewInterface.IFindOrderByUserIdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +29,8 @@ import java.util.List;
  * Created by wnw on 2017/4/16.
  */
 
-public class MyOrderActivity extends FragmentActivity implements View.OnClickListener{
+public class MyOrderActivity extends FragmentActivity implements View.OnClickListener,
+        IFindOrderByUserIdView{
 
     private TabLayout tabFragmentTitle ;           //定义TabLayout
     private ViewPager vpFragmentPager;             //定义viewPager
@@ -35,19 +40,46 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
     private List<Fragment> listFragment;           //定义要装fragment的列表
     private List<String> listTitle;                //tab名称列表
 
-    private TabAllOrder tabAllOrder;               //所有订单
-    private TabBePay tabBePay;                     //待支付
-    private TabBeSent tabBeSent;                   //待发货
-    private TabBeReceived tabBeReceived;           //待收货
-    private TabBeEvaluated tabBeEvaluated;         //待评价
+    private TabOrder tabOrder;               //所有订单
+    private TabOrder tabBePay;                     //待支付
+    private TabOrder tabBeSent;                   //待发货
+    private TabOrder tabBeReceived;           //待收货
+    private TabOrder tabBeEvaluated;         //待评价
+
+    private int userId;                            //用户Id
+    private FindOrderByUserIdPresenter findOrderByUserIdPresenter;
+
+    private List<Order> orderList = new ArrayList<>();         //所有的订单
+    private List<Order> bePayOrderList = new ArrayList<>();    //待付款
+    private List<Order> beSentOrderList = new ArrayList<>();   //待发货
+    private List<Order> beReceivedList = new ArrayList<>();    //待收货
+    private List<Order> beEvaluatedList = new ArrayList<>();   //待评价
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order);
-        initView();
         getPosition();
+        getData();
+        initTab();
+        initPresenter();
+        startPresenter();
     }
+
+    private void getData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("account", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("id", 0);
+    }
+
+    private void initTab(){
+        //初始化各fragment
+        tabOrder = new TabOrder();
+        tabBePay = new TabOrder();
+        tabBeSent = new TabOrder();
+        tabBeReceived = new TabOrder();
+        tabBeEvaluated = new TabOrder();
+    }
+
 
     private void initView(){
         back = (ImageView)findViewById(R.id.back_my_order);
@@ -56,16 +88,9 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
 
         back.setOnClickListener(this);
 
-        //初始化各fragment
-        tabAllOrder = new TabAllOrder();
-        tabBePay = new TabBePay();
-        tabBeSent = new TabBeSent();
-        tabBeReceived = new TabBeReceived();
-        tabBeEvaluated = new TabBeEvaluated();
-
         //将fragment装进列表中
         listFragment = new ArrayList<>();
-        listFragment.add(tabAllOrder);
+        listFragment.add(tabOrder);
         listFragment.add(tabBePay);
         listFragment.add(tabBeSent);
         listFragment.add(tabBeReceived);
@@ -75,7 +100,7 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
         listTitle = new ArrayList<>();
         listTitle.add("全部订单");
         listTitle.add("待支付");
-        listTitle.add("代发货");
+        listTitle.add("待发货");
         listTitle.add("待收货");
         listTitle.add("待评价");
 
@@ -96,6 +121,11 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
         //TabLayout加载viewpager
         tabFragmentTitle.setupWithViewPager(vpFragmentPager);
         //tab_FindFragment_title.set
+        vpFragmentPager.setOffscreenPageLimit(0);
+
+        //选中某一个Tab
+        vpFragmentPager.setCurrentItem(position);
+        tabFragmentTitle.getTabAt(position).select();
     }
 
     //选中的position
@@ -103,9 +133,71 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
     private void getPosition(){
         Intent intent = getIntent();
         position = intent.getIntExtra("position", position);
-        //选中某一个Tab
-        vpFragmentPager.setCurrentItem(position);
-        tabFragmentTitle.getTabAt(position).select();
+    }
+
+    private void initPresenter(){
+        findOrderByUserIdPresenter = new FindOrderByUserIdPresenter(this,this);
+    }
+
+    //start presenter
+    private void startPresenter(){
+        if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "暂无网络",Toast.LENGTH_SHORT).show();
+        }else{
+            findOrderByUserIdPresenter.findOrderByUserId(userId);
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        showDialogs();
+    }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        dialog.show();
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showOrdersByUserId(List<Order> orders) {
+
+        if(orders != null){
+            this.orderList = orders;
+        }
+
+        //对订单分类，并且加载到各个Tab中
+        int length = orderList.size();
+        for (int i = 0; i < length; i++){
+            int type = orderList.get(i).getOrderType();
+            if(type == 1){          //待付款
+                bePayOrderList.add(orderList.get(i));
+            }else if(type == 2){    //待发货
+                beSentOrderList.add(orderList.get(i));
+            }else if(type == 3){    //待收货
+                beReceivedList.add(orderList.get(i));
+            }else if(type == 4){     //待评价
+                beEvaluatedList.add(orderList.get(i));
+            }
+        }
+
+        //加载到各个Tab中
+        tabOrder.setOrderList(orderList);
+        tabBePay.setOrderList(bePayOrderList);
+        tabBeSent.setOrderList(beSentOrderList);
+        tabBeReceived.setOrderList(beReceivedList);
+        tabBeEvaluated.setOrderList(beEvaluatedList);
+        initView();
+        dismissDialogs();
     }
 
     @Override

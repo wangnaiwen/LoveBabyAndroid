@@ -13,7 +13,7 @@ import java.util.List;
  * Created by wnw on 2017/4/11.
  */
 
-public class FindDealByOrderIdPresneter {
+public class FindDealByOrderIdPresenter {
     private Context context;
     //view
     private IFindDealByOrderIdView findDealByOrderIdView;
@@ -21,7 +21,7 @@ public class FindDealByOrderIdPresneter {
     private IFindDealByOrderIdModel findDealByOrderIdModel = new FindDealByOrderIdModelImpl();
     //ͨ通过构造函数传入view
 
-    public FindDealByOrderIdPresneter(Context context,IFindDealByOrderIdView findDealByOrderIdView) {
+    public FindDealByOrderIdPresenter(Context context, IFindDealByOrderIdView findDealByOrderIdView) {
         this.context = context;
         this.findDealByOrderIdView = findDealByOrderIdView;
     }

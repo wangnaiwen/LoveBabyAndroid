@@ -3,6 +3,7 @@ package com.wnw.lovebaby.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -38,4 +39,8 @@ public class TabAdapter extends FragmentPagerAdapter {
         return list_Title.get(position % list_Title.size());
     }
 
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        return super.instantiateItem(container, position);
+    }
 }

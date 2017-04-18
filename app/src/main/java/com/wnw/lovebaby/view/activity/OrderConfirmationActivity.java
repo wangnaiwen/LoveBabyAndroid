@@ -99,7 +99,6 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         userId = sharedPreferences.getInt("id",0);
     }
 
-
     private void initView(){
         orderListView = (ListView)findViewById(R.id.order_lv);
         pickAddress = (LinearLayout)findViewById(R.id.pick_address_normal);
@@ -275,6 +274,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
             Toast.makeText(this,"订单提交成功",Toast.LENGTH_SHORT).show();
             //订单提交成功，跳转到支付页面，并且finish当前页面
             Intent intent = new Intent(this, PayActivity.class);
+            intent.putExtra("tag", 0);
             intent.putExtra("sumPrice", sumPrice);
             intent.putExtra("order", order);
             startActivity(intent);
