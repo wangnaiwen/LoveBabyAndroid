@@ -33,7 +33,7 @@ public class FindPrsByUserIdPresenter {
     }
 
     //加载数据
-    public void deleteShoppingCar(int userId, int number) {
+    public void findPrsByUserId(int userId, int number) {
         //加载进度条
         findPrsByUserIdView.showDialog();
         //model进行数据获取

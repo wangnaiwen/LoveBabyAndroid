@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.domain;
 
-public class Deal {
+import java.io.Serializable;
+
+public class Deal implements Serializable{
 	
 	private int id;
 	private int orderId;

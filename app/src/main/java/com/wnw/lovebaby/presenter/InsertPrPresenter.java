@@ -29,7 +29,7 @@ public class InsertPrPresenter {
     }
 
     //加载数据
-    public void deleteShoppingCar(Pr pr) {
+    public void insertPr(Pr pr) {
         //加载进度条
         insertPrView.showDialog();
         //model进行数据获取

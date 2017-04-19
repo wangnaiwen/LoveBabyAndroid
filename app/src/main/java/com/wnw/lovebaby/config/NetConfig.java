@@ -39,4 +39,7 @@ public class NetConfig {
     //product
     public final static String FIND_PRODUCT_BY_ID = "findProductById?";
     public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
+
+    //pr
+    public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";
 }

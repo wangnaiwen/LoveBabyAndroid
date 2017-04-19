@@ -85,7 +85,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="删除" />
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

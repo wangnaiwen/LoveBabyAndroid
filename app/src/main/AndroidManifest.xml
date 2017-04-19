@@ -51,6 +51,7 @@
         <activity android:name=".view.activity.PayActivity"/>
         <activity android:name=".view.activity.MyOrderActivity"/>
         <activity android:name=".view.activity.MyOrderDetailActivity"/>
+        <activity android:name=".view.activity.InsertPrActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

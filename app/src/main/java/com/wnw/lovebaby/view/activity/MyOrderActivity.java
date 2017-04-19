@@ -63,7 +63,6 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
         getData();
         initTab();
         initPresenter();
-        startPresenter();
     }
 
     private void getData(){
@@ -80,6 +79,11 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
         tabBeEvaluated = new TabOrder();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startPresenter();
+    }
 
     private void initView(){
         back = (ImageView)findViewById(R.id.back_my_order);
@@ -173,6 +177,10 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
 
         if(orders != null){
             this.orderList = orders;
+            bePayOrderList.clear();
+            beSentOrderList.clear();
+            beReceivedList.clear();
+            beEvaluatedList.clear();
         }
 
         //对订单分类，并且加载到各个Tab中

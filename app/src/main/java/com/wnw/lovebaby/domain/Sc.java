@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.domain;
 
-public class Sc {
+import java.io.Serializable;
+
+public class Sc implements Serializable{
 	private int id;
 	private String name;
 	private int mcId;

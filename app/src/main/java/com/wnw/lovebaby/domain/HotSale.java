@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.domain;
 
-public class HotSale {
+import java.io.Serializable;
+
+public class HotSale implements Serializable{
 	private int id;
 	private int productId;
 	private String time;

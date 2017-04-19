@@ -16,6 +16,7 @@ import com.wnw.lovebaby.adapter.OrderLvAdapter;
 import com.wnw.lovebaby.bean.ShoppingCarItem;
 import com.wnw.lovebaby.domain.Deal;
 import com.wnw.lovebaby.domain.Order;
+import com.wnw.lovebaby.domain.Pr;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.net.NetUtil;
@@ -31,6 +32,7 @@ import com.wnw.lovebaby.view.viewInterface.IFindProductByIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindReceAddressByIdView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateOrderView;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +60,8 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     private ListView dealLv;          //交易列表
     private TextView sumPriceTv;      //总价
     private TextView payTv;           //支付
-    private TextView comfirmReceiptTv;//确认收货
+    private TextView confirmReceiptTv;//确认收货
+    private TextView submitEvaluatioinTv; //立即评价
 
     private Order order;             //当前的Order
     private List<Deal> dealList = new ArrayList<>();
@@ -103,11 +106,13 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
         sumPriceTv = (TextView)findViewById(R.id.tv_order_all_price);
         payTv = (TextView)findViewById(R.id.tv_order_pay);
         dealLv = (ListView) findViewById(R.id.lv_order_deal);
-        comfirmReceiptTv = (TextView)findViewById(R.id.tv_confirm_receipt);
+        confirmReceiptTv = (TextView)findViewById(R.id.tv_confirm_receipt);
+        submitEvaluatioinTv = (TextView)findViewById(R.id.tv_submit_evaluation);
 
         payTv.setOnClickListener(this);
-        comfirmReceiptTv.setOnClickListener(this);
+        confirmReceiptTv.setOnClickListener(this);
         dealLv.setOnItemClickListener(this);
+        submitEvaluatioinTv.setOnClickListener(this);
 
         //设初始值
         int orderType = order.getOrderType();
@@ -128,11 +133,12 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
             payTimeTv.setText("付款时间:"+TimeConvert.getTime(order.getPayTime()));
             finishTimeTv.setVisibility(View.GONE);
             payTv.setVisibility(View.GONE);
-            comfirmReceiptTv.setVisibility(View.VISIBLE);
+            confirmReceiptTv.setVisibility(View.VISIBLE);
         }else if(orderType == 4){
             payTimeTv.setText("付款时间:"+TimeConvert.getTime(order.getPayTime()));
             finishTimeTv.setText("完成时间:"+TimeConvert.getTime(order.getFinishTime()));
             payTv.setVisibility(View.GONE);
+            submitEvaluatioinTv.setVisibility(View.VISIBLE);
         }else if (orderType == 5){
             payTimeTv.setText("付款时间:"+TimeConvert.getTime(order.getPayTime()));
             finishTimeTv.setText("完成时间:"+TimeConvert.getTime(order.getFinishTime()));
@@ -277,12 +283,21 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.tv_confirm_receipt:
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMddHHmmss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
                 java.util.Date d = new java.util.Date();
                 String str = sdf.format(d);
                 order.setFinishTime(str);
                 order.setOrderType(4);
                 startUpdateOrder();
+                break;
+            case R.id.tv_submit_evaluation:
+                //跳转到评价页面
+                Intent intent1 = new Intent(this, InsertPrActivity.class);
+                intent1.putExtra("shoppingCarItemList", (Serializable)shoppingCarItemList);
+                intent1.putExtra("dealList", (Serializable)dealList);
+                intent1.putExtra("order", order);
+                startActivityForResult(intent1, 2);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }
@@ -291,6 +306,11 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK){  //说明支付成功
             finish();
+        }else if(requestCode == 2 && resultCode == RESULT_OK){
+            boolean isSuccess = data.getBooleanExtra("isSuccess", false);
+            if(isSuccess){
+                submitEvaluatioinTv.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -298,7 +318,10 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.lv_order_deal:
-
+                Intent intent = new Intent(this, ProductDetailActivity.class);
+                intent.putExtra("product", productList.get(i));
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }
