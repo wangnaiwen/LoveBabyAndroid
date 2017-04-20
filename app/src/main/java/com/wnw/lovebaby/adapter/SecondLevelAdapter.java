@@ -6,8 +6,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.wnw.lovebaby.R;
-import com.wnw.lovebaby.bean.SecondLevelItem;
+import com.wnw.lovebaby.domain.Sc;
 import com.wnw.lovebaby.view.costom.GoodsSquareLayout;
 
 import java.util.List;
@@ -19,25 +21,25 @@ import java.util.List;
 public class SecondLevelAdapter extends BaseAdapter {
 
     private Context context;
-    private List<SecondLevelItem> secondLevelItemList;
+    private List<Sc> scList;
 
-    public SecondLevelAdapter(Context context, List<SecondLevelItem> secondLevelItems){
+    public SecondLevelAdapter(Context context, List<Sc> scs){
         this.context = context;
-        this.secondLevelItemList = secondLevelItems;
+        this.scList = scs;
     }
 
-    public void setSecondLevelItemList(List<SecondLevelItem> secondLevelItemList){
-        this.secondLevelItemList = secondLevelItemList;
+    public void setScList(List<Sc> scs){
+        this.scList = scs;
     }
 
     @Override
     public int getCount() {
-        return secondLevelItemList.size();
+        return scList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return secondLevelItemList.get(i);
+        return scList.get(i);
     }
 
     @Override
@@ -47,24 +49,24 @@ public class SecondLevelAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        SecondLevelHolder secondLevelHolder = null;
+        ScHolder scHolder = null;
         if(view == null){
-            secondLevelHolder = new SecondLevelHolder();
+            scHolder = new ScHolder();
             view = LayoutInflater.from(context).inflate(R.layout.gv_second_level_item, viewGroup, false);
-            secondLevelHolder.squareLayout = (GoodsSquareLayout)view.findViewById(R.id.second_level_square_layout);
-            secondLevelHolder.title = (TextView)view.findViewById(R.id.second_level_cover_title);
-            secondLevelHolder.titleImg = (ImageView) view.findViewById(R.id.second_level_cover_icon);
-            view.setTag(secondLevelHolder);
+            scHolder.squareLayout = (GoodsSquareLayout)view.findViewById(R.id.second_level_square_layout);
+            scHolder.title = (TextView)view.findViewById(R.id.second_level_cover_title);
+            scHolder.titleImg = (ImageView) view.findViewById(R.id.second_level_cover_icon);
+            view.setTag(scHolder);
         }else {
-            secondLevelHolder = (SecondLevelHolder)view.getTag();
+            scHolder = (ScHolder)view.getTag();
         }
-        secondLevelHolder.titleImg.setImageResource(secondLevelItemList.get(i).getTitleImg());
-        secondLevelHolder.title.setText(secondLevelItemList.get(i).getTitle());
+        Glide.with(context).load(scList.get(i).getImage()).into(scHolder.titleImg);
+        scHolder.title.setText(scList.get(i).getName());
 
         return view;
     }
 
-    private class SecondLevelHolder{
+    private class ScHolder{
         GoodsSquareLayout squareLayout;
         ImageView titleImg;
         TextView title;

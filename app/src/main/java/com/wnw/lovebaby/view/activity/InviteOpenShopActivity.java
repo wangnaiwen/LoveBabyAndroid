@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
-import com.wnw.lovebaby.util.LogUtil;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -42,4 +42,12 @@ public class NetConfig {
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";
+
+    //mc
+    public final static String FIND_MC_BY_ID = "findMcById?";
+    public final static String FIND_MCS = "findMcs?";
+
+    //sc
+    public final static String FIND_SC_BY_ID = "findScById?";
+    public final static String FIND_SC_BY_MC_ID = "findScByMcId?";
 }

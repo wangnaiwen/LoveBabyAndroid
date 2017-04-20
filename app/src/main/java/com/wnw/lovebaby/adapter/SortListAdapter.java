@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.domain.Mc;
 import com.wnw.lovebaby.view.activity.SortListActivity;
+
+import java.util.List;
 
 /**
  * Created by wnw on 2016/12/20.
@@ -17,23 +20,23 @@ import com.wnw.lovebaby.view.activity.SortListActivity;
 
 public class SortListAdapter extends BaseAdapter {
     private Context mContext;
-    private String[] sortTitles;
+    private List<Mc> mcList;
     public static int mPosition;
 
 
-    public SortListAdapter(Context context, String[] titles){
+    public SortListAdapter(Context context, List<Mc> mcs){
         this.mContext = context;
-        this.sortTitles = titles;
+        this.mcList = mcs;
     }
 
     @Override
     public int getCount() {
-        return sortTitles.length;
+        return mcList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return sortTitles[i];
+        return mcList.get(i);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class SortListAdapter extends BaseAdapter {
             sortListLvHolder = (SortListLvHolder)view.getTag();
         }
         mPosition = i;
-        sortListLvHolder.lvTitle.setText(sortTitles[i]);
+        sortListLvHolder.lvTitle.setText(mcList.get(i).getName());
         if(i == SortListActivity.mPosition){
             sortListLvHolder.lvTitle.setBackgroundColor(Color.parseColor("#b1f1efef"));
             sortListLvHolder.lvTitle.setTextColor(Color.parseColor("#fd4a7d"));
