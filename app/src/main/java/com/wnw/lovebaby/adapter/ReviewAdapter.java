@@ -1,12 +1,11 @@
 package com.wnw.lovebaby.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
@@ -22,15 +21,6 @@ import java.util.List;
 public class ReviewAdapter extends BaseAdapter {
     private Context context;
     private List<Pr> prList;
-
-    private int[] starImg = new int[]{
-            R.drawable.star0,
-            R.drawable.star1,
-            R.drawable.star2,
-            R.drawable.star3,
-            R.drawable.star4,
-            R.drawable.star5
-    };
 
     public ReviewAdapter(Context context, List<Pr> prs){
         this.context = context;
@@ -58,36 +48,36 @@ public class ReviewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        PrHorder prHorder = null;
+        PrHolder prHolder = null;
         if(view == null){
-            prHorder = new PrHorder();
+            prHolder = new PrHolder();
             view = LayoutInflater.from(context).inflate(R.layout.item_product_review,null);
-            prHorder.nickNameTv = (TextView)view.findViewById(R.id.tv_nickname);
-            prHorder.timeTv = (TextView)view.findViewById(R.id.tv_time);
-            prHorder.productScoreImg = (ImageView)view.findViewById(R.id.product_score);
-            prHorder.serviceScoreImg = (ImageView)view.findViewById(R.id.service_score);
-            prHorder.logisticsScoreImg = (ImageView)view.findViewById(R.id.logistics_score);
-            prHorder.deatailReviewTv = (TextView)view.findViewById(R.id.tv_detail_review);
-            view.setTag(prHorder);
+            prHolder.nickNameTv = (TextView)view.findViewById(R.id.tv_nickname);
+            prHolder.timeTv = (TextView)view.findViewById(R.id.tv_time);
+            prHolder.productScoreImg = (RatingBar)view.findViewById(R.id.product_score);
+            prHolder.serviceScoreImg = (RatingBar)view.findViewById(R.id.service_score);
+            prHolder.logisticsScoreImg = (RatingBar)view.findViewById(R.id.logistics_score);
+            prHolder.deatailReviewTv = (TextView)view.findViewById(R.id.tv_detail_review);
+            view.setTag(prHolder);
         }else {
-            prHorder = (PrHorder)view.getTag();
+            prHolder = (PrHolder)view.getTag();
         }
         Pr pr = prList.get(i);
-        prHorder.nickNameTv.setText(pr.getUserNickName());
-        prHorder.timeTv.setText(TimeConvert.getTime(pr.getTime()));
-        prHorder.productScoreImg.setImageResource(starImg[pr.getProductScore()]);
-        prHorder.serviceScoreImg.setImageResource(starImg[pr.getServiceScore()]);
-        prHorder.logisticsScoreImg.setImageResource(starImg[pr.getLogisticsScore()]);
-        prHorder.deatailReviewTv.setText(pr.getEvaluation());
+        prHolder.nickNameTv.setText(pr.getUserNickName());
+        prHolder.timeTv.setText(TimeConvert.getTime(pr.getTime()));
+        prHolder.productScoreImg.setNumStars(pr.getProductScore());
+        prHolder.serviceScoreImg.setNumStars(pr.getServiceScore());
+        prHolder.logisticsScoreImg.setNumStars(pr.getLogisticsScore());
+        prHolder.deatailReviewTv.setText(pr.getEvaluation());
         return view;
     }
 
-    private class PrHorder{
+    private class PrHolder{
         TextView nickNameTv;
         TextView timeTv;
-        ImageView productScoreImg;
-        ImageView serviceScoreImg;
-        ImageView logisticsScoreImg;
+        RatingBar productScoreImg;
+        RatingBar serviceScoreImg;
+        RatingBar logisticsScoreImg;
         TextView deatailReviewTv;
     }
 }

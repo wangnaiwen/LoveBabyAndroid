@@ -41,13 +41,17 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="商品评分:" />
-        <ImageView
+        <RatingBar
             android:id="@+id/product_score"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/star5"
-            android:layout_gravity="center_vertical"/>
+            android:numStars="5"
+            android:rating="5"
+            android:isIndicator="false"
+            android:layout_gravity="center_vertical"
+            android:stepSize="1"
+            android:layout_marginLeft="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,13 +64,17 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="服务评分:" />
-        <ImageView
+        <RatingBar
             android:id="@+id/service_score"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/star4"
-            android:layout_gravity="center_vertical"/>
+            android:numStars="5"
+            android:rating="5"
+            android:isIndicator="false"
+            android:layout_gravity="center_vertical"
+            android:stepSize="1"
+            android:layout_marginLeft="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,13 +87,17 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="物流评分:" />
-        <ImageView
+        <RatingBar
             android:id="@+id/logistics_score"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/star5"
-            android:layout_gravity="center_vertical"/>
+            android:numStars="5"
+            android:rating="5"
+            android:isIndicator="false"
+            android:layout_gravity="center_vertical"
+            android:stepSize="1"
+            android:layout_marginLeft="20dp"/>
     </LinearLayout>
     <TextView
         android:id="@+id/tv_detail_review"
