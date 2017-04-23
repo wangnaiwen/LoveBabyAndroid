@@ -1,6 +1,7 @@
 package com.wnw.lovebaby.model.modelImpl;
 
 import android.content.Context;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.model.modelInterface.IFindNewProductModel;
 
@@ -38,7 +40,7 @@ public class FindNewProductModelImpl implements IFindNewProductModel {
     }
 
     private void sendRequestWithVolley(){
-        String url = "http://119.29.182.235:8080/babyTest/findNewProducts";
+        String url = NetConfig.SERVICE + NetConfig.FIND_NEW_PRODUCT;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

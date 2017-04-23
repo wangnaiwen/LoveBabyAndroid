@@ -10,11 +10,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.domain.UserInfo;
 import com.wnw.lovebaby.model.modelInterface.IFindUserInfoModel;
 import com.wnw.lovebaby.model.modelInterface.IUpdateUserInfoModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,8 +41,9 @@ public class FindUserInfoModelImp implements IFindUserInfoModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int userId){
-        String url = "http://119.29.182.235:8080/babyTest/findUserInfoByUserId?";
+        String url = NetConfig.SERVICE + NetConfig.FIND_USER_INFO_BY_USER_ID;
         url = url + "userId="+userId;
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

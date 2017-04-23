@@ -178,7 +178,7 @@ public class InsertPrActivity extends MvpBaseActivity<IFindUserInfoView, FindUse
 
     private void insertPr(int productScore, int serviceScore, int logisticsScore, String detail){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         java.util.Date d = new java.util.Date();
         String time = sdf.format(d);
 

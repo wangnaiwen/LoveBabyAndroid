@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.model.modelInterface.IFindReceAddressModel;
 import com.wnw.lovebaby.util.LogUtil;
@@ -31,7 +32,7 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
     private Context context;
     private List<ReceAddress> returnData = null;
     private ReceAddressFindListener receAddressFindListener;
-    private String url = "http://119.29.182.235:8080/babyTest/findReceAddressByUserId?";
+
 
     @Override
     public void findReceAddress(Context context, int userId, ReceAddressFindListener receAddressFindListener) {
@@ -44,6 +45,7 @@ public class FindReceAddressModelImp implements IFindReceAddressModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int userId){
+        String url = NetConfig.SERVICE + NetConfig.FIND_RECE_ADDRESS_BY_USER_ID;
         url = url + "userId="+ userId;
         LogUtil.d("www", url);
         RequestQueue queue = Volley.newRequestQueue(context);

@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.domain.UserInfo;
 import com.wnw.lovebaby.model.modelInterface.IUpdateUserInfoModel;
@@ -38,10 +39,16 @@ public class UpdateUserInfoMoelImp implements IUpdateUserInfoModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(UserInfo userInfo){
-        String url = "http://119.29.182.235:8080/babyTest/updateUserInfo?";
-        url = url + "id="+userInfo.getId() + "&userId="+ userInfo.getUserId() +"&sex="+ userInfo.getSex() +"&userImg="+ userInfo.getUserImg()
-                +"&nickName=" + userInfo.getNickName()+"&birthday="+ userInfo.getBirthday() +"&email="+ userInfo.getEmail()
-                +"&hobby=" + userInfo.getHobby() +"&personalizedSignature="+ userInfo.getPersonalizedSignature();
+        String url = NetConfig.SERVICE + NetConfig.UPDATE_USER_INFO;
+        url = url + "id="+userInfo.getId()
+                + "&userId="+ userInfo.getUserId()
+                +"&sex="+ userInfo.getSex()
+                +"&userImg="+ userInfo.getUserImg()
+                +"&nickName=" + userInfo.getNickName()
+                +"&birthday="+ userInfo.getBirthday()
+                +"&email="+ userInfo.getEmail()
+                +"&hobby=" + userInfo.getHobby()
+                +"&personalizedSignature=" + userInfo.getPersonalizedSignature();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

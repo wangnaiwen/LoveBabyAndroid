@@ -7,19 +7,19 @@ import com.wnw.lovebaby.domain.Order;
 import java.util.List;
 
 /**
- * Created by wnw on 2017/4/11.
+ * Created by wnw on 2017/4/23.
  */
 
-public interface IFindOrderByShopIdModel {
+public interface IFindOrderByInviteeModel {
     /**
      * 加载数据
      * */
-    void findOrderByShopId(Context context, int shopId,int number, OrderFindByShopIdListener orderFindByShopIdListener);
+    void findOrderByInvitee(Context context, int invitee, int number, OrderFindByInviteeListener orderFindByInviteeListener);
 
     /**
      * 加载数据完成的回调
      * */
-    interface OrderFindByShopIdListener{
+    interface OrderFindByInviteeListener{
         void complete(List<Order> orders);
     }
 }

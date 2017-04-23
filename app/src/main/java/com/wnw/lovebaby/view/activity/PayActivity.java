@@ -111,7 +111,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
 
     //开始更改订单状态
     private void startUpdateOrder(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         java.util.Date d = new java.util.Date();
         String str = sdf.format(d);
         order.setPayTime(str);

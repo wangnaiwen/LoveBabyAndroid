@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.model.modelInterface.IDeleteReceAddressModel;
 import com.wnw.lovebaby.model.modelInterface.IInsertReceAddressModel;
@@ -38,8 +39,7 @@ public class DeleteReceAddressModelImp implements IDeleteReceAddressModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int id){
-        String url = "http://119.29.182.235:8080/babyTest/deleteReceAddress?";
-        url = url + "id="+id;
+        String url = NetConfig.SERVICE + NetConfig.DELETE_RECE_ADDRESS + "id="+id;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

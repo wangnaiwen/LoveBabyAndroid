@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.model.modelInterface.IFindSpecialPriceModel;
 
@@ -38,7 +39,7 @@ public class FindSpecialPriceModelImpl implements IFindSpecialPriceModel {
     }
 
     private void sendRequestWithVolley(){
-        String url = "http://119.29.182.235:8080/babyTest/findSpecialPrice";
+        String url = NetConfig.SERVICE + NetConfig.FIND_SPECIAL_PRICE;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

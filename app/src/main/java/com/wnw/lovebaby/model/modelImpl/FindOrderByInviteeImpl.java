@@ -1,8 +1,8 @@
 package com.wnw.lovebaby.model.modelImpl;
 
 import android.content.Context;
+import android.support.v4.util.LogWriter;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,8 +11,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
-import com.wnw.lovebaby.domain.Deal;
-import com.wnw.lovebaby.model.modelInterface.IFindDealByOrderIdModel;
+import com.wnw.lovebaby.domain.Order;
+import com.wnw.lovebaby.model.modelInterface.IFindOrderByInviteeModel;
 import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONArray;
@@ -23,25 +23,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wnw on 2017/4/11.
+ * Created by wnw on 2017/4/23.
  */
 
-public class FindDealByOrderIdModelImpl implements IFindDealByOrderIdModel {
+public class FindOrderByInviteeImpl implements IFindOrderByInviteeModel {
 
     private Context context;
-    private DealFindByOrderIdListener dealFindByOrderIdListener;
-    private List<Deal> returnData;
+    private OrderFindByInviteeListener orderFindByInviteeListener;
+    private List<Order> returnData;
 
     @Override
-    public void findDealByOrderId(Context context, int orderId, DealFindByOrderIdListener dealFindByOrderIdListener) {
+    public void findOrderByInvitee(Context context, int invitee, int number, OrderFindByInviteeListener orderFindByInviteeListener) {
         this.context = context;
-        this.dealFindByOrderIdListener = dealFindByOrderIdListener;
-        sendRequestWithVolley(orderId);
+        this.orderFindByInviteeListener = orderFindByInviteeListener;
+        sendRequestWithVolley(invitee, number);
     }
 
-    private void sendRequestWithVolley(int orderId){
-        String url = NetConfig.SERVICE+NetConfig.FIND_DEAL_BY_ORDER_ID
-                +"orderId="+orderId;
+    /**
+     * use volley to get the data
+     * */
+
+    private void sendRequestWithVolley(int invitee, int number){
+        String url = NetConfig.SERVICE+NetConfig.FIND_ORDER_BY_INVITEE
+                +"invitee="+invitee
+                +"&number=" +number;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -61,24 +66,28 @@ public class FindDealByOrderIdModelImpl implements IFindDealByOrderIdModel {
     private void parseNetUserWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("findDealByOrderId");
+            JSONArray jsonArray = jsonObject.getJSONArray("findOrderByInvitee");
             if(jsonArray != null){
                 returnData = new ArrayList<>();
                 int length = jsonArray.length();
                 for(int i = 0 ; i < length; i++){
                     JSONObject object = jsonArray.getJSONObject(i);
-                    Deal deal = new Deal();
-                    deal.setId(object.getInt("id"));
-                    deal.setOrderId(object.getInt("orderId"));
-                    deal.setProductId(object.getInt("productId"));
-                    deal.setProductCount(object.getInt("productCount"));
-                    deal.setSumPrice(object.getLong("sumPrice"));
-                    deal.setProductName(object.getString("productName"));
-                    returnData.add(deal);
+                    Order order = new Order();
+                    order.setId(object.getInt("id"));
+                    order.setShopId(object.getInt("shopId"));
+                    order.setAddressId(object.getInt("addressId"));
+                    order.setUserId(object.getInt("userId"));
+                    order.setCreateTime(object.getString("createTime"));
+                    order.setPayTime(object.getString("payTime"));
+                    order.setFinishTime(object.getString("finishTime"));
+                    order.setOrderNumber(object.getString("orderNumber"));
+                    order.setOrderType(object.getInt("orderType"));
+                    returnData.add(order);
                 }
             }else {
                 //Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
+
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -93,8 +102,8 @@ public class FindDealByOrderIdModelImpl implements IFindDealByOrderIdModel {
      */
 
     private void retData(){
-        if(dealFindByOrderIdListener != null){
-            dealFindByOrderIdListener.complete(returnData);
+        if(orderFindByInviteeListener != null){
+            orderFindByInviteeListener.complete(returnData);
         }
     }
 }

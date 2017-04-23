@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.Pr;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.model.modelInterface.IFindPrsByProductIdModel;
@@ -40,7 +41,7 @@ public class FindPrsByProductIdModelImpl implements IFindPrsByProductIdModel {
     }
 
     private void sendRequestWithVolley(int productId, int number){
-        String url = "http://119.29.182.235:8080/babyTest/findPrsByProductId?";
+        String url = NetConfig.SERVICE + NetConfig.FIND_PR_BY_PRODUCT_ID;
         url = url + "productId=" + productId + "&number="+number;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);

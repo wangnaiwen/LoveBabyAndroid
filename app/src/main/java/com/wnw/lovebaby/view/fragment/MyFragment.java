@@ -33,12 +33,11 @@ public class MyFragment extends Fragment implements View.OnClickListener{
     private ImageView settingView;
     private ImageView editMyInfoViewView;
     private RelativeLayout checkAllOrdersView;
-    private LinearLayout bePayView;
-    private LinearLayout beSentView;
-    private LinearLayout beReceivedView;
-    private LinearLayout beEvaluatedView;
-    private LinearLayout rerundsView;
-    private ImageView joinUsView;
+    private RelativeLayout bePayView;
+    private RelativeLayout beSentView;
+    private RelativeLayout beReceivedView;
+    private RelativeLayout beEvaluatedView;
+    private RelativeLayout rerundsView;
     private TextView disPhone;
 
     private String phone;
@@ -58,12 +57,11 @@ public class MyFragment extends Fragment implements View.OnClickListener{
         settingView = (ImageView)mView.findViewById(R.id.mine_setting);
         editMyInfoViewView = (ImageView)mView.findViewById(R.id.mine_edit_my_info);
         checkAllOrdersView = (RelativeLayout)mView.findViewById(R.id.mine_all_order);
-        bePayView = (LinearLayout)mView.findViewById(R.id.mine_be_pad);
-        beSentView = (LinearLayout)mView.findViewById(R.id.mine_be_sent);
-        beReceivedView = (LinearLayout)mView.findViewById(R.id.mine_be_received);
-        beEvaluatedView = (LinearLayout)mView.findViewById(R.id.mine_be_evaluated);
-        rerundsView = (LinearLayout)mView.findViewById(R.id.mine_refunds);
-        joinUsView = (ImageView)mView.findViewById(R.id.mine_join_us);
+        bePayView = (RelativeLayout)mView.findViewById(R.id.mine_be_pad);
+        beSentView = (RelativeLayout)mView.findViewById(R.id.mine_be_sent);
+        beReceivedView = (RelativeLayout)mView.findViewById(R.id.mine_be_received);
+        beEvaluatedView = (RelativeLayout)mView.findViewById(R.id.mine_be_evaluated);
+        rerundsView = (RelativeLayout)mView.findViewById(R.id.mine_refunds);
         disPhone = (TextView)mView.findViewById(R.id.mine_dis_phone);
 
         settingView.setOnClickListener(this);
@@ -74,7 +72,6 @@ public class MyFragment extends Fragment implements View.OnClickListener{
         beReceivedView.setOnClickListener(this);
         beEvaluatedView.setOnClickListener(this);
         rerundsView.setOnClickListener(this);
-        joinUsView.setOnClickListener(this);
     }
 
     private void getUserLoginInfo(){
@@ -110,9 +107,6 @@ public class MyFragment extends Fragment implements View.OnClickListener{
                 openMyOrderActivity(4);
                 break;
             case R.id.mine_refunds:
-
-                break;
-            case R.id.mine_join_us:
 
                 break;
         }

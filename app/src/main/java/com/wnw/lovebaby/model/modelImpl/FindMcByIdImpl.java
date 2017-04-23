@@ -31,6 +31,7 @@ public class FindMcByIdImpl implements IFindMcByIdModel{
     public void findMcById(Context context, int id, FindMcByIdListener findMcByIdListener) {
         this.context = context;
         this.findMcByIdListener = findMcByIdListener;
+        sendRequestWithVolley(id);
     }
 
     /**

@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.model.modelInterface.IInsertReceAddressModel;
 import com.wnw.lovebaby.util.LogUtil;
@@ -26,7 +27,6 @@ public class InsertReceAddressModelImp implements IInsertReceAddressModel{
     private Context context;
     private ReceAddress address;
     private ReceAddressInsertListener receAddressInsertListener;
-    private String url = "http://119.29.182.235:8080/babyTest/insertReceAddress?";
 
     @Override
     public void insertReceAddress(Context context, ReceAddress address, ReceAddressInsertListener receAddressInsertListener) {
@@ -39,9 +39,15 @@ public class InsertReceAddressModelImp implements IInsertReceAddressModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(ReceAddress address){
-        url = url + "userId="+ address.getUserId() +"&receiver="+ address.getReceiver() +"&province="+ address.getProvince()
-                +"&city=" + address.getCity() +"&county="+ address.getCounty() +"&detailAddress="+ address.getDetailAddress()
-                +"&phone=" + address.getPhone() +"&postcode="+ address.getPostcode();
+        String url = NetConfig.SERVICE + NetConfig.INSERT_RECE_ADDRESS;
+        url = url + "userId="+ address.getUserId()
+                +"&receiver="+ address.getReceiver()
+                +"&province="+ address.getProvince()
+                +"&city=" + address.getCity()
+                +"&county="+ address.getCounty()
+                +"&detailAddress="+ address.getDetailAddress()
+                +"&phone=" + address.getPhone()
+                +"&postcode="+ address.getPostcode();
         LogUtil.d("wnwInsert",url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

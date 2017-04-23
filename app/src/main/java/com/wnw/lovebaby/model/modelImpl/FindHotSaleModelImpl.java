@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.model.modelInterface.IFindHotSaleModel;
 
@@ -38,7 +39,7 @@ public class FindHotSaleModelImpl implements IFindHotSaleModel {
     }
 
     private void sendRequestWithVolley(){
-        String url = "http://119.29.182.235:8080/babyTest/findHotSale";
+        String url = NetConfig.SERVICE + NetConfig.FIND_HOT_SALE;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

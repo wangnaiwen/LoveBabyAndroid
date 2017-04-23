@@ -31,19 +31,20 @@ public class FindOrderByShopIdModelImpl implements IFindOrderByShopIdModel {
     private List<Order> returnData;
 
     @Override
-    public void findOrderByShopId(Context context, int shopId, OrderFindByShopIdListener orderFindByShopIdListener) {
+    public void findOrderByShopId(Context context, int shopId,int number, OrderFindByShopIdListener orderFindByShopIdListener) {
         this.context = context;
         this.orderFindByShopIdListener = orderFindByShopIdListener;
-        sendRequestWithVolley(shopId);
+        sendRequestWithVolley(shopId, number);
     }
 
     /**
      * use volley to get the data
      * */
 
-    private void sendRequestWithVolley(int shopId){
+    private void sendRequestWithVolley(int shopId, int number){
         String url = NetConfig.SERVICE+NetConfig.FIND_ORDER_BY_SHOP_ID
-                +"shopId="+shopId;
+                +"shopId="+shopId
+                +"&number=" +number;
 
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

@@ -53,6 +53,10 @@
         <activity android:name=".view.activity.MyOrderDetailActivity"/>
         <activity android:name=".view.activity.InsertPrActivity"/>
         <activity android:name=".view.activity.ProductListActivity"/>
+        <activity android:name=".view.activity.ShopOrderActivity"/>
+        <activity android:name=".view.activity.InviteeShopOrderActivity"/>
+        <activity android:name=".view.activity.OpenMyShopActivity"/>
+        <activity android:name=".view.activity.EditMyShopActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

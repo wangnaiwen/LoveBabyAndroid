@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.Pr;
 import com.wnw.lovebaby.model.modelInterface.IInsertPrModel;
 
@@ -35,7 +36,7 @@ public class InsertPrModelImpl implements IInsertPrModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(Pr pr){
-        String url = "http://119.29.182.235:8080/babyTest/insertPr?";
+        String url = NetConfig.SERVICE + NetConfig.INSERT_PR;
         url = url
                 + "userId="+pr.getUserId()
                 +"&dealId="+ pr.getDealId()

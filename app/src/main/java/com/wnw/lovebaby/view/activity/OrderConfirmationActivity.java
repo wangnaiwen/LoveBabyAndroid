@@ -150,7 +150,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         //订单号 = 时间戳 + IMEI
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         String szImei = TelephonyMgr.getDeviceId();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         java.util.Date d = new java.util.Date();
         String str = sdf.format(d);
         String orderNumbering = str + szImei;

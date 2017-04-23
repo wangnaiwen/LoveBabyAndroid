@@ -13,7 +13,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="145dp"
-                android:background="@mipmap/head">
+                android:background="@mipmap/bg_shop">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp">
@@ -30,6 +30,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"/>
                     <TextView
+                        android:id="@+id/tv_shop_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="店铺名称"
@@ -57,10 +58,14 @@
                 android:id="@+id/tv_my_shop_all_income"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="总收益：￥800.00"
+                android:text="总收益：￥0.00"
                 android:textSize="20sp"
                 android:textColor="@color/btn_color_yes"
                 android:gravity="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#a9e4e3e3"/>
             <RelativeLayout
                 android:id="@+id/rl_shop_orders"
                 android:layout_width="match_parent"
@@ -97,7 +102,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:text="￥400.00"
+                    android:text="￥0.00"
                     android:textColor="@color/btn_color_yes"
                     android:gravity="center_vertical"/>
             </RelativeLayout>
@@ -141,10 +146,14 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
-                    android:text="￥400.00"
+                    android:text="￥0.00"
                     android:textColor="@color/btn_color_yes"
                     android:gravity="center_vertical"/>
             </RelativeLayout>
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#a9e4e3e3"/>
     </LinearLayout>
 </ScrollView>

@@ -283,7 +283,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.tv_confirm_receipt:
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
                 java.util.Date d = new java.util.Date();
                 String str = sdf.format(d);
                 order.setFinishTime(str);
@@ -310,6 +310,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
             boolean isSuccess = data.getBooleanExtra("isSuccess", false);
             if(isSuccess){
                 submitEvaluatioinTv.setVisibility(View.GONE);
+                orderTypeTv.setText(OrderTypeConvert.getStringType(5));
             }
         }
     }

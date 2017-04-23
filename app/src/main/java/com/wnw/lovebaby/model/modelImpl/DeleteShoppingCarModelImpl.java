@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.model.modelInterface.IDeleteShoppingCarModel;
 import com.wnw.lovebaby.util.LogUtil;
 
@@ -35,7 +36,7 @@ public class DeleteShoppingCarModelImpl implements IDeleteShoppingCarModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int id){
-        String url = "http://119.29.182.235:8080/babyTest/deleteShoppingCar?";
+        String url = NetConfig.SERVICE + NetConfig.DELETE_SHOPPING_CAR;
         url = url + "id=" +id;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);

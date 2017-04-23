@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,11 +28,16 @@ import com.wnw.lovebaby.adapter.DepthPageTransformer;
 import com.wnw.lovebaby.adapter.ImagePageAdapter;
 import com.wnw.lovebaby.adapter.ProductAdapter;
 import com.wnw.lovebaby.domain.Product;
+import com.wnw.lovebaby.domain.Shop;
 import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.FindHotSalePresenter;
 import com.wnw.lovebaby.presenter.FindNewProductPresenter;
+import com.wnw.lovebaby.presenter.FindShopByUserIdPresenter;
 import com.wnw.lovebaby.presenter.FindSpecialPricePresenter;
+import com.wnw.lovebaby.view.activity.EditMyShopActivity;
 import com.wnw.lovebaby.view.activity.InviteOpenShopActivity;
+import com.wnw.lovebaby.view.activity.MyShopActivity;
+import com.wnw.lovebaby.view.activity.OpenMyShopActivity;
 import com.wnw.lovebaby.view.activity.ProductDetailActivity;
 import com.wnw.lovebaby.view.activity.SearchGoodsActivity;
 import com.wnw.lovebaby.view.activity.SortListActivity;
@@ -39,6 +45,7 @@ import com.wnw.lovebaby.view.activity.TodayNewGoodsActivity;
 import com.wnw.lovebaby.view.costom.GoodsGridView;
 import com.wnw.lovebaby.view.viewInterface.IFindHotSaleView;
 import com.wnw.lovebaby.view.viewInterface.IFindNewProductView;
+import com.wnw.lovebaby.view.viewInterface.IFindShopByUserIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindSpecialPriceView;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomepageFragment extends Fragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
-        IFindHotSaleView, IFindSpecialPriceView,IFindNewProductView{
+        IFindHotSaleView, IFindSpecialPriceView,IFindNewProductView,IFindShopByUserIdView{
 
     public static int IMAGE_PAGER = 1;   //图片轮播的Handler发送的消息
     /**
@@ -67,6 +74,10 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     private LinearLayout classify;
     private LinearLayout myShop;
     private LinearLayout inviteOpenShop;
+
+    private int userId;
+    private Shop shop;
+    private FindShopByUserIdPresenter findShopByUserIdPresenter;
 
     /**
      * 猜你喜欢的内容
@@ -111,9 +122,15 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
 
         //初始化界面，初始化Presenter，用Presenter加载数据
         initView();
+        getUserId();
         initPresenter();
         loadData();
         return view;
+    }
+
+    private void getUserId(){
+        SharedPreferences sharedPreferences = ((Activity)context).getSharedPreferences("account", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("id", 0);
     }
 
     public void initView(){
@@ -153,6 +170,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
         findHotSalePresenter = new FindHotSalePresenter(context,this);
         findSpecialPricePresenter = new FindSpecialPricePresenter(context,this);
         youLovePricePresenter = new FindNewProductPresenter(context,this);
+        findShopByUserIdPresenter = new FindShopByUserIdPresenter(context ,this);
     }
 
     /**
@@ -190,7 +208,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
     @Override
     public void showHotSale(List<Product> products) {
         this.hotSaleProductList = products;
@@ -222,6 +239,30 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
             Toast.makeText(context,"暂无法加载更多", Toast.LENGTH_SHORT).show();
         }else {
             setYouLoveProductAdapter();
+        }
+    }
+
+    private void startFindShop(){
+        if(NetUtil.getNetworkState(context) == NetUtil.NETWORN_NONE){
+            Toast.makeText(context, "暂无网络",Toast.LENGTH_SHORT).show();
+        }else {
+            findShopByUserIdPresenter.findShopByUserId(userId);
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        showDialogs();
+    }
+
+    @Override
+    public void showShopsByUserId(Shop shop) {
+        dismissDialogs();
+        this.shop = shop;
+        if(findPosition == 0){
+            openShop();
+        }else if(findPosition == 1) {
+            openInviteeShop();
         }
     }
 
@@ -298,8 +339,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
 
     private Handler handler = new Handler(){
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+        public void handleMessage(Message msg) {super.handleMessage(msg);
             if(msg.what == 100){
                 mviewPager.setCurrentItem(currentItem);
             }else if(msg.what == IMAGE_PAGER){ //图片轮播里的点击事件传递出来
@@ -343,7 +383,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
      *
      */
     private class MyPageChangeListener implements ViewPager.OnPageChangeListener {
-
         boolean isAutoPlay = false;
         @Override
         public void onPageScrollStateChanged(int arg0) {
@@ -388,6 +427,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    private int findPosition = 0; // 0的时候，说明是点击了我的店铺，1是说明点击了邀请开店
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -398,10 +438,12 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                 startAnotherAty(SortListActivity.class);
                 break;
             case R.id.homepage_menu_myshop:
-                Toast.makeText(context, "我的店铺", Toast.LENGTH_SHORT).show();
+                findPosition = 0;
+                startFindShop();
                 break;
             case R.id.homepage_menu_invite:
-                startAnotherAty(InviteOpenShopActivity.class);
+                findPosition = 1;
+                startFindShop();
                 break;
             case R.id.btn_search_bar:
                 Intent intent = new Intent(context, SearchGoodsActivity.class);
@@ -409,6 +451,60 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                 break;
             default:
                 break;
+        }
+    }
+
+    //根据获取到用户本身的Shop状态来跳转
+    private void openShop(){
+        if(shop == null) {  //没有开店
+            Intent intent1 = new Intent(context, OpenMyShopActivity.class);
+            startActivityForResult(intent1, 1);
+            ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }else {
+            //已经申请开店，但是没有通过审核
+            if(shop.getReviewType() == 1){
+                Toast.makeText(context, "你的店铺正在紧急审核中", Toast.LENGTH_SHORT).show();
+            }else if(shop.getReviewType() == 3){  //未通过审核
+                Toast.makeText(context, "你的店铺未通过审核", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(context, EditMyShopActivity.class);
+                intent1.putExtra("shop", shop);
+                startActivity(intent1);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            } else {  //已经通过审核
+                Intent intent1 = new Intent(context, MyShopActivity.class);
+                startActivity(intent1);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        }
+    }
+
+    //根据获取到用户本身的Shop状态来跳转
+    private void openInviteeShop(){
+        if(shop == null) {  //没有开店
+            Toast.makeText(context, "自己先开店才能邀请", Toast.LENGTH_SHORT).show();
+            Intent intent1 = new Intent(context, OpenMyShopActivity.class);
+            startActivity(intent1);
+            ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }else {
+            //已经申请开店，但是没有通过审核
+            if(shop.getReviewType() == 1){
+                Toast.makeText(context, "你的店铺正在紧急审核中，暂时不能邀请", Toast.LENGTH_SHORT).show();
+            }else if(shop.getReviewType() == 3){  //未通过审核
+                Toast.makeText(context, "你的店铺未通过审核", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(context, EditMyShopActivity.class);
+                intent1.putExtra("shop", shop);
+                startActivity(intent1);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            } else {  //已经通过审核
+                startAnotherAty(InviteOpenShopActivity.class);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK){
+            shop = (Shop)data.getSerializableExtra("shop");
         }
     }
 
@@ -451,23 +547,5 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
      * */
     private void refreshHomePage(){
         loadData();
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(2000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-
-                ((Activity)context).runOnUiThread(new Runnable(){
-                    @Override
-                    public void run() {
-                        //重新加载数据，设置为SwipeRefreshLayout为false
-                        homepageSwipRefresh.setRefreshing(false);
-                    }
-                });
-            }
-        }).start();*/
     }
 }

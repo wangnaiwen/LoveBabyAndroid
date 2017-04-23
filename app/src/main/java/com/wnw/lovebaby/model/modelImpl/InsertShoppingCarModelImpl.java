@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.model.modelInterface.IInsertShoppingCarModel;
 
@@ -34,7 +35,7 @@ public class InsertShoppingCarModelImpl implements IInsertShoppingCarModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(ShoppingCar car){
-        String url = "http://119.29.182.235:8080/babyTest/insertShoppingCar?";
+        String url = NetConfig.SERVICE + NetConfig.INSERT_SHOPPING_CAR;
         url = url
                 +"userId="+car.getUserId()
                 +"&productId="+car.getProductId()

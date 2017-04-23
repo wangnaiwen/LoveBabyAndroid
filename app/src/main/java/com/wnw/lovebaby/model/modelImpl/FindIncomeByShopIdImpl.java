@@ -2,7 +2,6 @@ package com.wnw.lovebaby.model.modelImpl;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,46 +10,40 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
-import com.wnw.lovebaby.domain.User;
-import com.wnw.lovebaby.model.modelInterface.IRegisterModel;
+import com.wnw.lovebaby.model.modelInterface.IFindIncomeByShopIdModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by wnw on 2016/10/17.
+ * Created by wnw on 2017/4/22.
  */
 
-public class RegisterModelImp implements IRegisterModel {
+public class FindIncomeByShopIdImpl implements IFindIncomeByShopIdModel{
 
     private Context context;
-    private UserRegisterListener userRegisterListener;
-    private boolean returnData = false;
+    private FindIncomeByShopIdListener findIncomeByShopIdListener;
+    private int income;
 
     @Override
-    public void registerNetUser(Context context, User user, UserRegisterListener userRegisterListener) {
-        this.context =context;
-        this.userRegisterListener = userRegisterListener;
-        sendRequestWithVolley(user.getPhone(), user.getPassword());
-    }
-
-    private void retData(){
-        if(userRegisterListener != null){
-            userRegisterListener.complete(returnData);
-        }
+    public void findIncomeByShopId(Context context, int shopId, FindIncomeByShopIdListener findIncomeByShopIdListener) {
+        this.context = context;
+        this.findIncomeByShopIdListener = findIncomeByShopIdListener;
+        sendRequestWithVolley(shopId);
     }
 
     /**
      * use volley to get the data
      * */
-    private void sendRequestWithVolley(String phone, String password){
-        String url = NetConfig.SERVICE + NetConfig.REGISTER;
-        url = url +"phone="+ phone
-               +"&password=" + password;
+
+    private void sendRequestWithVolley(int shopId){
+        String url = NetConfig.SERVICE + NetConfig.FIND_INCOME_BY_SHOP_ID + "shopId="+shopId;
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response){
                 parseNetUserWithJSON(response);
             }
         }, new Response.ErrorListener() {
@@ -65,12 +58,7 @@ public class RegisterModelImp implements IRegisterModel {
     private void parseNetUserWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            boolean isExist = jsonObject.getBoolean("exist");
-            if(isExist){
-                Toast.makeText(context, "该用户已经存在", Toast.LENGTH_SHORT).show();
-            }else {
-                returnData = jsonObject.getBoolean("register");
-            }
+            income = jsonObject.getInt("findIncomeByShopId");
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -78,5 +66,15 @@ public class RegisterModelImp implements IRegisterModel {
          * 解析完后返回数据
          * */
         retData();
+    }
+
+    /***
+     * return data
+     */
+
+    private void retData(){
+        if(findIncomeByShopIdListener != null){
+            findIncomeByShopIdListener.complete(income);
+        }
     }
 }

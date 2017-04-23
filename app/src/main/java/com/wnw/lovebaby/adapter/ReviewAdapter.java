@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.domain.Pr;
+import com.wnw.lovebaby.util.TimeConvert;
 
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class ReviewAdapter extends BaseAdapter {
         }
         Pr pr = prList.get(i);
         prHorder.nickNameTv.setText(pr.getUserNickName());
-        prHorder.timeTv.setText(pr.getTime());
+        prHorder.timeTv.setText(TimeConvert.getTime(pr.getTime()));
         prHorder.productScoreImg.setImageResource(starImg[pr.getProductScore()]);
         prHorder.serviceScoreImg.setImageResource(starImg[pr.getServiceScore()]);
         prHorder.logisticsScoreImg.setImageResource(starImg[pr.getLogisticsScore()]);

@@ -31,12 +31,12 @@ public class FindOrderByShopIdPresenter {
     }
 
     //加载数据
-    public void findOrderByShopId(int shopId) {
+    public void findOrderByShopId(int shopId, int number) {
         //加载进度条
         findOrderByShopIdView.showDialog();
         //model进行数据获取
         if(findOrderByShopIdModel != null) {
-            findOrderByShopIdModel.findOrderByShopId(context, shopId, new IFindOrderByShopIdModel.OrderFindByShopIdListener() {
+            findOrderByShopIdModel.findOrderByShopId(context, shopId,number, new IFindOrderByShopIdModel.OrderFindByShopIdListener() {
                 @Override
                 public void complete(List<Order> orders) {
                     findOrderByShopIdView.showOrdersByShopId(orders);

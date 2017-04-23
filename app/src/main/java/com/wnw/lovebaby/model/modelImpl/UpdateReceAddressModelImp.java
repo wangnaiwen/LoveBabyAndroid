@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ReceAddress;
 import com.wnw.lovebaby.model.modelInterface.IUpdateReceAddressModel;
 
@@ -24,7 +25,6 @@ public class UpdateReceAddressModelImp implements IUpdateReceAddressModel {
     private Context context;
     private boolean returnData = false;
     private ReceAddressUpdateListener receAddressUpdateListener;
-    private String url = "http://119.29.182.235:8080/babyTest/updateReceAddress?";
 
     @Override
     public void updateReceAddress(Context context, ReceAddress receAddress, ReceAddressUpdateListener receAddressUpdateListener) {
@@ -37,9 +37,17 @@ public class UpdateReceAddressModelImp implements IUpdateReceAddressModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(ReceAddress address){
-        url = url +"id="+address.getId()+ "&userId="+ address.getUserId() +"&receiver="+ address.getReceiver() +"&province="+ address.getProvince()
-                +"&city=" + address.getCity() +"&county="+ address.getCounty() +"&detailAddress="+ address.getDetailAddress()
-                +"&phone=" + address.getPhone() +"&postcode="+ address.getPostcode();
+        String url = NetConfig.SERVICE + NetConfig.UPDATE_RECE_ADDRESS;
+        url = url +"id="+address.getId()
+                + "&userId="+ address.getUserId()
+                +"&receiver="+ address.getReceiver()
+                +"&province="+ address.getProvince()
+                +"&city=" + address.getCity()
+                +"&county="+ address.getCounty()
+                +"&detailAddress="
+                + address.getDetailAddress()
+                +"&phone=" + address.getPhone()
+                +"&postcode="+ address.getPostcode();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

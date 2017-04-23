@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.model.modelInterface.IFindShoppingByUserIdModel;
 import com.wnw.lovebaby.util.LogUtil;
@@ -39,7 +40,7 @@ public class FindShoppingCarByUserIdModelImpl implements IFindShoppingByUserIdMo
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int userId){
-        String url = "http://119.29.182.235:8080/babyTest/findShoppingCarByUserId?";
+        String url = NetConfig.SERVICE + NetConfig.FIND_SHOPPING_CAR_BBY_USER_ID;
         url = url + "userId="+userId;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);

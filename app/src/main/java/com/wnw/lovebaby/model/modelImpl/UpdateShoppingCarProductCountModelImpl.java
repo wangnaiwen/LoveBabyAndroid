@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.model.modelInterface.IUpdateShoppingCarProductCountModel;
 
 import org.json.JSONException;
@@ -35,7 +36,7 @@ public class UpdateShoppingCarProductCountModelImpl implements IUpdateShoppingCa
      * use volley to get the data
      * */
     private void sendRequestWithVolley(int id, int count){
-        String url = "http://119.29.182.235:8080/babyTest/updateShoppingCarProductCount?";
+        String url = NetConfig.SERVICE + NetConfig.UPDATE_SHOPPING_CAR_PRODUCT_COUNT;
         url = url + "id=" +id +"&count="+count;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

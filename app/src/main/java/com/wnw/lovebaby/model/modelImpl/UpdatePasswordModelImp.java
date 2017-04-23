@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.model.modelInterface.IUpdatePasswordModel;
 
@@ -40,13 +41,12 @@ public class UpdatePasswordModelImp implements IUpdatePasswordModel {
         }
     }
 
-
     /**
      * use volley to update the data
      * */
     private void sendRequestWithVolley(String phone, String password){
-        String url = "http://119.29.182.235:8080/babyTest/updateUserPassword?phone="+ phone
-                +"&password=" + password;
+        String url = NetConfig.SERVICE + NetConfig.UPDATE_USER_PASSWORD;
+        url = url + "phone="+ phone +"&password=" + password;
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
