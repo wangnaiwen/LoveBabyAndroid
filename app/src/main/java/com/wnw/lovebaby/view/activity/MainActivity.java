@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.login.ActivityCollector;
 import com.wnw.lovebaby.view.fragment.CollegeFragment;
 import com.wnw.lovebaby.view.fragment.HomepageFragment;
 import com.wnw.lovebaby.view.fragment.MyFragment;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityCollector.addActivity(this);
         initView();
         setDefaultFragment();
     }
@@ -217,5 +219,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

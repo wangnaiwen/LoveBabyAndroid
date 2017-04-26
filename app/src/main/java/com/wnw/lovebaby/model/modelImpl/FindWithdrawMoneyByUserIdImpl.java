@@ -10,38 +10,34 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
-import com.wnw.lovebaby.model.modelInterface.IValiteWalletModel;
+import com.wnw.lovebaby.model.modelInterface.IFindWithdrawMoneyByUserIdModel;
 import com.wnw.lovebaby.util.LogUtil;
-import com.wnw.lovebaby.util.Md5Encode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by wnw on 2017/4/16.
+ * Created by wnw on 2017/4/26.
  */
 
-public class ValiteWalletModelImpl implements IValiteWalletModel{
+public class FindWithdrawMoneyByUserIdImpl implements IFindWithdrawMoneyByUserIdModel{
+
     private Context context;
-    private WalletValiteListener walletValiteListener;
-    private boolean returnData;
-
-
+    private FindWithdrawMoneyByUserIdListener findWithdrawMoneyByUserIdListener;
+    private int returnData;
     @Override
-    public void valiteWallet(Context context, int userId, String password, WalletValiteListener walletValiteListener) {
+    public void findWithdrawMoneyByUserId(Context context, int userId, FindWithdrawMoneyByUserIdListener findWithdrawMoneyByUserIdListener) {
         this.context = context;
-        this.walletValiteListener = walletValiteListener;
-        sendRequestWithVolley(userId, password);
+        this.findWithdrawMoneyByUserIdListener = findWithdrawMoneyByUserIdListener;
+        sendRequestWithVolley(userId);
     }
 
     /**
      * use volley to get the data
      * */
-    private void sendRequestWithVolley(int userId, String password){
-        String url = NetConfig.SERVICE
-                + NetConfig.VALITE_WALLET
-                +"userId=" + userId
-                +"&password=" + Md5Encode.getEd5EncodePassword(password);
+    private void sendRequestWithVolley(int userId){
+        String url = NetConfig.SERVICE + NetConfig.FIND_WITHDRAW_MONEY_BY_USER_ID
+                + "userId="+userId;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -61,7 +57,7 @@ public class ValiteWalletModelImpl implements IValiteWalletModel{
     private void parseWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            returnData = jsonObject.getBoolean("valiteWallet");
+            returnData = jsonObject.getInt("findWithdrawMoneyByUserId");
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -69,8 +65,8 @@ public class ValiteWalletModelImpl implements IValiteWalletModel{
     }
 
     private void retData(){
-        if(walletValiteListener != null){
-            walletValiteListener.complete(returnData);
+        if(findWithdrawMoneyByUserIdListener != null){
+            findWithdrawMoneyByUserIdListener.complete(returnData);
         }
     }
 }

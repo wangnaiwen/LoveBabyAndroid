@@ -17,13 +17,13 @@ public class RegisterPresenter extends RegisterBasePresenter<IRegisterView> {
 
 
     //加载数据
-    public void register(Context context, User user) {
+    public void register(Context context, User user, String payPassword) {
         //加载进度条
 
         getView().showDialog();
         //model进行数据获取
         if (mRegisterModel != null) {
-            mRegisterModel.registerNetUser(context, user, new IRegisterModel.UserRegisterListener(){
+            mRegisterModel.registerNetUser(context, user, payPassword, new IRegisterModel.UserRegisterListener(){
                 @Override
                 public void complete(boolean isSuccess) {
                     //返回给view

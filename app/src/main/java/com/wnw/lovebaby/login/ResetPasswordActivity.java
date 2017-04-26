@@ -2,6 +2,7 @@ package com.wnw.lovebaby.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -158,13 +159,15 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
     }
 
     /**将用户的手机号码和密码保存起来,从LoginGetCodesAty方法中传递过来的phoneNums*/
-    private void savePassword(){
-        Intent intent = new Intent();
-        phoneNum = intent.getStringExtra("phone");
-        password = login_edit_setpasswd.getText().toString();
-        Log.d("wnw",phoneNum + " "+password);
+    private void saveAccount(){
+        SharedPreferences.Editor editor = getSharedPreferences("account",
+                MODE_PRIVATE).edit();
+        editor.clear();
+        editor.putInt("id", user.getId());
+        editor.putString("phone",user.getPhone());
+        editor.putInt("type", user.getType());
+        editor.apply();
     }
-
     /**在finish()方法中，将Activity从activityCollector中删除*/
     @Override
     protected void onDestroy() {
@@ -192,6 +195,7 @@ public class ResetPasswordActivity  extends FindPasswordBaseActivity<IFindPasswo
         }else {
             this.user = user;
             Toast.makeText(this, "成功设置密码！", Toast.LENGTH_SHORT).show();
+            saveAccount();
             ActivityCollector.finishAllActivity();
             Intent intent = new Intent(ResetPasswordActivity.this,MainActivity.class);
             startActivity(intent);

@@ -86,4 +86,8 @@ public class NetConfig {
 
     //special price
     public final static String FIND_SPECIAL_PRICE = "findSpecialPrice?";
+
+    //withdraw 提现
+    public final static String INSERT_WITHDRAW = "insertWithdraw?";
+    public final static String FIND_WITHDRAW_MONEY_BY_USER_ID = "findWithdrawMoneyByUserId?";
 }

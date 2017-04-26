@@ -17,17 +17,19 @@ import com.wnw.lovebaby.domain.Shop;
 import com.wnw.lovebaby.presenter.FindIncomeByInviteePresenter;
 import com.wnw.lovebaby.presenter.FindIncomeByShopIdPresenter;
 import com.wnw.lovebaby.presenter.FindShopByUserIdPresenter;
+import com.wnw.lovebaby.presenter.FindWithdrawMoneyByUserIdPresenter;
 import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.viewInterface.IFindIncomeByInviteeView;
 import com.wnw.lovebaby.view.viewInterface.IFindIncomeByShopIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindShopByUserIdView;
+import com.wnw.lovebaby.view.viewInterface.IFindWithdrawMoneyByUserIdView;
 
 /**
  * Created by wnw on 2017/4/10.
  */
 
 public class MyShopActivity extends Activity implements View.OnClickListener ,
-        IFindIncomeByShopIdView, IFindIncomeByInviteeView, IFindShopByUserIdView{
+        IFindIncomeByShopIdView, IFindIncomeByInviteeView, IFindShopByUserIdView, IFindWithdrawMoneyByUserIdView{
     private ImageView backMyShop;
     private ImageView shareMyShop;
     private TextView allIncomeTv;
@@ -37,16 +39,23 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
     private TextView myInviteShopIncomeTv;
     private TextView shopNameTv;
 
+    private RelativeLayout shopBalanceRl; //余额点击
+    private TextView shopBalanceTv;       //余额
+    private TextView withdrawMoneyTv;     //提现额度
+
     private FindShopByUserIdPresenter findShopByUserIdPresenter;
     private FindIncomeByShopIdPresenter findIncomeByShopIdPresenter;
     private FindIncomeByInviteePresenter findIncomeByInviteePresenter;
+    private FindWithdrawMoneyByUserIdPresenter findWithdrawMoneyByUserIdPresenter;
 
     private int userId;
     private Shop shop;
 
-    private int myShopIncome;
-    private int myInviteeShopIncome;
-    private int allIncome;
+    private int myShopIncome;             //店铺收入
+    private int myInviteeShopIncome;      //邀请的店铺的收入
+    private int allIncome;                //总收入
+    private int withdraw;                 //已经提现的数量
+    private int balance;                  //店铺余额
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
         initPresenter();
         startFindShopByUserId();
         startFindIncome();
+        startFindWithdraw();
     }
 
     //init view
@@ -69,6 +79,12 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
         myInviteShopOrdersRl = (RelativeLayout)findViewById(R.id.rl_invite_shop_orders);
         myInviteShopIncomeTv = (TextView)findViewById(R.id.tv_invite_shop_income);
         shopNameTv = (TextView)findViewById(R.id.tv_shop_name);
+
+        shopBalanceRl = (RelativeLayout)findViewById(R.id.rl_shop_balance);
+        shopBalanceTv = (TextView)findViewById(R.id.tv_shop_balance);
+        withdrawMoneyTv = (TextView)findViewById(R.id.tv_withdraw_money);
+
+        shopBalanceRl.setOnClickListener(this);
 
         backMyShop.setOnClickListener(this);
         shareMyShop.setOnClickListener(this);
@@ -85,6 +101,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
         findShopByUserIdPresenter = new FindShopByUserIdPresenter(this,this);
         findIncomeByInviteePresenter = new FindIncomeByInviteePresenter(this,this);
         findIncomeByShopIdPresenter = new FindIncomeByShopIdPresenter(this, this);
+        findWithdrawMoneyByUserIdPresenter = new FindWithdrawMoneyByUserIdPresenter(this, this);
     }
 
     private void startFindShopByUserId(){
@@ -97,6 +114,10 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
 
     private void startFindIncomeByShopId(){
         findIncomeByShopIdPresenter.load(shop.getId());
+    }
+
+    private void startFindWithdraw(){
+        findWithdrawMoneyByUserIdPresenter.findWithdrawMoneyByUserId(userId);
     }
 
     @Override
@@ -136,19 +157,35 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
     @Override
     public void showIncomeByInvitee(int income) {
         dismissDialogs();
-        myInviteeShopIncome = income;
-        allIncome = myShopIncome + myInviteeShopIncome;
+        myInviteeShopIncome = income * 2/100;    //邀请获得的，可以拿到2%的提成
+        allIncome = myShopIncome + myInviteeShopIncome ;
         myInviteShopIncomeTv.setText(TypeConverters.IntConvertToString(myInviteeShopIncome));
         allIncomeTv.setText(TypeConverters.IntConvertToString(allIncome));
+
+        balance = allIncome - withdraw;
+        shopBalanceTv.setText(TypeConverters.IntConvertToString(balance));
     }
 
     @Override
     public void showIncomeByShopId(int income) {
         dismissDialogs();
-        myShopIncome = income;
+        myShopIncome = income * 8/100;       //拿到8%的提成
         allIncome = myShopIncome + myInviteeShopIncome;
         shopIncomeTv.setText(TypeConverters.IntConvertToString(myShopIncome));
         allIncomeTv.setText(TypeConverters.IntConvertToString(allIncome));
+
+        balance = allIncome - withdraw;
+        shopBalanceTv.setText(TypeConverters.IntConvertToString(balance));
+    }
+
+    @Override
+    public void showWithdrawMoney(int money) {
+        dismissDialogs();
+        withdraw = money;
+        balance = allIncome - withdraw;
+        shopBalanceTv.setText(TypeConverters.IntConvertToString(balance));
+        withdrawMoneyTv.setText(TypeConverters.IntConvertToString(withdraw));
+
     }
 
     @Override
@@ -175,8 +212,26 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
                 startActivity(intent1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
+            case R.id.rl_shop_balance:
+                //店铺余额被点击
+                Intent intent2 = new Intent(this, WithdrawActivity.class);
+                intent2.putExtra("userId", userId);
+                intent2.putExtra("balance", balance);
+                startActivityForResult(intent2, 1);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            withdraw = withdraw + balance - data.getIntExtra("balance", 0);
+            balance = data.getIntExtra("balance", 0);
+            withdrawMoneyTv.setText(TypeConverters.IntConvertToString(withdraw));
+            shopBalanceTv.setText(TypeConverters.IntConvertToString(balance));
         }
     }
 

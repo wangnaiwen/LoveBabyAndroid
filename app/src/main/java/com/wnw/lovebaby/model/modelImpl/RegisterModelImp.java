@@ -13,6 +13,8 @@ import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.model.modelInterface.IRegisterModel;
+import com.wnw.lovebaby.util.LogUtil;
+import com.wnw.lovebaby.util.Md5Encode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,10 +30,10 @@ public class RegisterModelImp implements IRegisterModel {
     private boolean returnData = false;
 
     @Override
-    public void registerNetUser(Context context, User user, UserRegisterListener userRegisterListener) {
+    public void registerNetUser(Context context, User user,String payPassword,  UserRegisterListener userRegisterListener) {
         this.context =context;
         this.userRegisterListener = userRegisterListener;
-        sendRequestWithVolley(user.getPhone(), user.getPassword());
+        sendRequestWithVolley(user.getPhone(), user.getPassword(), payPassword);
     }
 
     private void retData(){
@@ -43,10 +45,12 @@ public class RegisterModelImp implements IRegisterModel {
     /**
      * use volley to get the data
      * */
-    private void sendRequestWithVolley(String phone, String password){
+    private void sendRequestWithVolley(String phone, String password, String payPassword){
         String url = NetConfig.SERVICE + NetConfig.REGISTER;
         url = url +"phone="+ phone
-               +"&password=" + password;
+               +"&password=" + Md5Encode.getEd5EncodePassword(password)
+                +"&payPassword=" + Md5Encode.getEd5EncodePassword(payPassword);
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

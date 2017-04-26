@@ -25,7 +25,7 @@ public class ValiteWalletPresenter {
     }
 
     //加载数据
-    public void valiteWallet(int userId, int password) {
+    public void valiteWallet(int userId, String password) {
         //加载进度条
         valiteWalletView.showDialog();
         //model进行数据获取

@@ -2,6 +2,7 @@ package com.wnw.lovebaby.model.modelImpl;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -9,38 +10,40 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
-import com.wnw.lovebaby.domain.User;
-import com.wnw.lovebaby.model.modelInterface.ILoginModel;
-import com.wnw.lovebaby.util.Md5Encode;
+import com.wnw.lovebaby.domain.Withdraw;
+import com.wnw.lovebaby.model.modelInterface.IInsertWithdrawModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by wnw on 2016/10/17.
+ * Created by wnw on 2017/4/26.
  */
 
-public class LoginModelImp implements ILoginModel {
+public class InsertWithdrawImpl implements IInsertWithdrawModel{
 
     private Context context;
-    private User user;
-    private UserLoadingListener userLoadingListener;
+    private InsertWithdrawListener insertWithdrawListener;
+    private boolean result;
+
 
     @Override
-    public void loadUser(Context context, User user, UserLoadingListener loadingListener) {
+    public void insertWithdraw(Context context, Withdraw withdraw, InsertWithdrawListener insertWithdrawListener) {
         this.context = context;
-        sendRequestWithVolley(user.getPhone(), user.getPassword());
-        this.userLoadingListener = loadingListener;
+        this.insertWithdrawListener = insertWithdrawListener;
+        sendRequestWithVolley(withdraw);
     }
 
     /**
      * use volley to get the data
      * */
 
-    private void sendRequestWithVolley(String phone, String password){
-        String url = NetConfig.SERVICE + NetConfig.LOGIN;
-        url = url + "phone=" + phone+"&password="+ Md5Encode.getEd5EncodePassword(password);
-        Log.d("wnwUser",url );
+    private void sendRequestWithVolley(Withdraw withdraw){
+        String url = NetConfig.SERVICE + NetConfig.INSERT_WITHDRAW;
+        url = url
+                + "userId=" +withdraw.getUserId()
+                +"&money=" + withdraw.getMoney();
+        Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -59,14 +62,7 @@ public class LoginModelImp implements ILoginModel {
     private void parseNetUserWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            JSONObject resultObject = jsonObject.getJSONObject("user");
-            if(resultObject != null){
-                user = new User();
-                user.setId(resultObject.getInt("id"));
-                user.setPhone(resultObject.getString("phone"));
-                user.setPassword(resultObject.getString("password"));
-                user.setType(resultObject.getInt("type"));
-            }
+            result = jsonObject.getBoolean("insertWithdraw");
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -81,8 +77,8 @@ public class LoginModelImp implements ILoginModel {
      */
 
     private void retData(){
-        if(userLoadingListener != null){
-            userLoadingListener.complete(user);
+        if(insertWithdrawListener != null){
+            insertWithdrawListener.complete(result);
         }
     }
 }

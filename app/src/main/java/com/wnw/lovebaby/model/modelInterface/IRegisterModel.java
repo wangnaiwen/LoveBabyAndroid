@@ -11,7 +11,7 @@ public interface IRegisterModel {
     /**
      * 加载数据
      * */
-    void registerNetUser(Context context, User user, IRegisterModel.UserRegisterListener userRegisterListener);
+    void registerNetUser(Context context, User user, String payPassword, IRegisterModel.UserRegisterListener userRegisterListener);
 
     /**
      * 加载数据完成的回调

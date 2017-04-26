@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.model.modelInterface.IUpdatePasswordModel;
+import com.wnw.lovebaby.util.Md5Encode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +47,7 @@ public class UpdatePasswordModelImp implements IUpdatePasswordModel {
      * */
     private void sendRequestWithVolley(String phone, String password){
         String url = NetConfig.SERVICE + NetConfig.UPDATE_USER_PASSWORD;
-        url = url + "phone="+ phone +"&password=" + password;
+        url = url + "phone="+ phone +"&password=" + Md5Encode.getEd5EncodePassword(password);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

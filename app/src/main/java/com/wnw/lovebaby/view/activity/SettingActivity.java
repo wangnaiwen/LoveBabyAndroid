@@ -1,8 +1,11 @@
 package com.wnw.lovebaby.view.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -10,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.login.ActivityCollector;
+import com.wnw.lovebaby.login.LoginActivity;
 
 import org.w3c.dom.Text;
 
@@ -30,6 +35,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        ActivityCollector.addActivity(this);
         initView();
     }
 
@@ -74,9 +80,50 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(this, "当前已经是最新版本", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.exit_login:
-
+                showExitDialog();
                 break;
         }
+    }
+
+
+    /**
+     * show the dialog of delete the address
+     * */
+    private void showExitDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("退出账号");
+        builder.setMessage("是否退成当前账号？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishLogin();
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog deleteDialog = builder.create();
+        deleteDialog.show();
+    }
+
+    //退出登录，清除保存登录账号的信息
+    public void finishLogin() {
+        SharedPreferences sharedPreferences = getSharedPreferences("account", MODE_PRIVATE);
+        sharedPreferences.edit().clear().commit();
+        Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        ActivityCollector.finishAllActivity();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

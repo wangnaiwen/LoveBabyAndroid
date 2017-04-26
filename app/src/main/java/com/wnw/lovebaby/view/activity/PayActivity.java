@@ -96,7 +96,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
 
     //开始验证密码
     private void startValitePassword(String password){
-        valiteWalletPresenter.valiteWallet(userId, Integer.parseInt(password));
+        valiteWalletPresenter.valiteWallet(userId, password);
     }
 
     //开始查余额

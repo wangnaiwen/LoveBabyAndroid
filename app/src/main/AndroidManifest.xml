@@ -57,6 +57,7 @@
         <activity android:name=".view.activity.InviteeShopOrderActivity"/>
         <activity android:name=".view.activity.OpenMyShopActivity"/>
         <activity android:name=".view.activity.EditMyShopActivity"/>
+        <activity android:name=".view.activity.WithdrawActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

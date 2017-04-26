@@ -128,9 +128,9 @@
                     android:layout_marginRight="10dp"/>
             </RelativeLayout>
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#a9e4e3e3"/>
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#a9e4e3e3"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp">
@@ -146,6 +146,59 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
+                    android:text="￥0.00"
+                    android:textColor="@color/btn_color_yes"
+                    android:gravity="center_vertical"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#a9e4e3e3"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="已提现金额"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"/>
+                <TextView
+                    android:id="@+id/tv_withdraw_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:text="￥0.00"
+                    android:textColor="@color/btn_color_yes"
+                    android:gravity="center_vertical"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#a9e4e3e3"/>
+            <RelativeLayout
+                android:id="@+id/rl_shop_balance"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="店铺余额"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"/>
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_advance"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/tv_shop_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/img"
                     android:text="￥0.00"
                     android:textColor="@color/btn_color_yes"
                     android:gravity="center_vertical"/>

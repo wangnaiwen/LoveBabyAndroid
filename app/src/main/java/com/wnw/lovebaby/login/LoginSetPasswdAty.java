@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,8 +49,8 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
     /**password的EditTxt*/
     private EditText login_edit_setpasswd;
 
-    /**password input again*/
-    private EditText login_edit_setpasswd_again;
+    /**pay password input again*/
+    private EditText payPasswordEt;
 
     private User user;
     @Override
@@ -75,58 +77,35 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
         back_imgbtn = (ImageView)findViewById(R.id.back_imgbtn);
         login_setpasswd_ok = (Button)findViewById(R.id.login_setpasswd_ok);
         login_edit_setpasswd = (EditText)findViewById(R.id.login_edit_setpasswd);
-        login_edit_setpasswd_again = (EditText)findViewById(R.id.login_edit_setpasswd_again);
+        payPasswordEt = (EditText)findViewById(R.id.login_edit_pay_passowrd);
 
         back_imgbtn.setOnClickListener(this);
         login_setpasswd_ok.setOnClickListener(this);
 
-        /**一旦用户输入发生改变，就调用passwdIsLegal()方法判断输入的密码格式是不是合法*/
-        login_edit_setpasswd.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                /**如果用户输入的合法，就设置login_setpasswd_ok为可点击的，并且设置背景颜色*/
-                boolean isLegal = judgePasswdIsLegal.passwdIsLegal(s.toString());
-                if (isLegal) {
-                    login_setpasswd_ok.setClickable(true);
-                    login_setpasswd_ok.setTextColor(getResources().getColor(R.color.text_color_yes));
-                    login_setpasswd_ok.setBackgroundColor(getResources().getColor(R.color.btn_color_yes));
-                } else {
-                    login_setpasswd_ok.setClickable(false);
-                    login_setpasswd_ok.setTextColor(getResources().getColor(R.color.text_color_no));
-                    login_setpasswd_ok.setBackgroundColor(getResources().getColor(R.color.btn_color_no));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_setpasswd_ok:
                 /**一旦用户输入密码成功，有以下工作需要完成：
-                 * 0. 判断两个密码是否相同
-                 * 1. 将用户的手机号码和密码存储起来，对密码进行相应的加工
                  * 2. 调用ActivityCollector中的finishAllActivity()方法，将用户注册这三个步骤需要的
                  *     所有Activity进行销毁
                  * 3.  打开登陆界面，进行用户登录*/
-                if(judgePasswdEqual()){
+                if(login_edit_setpasswd.getText().toString().trim().isEmpty()){
+                    login_edit_setpasswd.setHint("请输入登录密码");
+                    login_edit_setpasswd.setHintTextColor(Color.RED);
+                }else if (payPasswordEt.getText().toString().trim().isEmpty()){
+                    payPasswordEt.setHint("请输入6位数字的支付密码");
+                    payPasswordEt.setHintTextColor(Color.RED);
+                }else if (payPasswordEt.getText().toString().trim().length() != 6){
+                    payPasswordEt.setText("");
+                    payPasswordEt.setHint("支付密码必须是6位数字组成");
+                    payPasswordEt.setHintTextColor(Color.RED);
+                }else {
                     user = new User();
                     user.setPhone(phoneNum);
                     user.setPassword(login_edit_setpasswd.getText().toString().trim());
                     startRegisterPresenter();
-
-                }else{
-                    Toast.makeText(this, "输入的两次密码不一致",Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -144,24 +123,8 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
         if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
             Toast.makeText(this, "网络不可用",Toast.LENGTH_SHORT).show();
         }else{
-            mPresenter.register(this, user);
+            mPresenter.register(this, user, payPasswordEt.getText().toString().trim());
         }
-    }
-
-    /**
-     * 判断两次密码输入是否相同
-     *
-     * */
-    private boolean judgePasswdEqual(){
-        return login_edit_setpasswd.getText().toString().trim().equals(login_edit_setpasswd_again.getText().toString().trim());
-    }
-
-    /**将用户的手机号码和密码保存起来,从LoginGetCodesAty方法中传递过来的phoneNums*/
-    private void savePassword(){
-        Intent intent = new Intent();
-        phoneNum = intent.getStringExtra("phone");
-        password = login_edit_setpasswd.getText().toString();
-        Log.d("wnw",phoneNum + " "+password);
     }
 
     /**在finish()方法中，将Activity从activityCollector中删除*/
@@ -208,6 +171,7 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
         dismissDialogs();
         if(isSuccess){
             Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
+            saveAccount();
             ActivityCollector.finishAllActivity();
             Intent intent = new Intent(LoginSetPasswdAty.this,MainActivity.class);
             startActivity(intent);
@@ -215,5 +179,15 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
         }else {
             Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveAccount(){
+        SharedPreferences.Editor editor = getSharedPreferences("account",
+                MODE_PRIVATE).edit();
+        editor.clear();
+        editor.putInt("id", user.getId());
+        editor.putString("phone",user.getPhone());
+        editor.putInt("type", user.getType());
+        editor.apply();
     }
 }

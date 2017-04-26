@@ -10,7 +10,7 @@ public interface IValiteWalletModel {
     /**
      * 加载数据
      * */
-    void valiteWallet(Context context, int userId, int password, WalletValiteListener walletValiteListener);
+    void valiteWallet(Context context, int userId, String password, WalletValiteListener walletValiteListener);
 
     /**
      * 加载数据完成的回调
