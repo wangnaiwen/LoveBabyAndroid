@@ -447,6 +447,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.btn_search_bar:
                 Intent intent = new Intent(context, SearchGoodsActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
                 break;
             default:

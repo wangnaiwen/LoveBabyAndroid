@@ -1,6 +1,7 @@
 package com.wnw.lovebaby.view.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.domain.Search;
+import com.wnw.lovebaby.net.NetUtil;
+import com.wnw.lovebaby.presenter.FindSearchByUserIdPresenter;
 import com.wnw.lovebaby.view.costom.FlowViewGroup;
+import com.wnw.lovebaby.view.viewInterface.IFindSearchByUserIdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +28,9 @@ import java.util.List;
  * Created by wnw on 2016/12/7.
  */
 
-public class SearchGoodsActivity extends Activity implements View.OnClickListener,TextWatcher {
+public class SearchGoodsActivity extends Activity implements View.OnClickListener,
+        TextWatcher ,IFindSearchByUserIdView{
+
     private ImageView searchBack;
     private ImageView clearSearch;
     private EditText searchContent;
@@ -34,13 +41,26 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
 
     private ImageView clearHistorySearch;
 
+    private int userId;
+
     private List<String> historyKeyWordList =  new ArrayList<>();
+    private List<Search> searchList = new ArrayList<>();
+
+    private FindSearchByUserIdPresenter findSearchByUserIdPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_goods);
         initView();
+        getUserId();
+        initPresenter();
+        startFindSearchList();
+    }
+
+    private void getUserId(){
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("userId", 0);
     }
 
     private void initView(){
@@ -57,16 +77,65 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
         hotKeyWord = (FlowViewGroup)findViewById(R.id.flow_layout_hot_keyword);
         historyKeyWord = (FlowViewGroup)findViewById(R.id.flow_layout_history_keyword);
         clearHistorySearch = (ImageView)findViewById(R.id.clear_history_search);
+
         clearHistorySearch.setOnClickListener(this);
         setFlowView();
+    }
+
+    private void initPresenter(){
+        findSearchByUserIdPresenter = new FindSearchByUserIdPresenter(this,this);
+    }
+
+    private void startFindSearchList(){
+        if(NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "当前无网络，不不到搜索记录", Toast.LENGTH_SHORT).show();
+        }else {
+            findSearchByUserIdPresenter.findSearchByUserId(userId);
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        showDialogs();
+    }
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("订单正在提交中...");
+        }
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showSearchByUserId(List<Search> searches) {
+        dismissDialogs();
+        if (searches == null){
+            //不理会
+        }else {
+            //找到了，开始加载
+            searchList = searches;
+            int length = searchList.size();
+            for (int i = 0; i < length; i++){
+                historyKeyWordList.add(searchList.get(i).getKey());
+            }
+            setHistoryFlowView();
+        }
     }
 
     /**
      * set hot search flow layout data
      * */
     private void setFlowView(){
-        String[] mTexts = new String[]{"宝宝奶粉", "宝宝止尿布",
-                "宝宝早教", " 宝宝故事书", "纸巾", "保温灯","宝宝浴缸"};
+        String[] mTexts = new String[]{"奶粉", "止尿布","故事书", "纸巾","浴缸"};
         TextView tv;
         for (int i=0;i<mTexts.length;i++) {
             tv = (TextView) LayoutInflater.from(this).inflate(R.layout.flow_item, hotKeyWord, false);
@@ -97,7 +166,7 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
                 search(searchContent.getText().toString().trim());
                 break;
             case R.id.clear_history_search:
-                clearHistorySearch();
+                //clearHistorySearch();
                 break;
             default:
                 break;
@@ -127,6 +196,8 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
         historyKeyWordList.add(0, keyword);
         setHistoryFlowView();
         Intent intent = new Intent(this, SearchResultActivity.class);
+        intent.putExtra("keyWord", keyword);
+        intent.putExtra("userId", userId);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
@@ -138,9 +209,9 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
         historyKeyWord.removeAllViews();
         TextView tv;
         int count = historyKeyWordList.size();
-        if(count > 0){
+        /*if(count > 0){
             clearHistorySearch.setVisibility(View.VISIBLE);
-        }
+        }*/
         for (int i=0;i<count;i++) {
             tv = (TextView) LayoutInflater.from(this).inflate(R.layout.flow_item, historyKeyWord, false);
             tv.setText(historyKeyWordList.get(i));

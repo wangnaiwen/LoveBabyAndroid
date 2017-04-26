@@ -63,6 +63,7 @@ public class NetConfig {
     //product
     public final static String FIND_PRODUCT_BY_ID = "findProductById?";
     public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
+    public final static String FIND_PRODUCT_BY_KEY = "findProductByKey?";
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";
@@ -90,4 +91,7 @@ public class NetConfig {
     //withdraw 提现
     public final static String INSERT_WITHDRAW = "insertWithdraw?";
     public final static String FIND_WITHDRAW_MONEY_BY_USER_ID = "findWithdrawMoneyByUserId?";
+
+    //search
+    public final static String FIND_SEARCH_BY_USER_ID = "findSearchByUserId?";
 }

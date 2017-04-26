@@ -22,9 +22,23 @@
             android:textSize="15sp"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
-        <TextView
+    <GridView
+        android:id="@+id/gv_product_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:columnWidth="140dp"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:stretchMode="columnWidth">
+    </GridView>
+    <TextView
+        android:id="@+id/tv_null"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="宝宝找不到"
-        android:gravity="center"/>
+        android:text="宝宝找不到，点击屏幕刷新"
+        android:gravity="center"
+        android:visibility="gone"/>
 </LinearLayout>
