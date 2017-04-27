@@ -1,5 +1,7 @@
 package com.wnw.lovebaby.view.viewInterface;
 
+import com.wnw.lovebaby.domain.User;
+
 /**
  * Created by wnw on 2016/10/17.
  */
@@ -13,5 +15,5 @@ public interface IRegisterView {
     /**
      * 返回数据
      * */
-    void register(boolean isSuccess);
+    void register(User user);
 }

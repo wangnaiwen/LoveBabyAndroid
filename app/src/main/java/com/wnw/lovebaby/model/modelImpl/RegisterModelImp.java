@@ -27,7 +27,7 @@ public class RegisterModelImp implements IRegisterModel {
 
     private Context context;
     private UserRegisterListener userRegisterListener;
-    private boolean returnData = false;
+    private User user;
 
     @Override
     public void registerNetUser(Context context, User user,String payPassword,  UserRegisterListener userRegisterListener) {
@@ -38,7 +38,7 @@ public class RegisterModelImp implements IRegisterModel {
 
     private void retData(){
         if(userRegisterListener != null){
-            userRegisterListener.complete(returnData);
+            userRegisterListener.complete(user);
         }
     }
 
@@ -73,7 +73,14 @@ public class RegisterModelImp implements IRegisterModel {
             if(isExist){
                 Toast.makeText(context, "该用户已经存在", Toast.LENGTH_SHORT).show();
             }else {
-                returnData = jsonObject.getBoolean("register");
+                JSONObject resultObject = jsonObject.getJSONObject("register");
+                if(resultObject != null){
+                    user = new User();
+                    user.setId(resultObject.getInt("id"));
+                    user.setPhone(resultObject.getString("phone"));
+                    user.setPassword(resultObject.getString("password"));
+                    user.setType(resultObject.getInt("type"));
+                }
             }
         }catch (JSONException e){
             e.printStackTrace();

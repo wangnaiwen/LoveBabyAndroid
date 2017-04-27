@@ -167,15 +167,16 @@ public class LoginSetPasswdAty extends RegisterBaseActivity<IRegisterView, Regis
     }
 
     @Override
-    public void register(boolean isSuccess) {
+    public void register(User user) {
         dismissDialogs();
-        if(isSuccess){
+        if(user != null){
             Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
+            this.user = user;
             saveAccount();
-            ActivityCollector.finishAllActivity();
             Intent intent = new Intent(LoginSetPasswdAty.this,MainActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            ActivityCollector.finishAllActivity();
         }else {
             Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
         }

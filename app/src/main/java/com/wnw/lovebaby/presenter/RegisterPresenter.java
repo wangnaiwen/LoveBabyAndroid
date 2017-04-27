@@ -25,9 +25,9 @@ public class RegisterPresenter extends RegisterBasePresenter<IRegisterView> {
         if (mRegisterModel != null) {
             mRegisterModel.registerNetUser(context, user, payPassword, new IRegisterModel.UserRegisterListener(){
                 @Override
-                public void complete(boolean isSuccess) {
+                public void complete(User user1) {
                     //返回给view
-                    getView().register(isSuccess);
+                    getView().register(user1);
                 }
             });
         }

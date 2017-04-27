@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.model.modelInterface.IInsertShoppingCarModel;
+import com.wnw.lovebaby.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ public class InsertShoppingCarModelImpl implements IInsertShoppingCarModel{
                 +"&productCover="+car.getProductCover()
                 +"&retailPrice="+car.getRetailPrice()
                 +"&productCount="+car.getProductCount();
+        LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

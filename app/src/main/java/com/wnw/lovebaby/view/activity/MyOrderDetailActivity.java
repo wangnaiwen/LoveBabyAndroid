@@ -109,6 +109,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
         confirmReceiptTv = (TextView)findViewById(R.id.tv_confirm_receipt);
         submitEvaluatioinTv = (TextView)findViewById(R.id.tv_submit_evaluation);
 
+        back.setOnClickListener(this);
         payTv.setOnClickListener(this);
         confirmReceiptTv.setOnClickListener(this);
         dealLv.setOnItemClickListener(this);
@@ -270,6 +271,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+
             case R.id.tv_order_pay:
                 Intent intent = new Intent(this, PayActivity.class);
                 intent.putExtra("tag",1);

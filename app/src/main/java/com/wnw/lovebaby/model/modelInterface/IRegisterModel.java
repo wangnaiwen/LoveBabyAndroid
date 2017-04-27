@@ -17,6 +17,6 @@ public interface IRegisterModel {
      * 加载数据完成的回调
      * */
     interface UserRegisterListener{
-        void complete(boolean isSuccess);
+        void complete(User user);
     }
 }
