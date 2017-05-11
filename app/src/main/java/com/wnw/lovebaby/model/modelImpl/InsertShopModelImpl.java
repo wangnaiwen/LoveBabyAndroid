@@ -16,6 +16,8 @@ import com.wnw.lovebaby.model.modelInterface.IInsertShopModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/4/11.
  */
@@ -37,12 +39,26 @@ public class InsertShopModelImpl implements IInsertShopModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(Shop shop){
+        String name = "";
+        String idCard = "";
+        String owner = "";
+        String wechat = "";
+        try{
+            name = URLEncoder.encode(shop.getName(), "UTF-8");
+            idCard = URLEncoder.encode(shop.getIdCard(), "UTF-8");
+            owner = URLEncoder.encode(shop.getOwner(), "UTF-8");
+            wechat = URLEncoder.encode(shop.getWechat(), "UTF-8");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         String url = NetConfig.SERVICE + NetConfig.INSERT_SHOP
                 + "userId="+shop.getUserId()
-                +"&name="+ shop.getName()
-                +"&idCard="+ shop.getIdCard()
-                +"&owner="+ shop.getOwner()
-                +"&wechat=" + shop.getWechat()
+                +"&name="+ name
+                +"&idCard="+ idCard
+                +"&owner="+ owner
+                +"&wechat=" + wechat
                 +"&money="+ shop.getMoney()
                 +"&reviewType="+ shop.getReviewType()
                 +"&invitee="+shop.getInvitee();

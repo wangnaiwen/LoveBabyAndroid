@@ -40,6 +40,7 @@ public class InsertWithdrawImpl implements IInsertWithdrawModel{
 
     private void sendRequestWithVolley(Withdraw withdraw){
         String url = NetConfig.SERVICE + NetConfig.INSERT_WITHDRAW;
+
         url = url
                 + "userId=" +withdraw.getUserId()
                 +"&money=" + withdraw.getMoney();

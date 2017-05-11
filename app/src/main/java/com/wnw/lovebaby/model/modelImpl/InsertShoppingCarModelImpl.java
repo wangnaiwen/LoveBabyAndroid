@@ -17,6 +17,8 @@ import com.wnw.lovebaby.util.LogUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/4/4.
  */
@@ -37,11 +39,22 @@ public class InsertShoppingCarModelImpl implements IInsertShoppingCarModel{
      * */
     private void sendRequestWithVolley(ShoppingCar car){
         String url = NetConfig.SERVICE + NetConfig.INSERT_SHOPPING_CAR;
+
+        String productName = "";
+        String productCover = "";
+        try{
+            productName = URLEncoder.encode(car.getProductName(), "UTF-8");
+            productCover = URLEncoder.encode(car.getProductCover(), "UTF-8");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         url = url
                 +"userId="+car.getUserId()
                 +"&productId="+car.getProductId()
-                +"&productName="+car.getProductName()
-                +"&productCover="+car.getProductCover()
+                +"&productName="+productName
+                +"&productCover="+productCover
                 +"&retailPrice="+car.getRetailPrice()
                 +"&productCount="+car.getProductCount();
         LogUtil.d("url", url);

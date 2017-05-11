@@ -41,7 +41,8 @@
             android:layout_weight="1"
             android:hint="输入店铺的拥有者"
             android:textSize="15sp"
-            android:textColorHint="@color/colorAccent"/>
+            android:textColorHint="@color/colorAccent"
+            android:background="@null" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,7 +64,10 @@
             android:layout_weight="1"
             android:hint="输入你的身份证号码"
             android:textSize="15sp"
-            android:textColorHint="@color/colorAccent"/>
+            android:textColorHint="@color/colorAccent"
+            android:background="@null"
+            android:inputType="number"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +89,9 @@
             android:layout_weight="1"
             android:hint="输入你的店铺名称"
             android:textSize="15sp"
-            android:textColorHint="@color/colorAccent"/>
+            android:textColorHint="@color/colorAccent"
+            android:background="@null"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -107,7 +113,9 @@
             android:layout_weight="1"
             android:hint="输入你的微信"
             android:textSize="15sp"
-            android:textColorHint="@color/colorAccent"/>
+            android:textColorHint="@color/colorAccent"
+            android:background="@null"
+            />
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/rl_pick_invitee"

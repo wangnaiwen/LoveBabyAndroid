@@ -5,7 +5,8 @@ package com.wnw.lovebaby.config;
  */
 
 public class NetConfig {
-    public final static String SERVICE = "http://119.29.182.235:8080/babyTest/";
+    //public final static String SERVICE = "http://192.168.31.106:8089/babyTest/";
+    public final static String SERVICE = "http://119.29.40.196:8080/babyTest/";
 
     //User
 
@@ -94,4 +95,14 @@ public class NetConfig {
 
     //search
     public final static String FIND_SEARCH_BY_USER_ID = "findSearchByUserId?";
+
+
+    //Article
+    public final static String INSERT_ARTICLE = "insertArticle?";
+    public final static String UPDATE_ARTICLE = "updateArticle?";
+    public final static String DELETE_ARTICLE = "deleteArticle?";
+    public final static String UPDATE_ARTICLE_READ_TIMES = "updateArticleReadTimes?";
+    public final static String UPDATE_ARTICLE_LIKE_TIMES = "updateArticleLikeTimes?";
+    public final static String FIND_ALL_ARTICLE = "findAllArticles?";
+
 }

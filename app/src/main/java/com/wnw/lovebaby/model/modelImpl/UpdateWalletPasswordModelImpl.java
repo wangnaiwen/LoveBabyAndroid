@@ -10,10 +10,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebaby.config.NetConfig;
-import com.wnw.lovebaby.domain.Pr;
-import com.wnw.lovebaby.model.modelInterface.IInsertPrModel;
 import com.wnw.lovebaby.model.modelInterface.IUpdateWalletPasswordModel;
 import com.wnw.lovebaby.util.LogUtil;
+import com.wnw.lovebaby.util.Md5Encode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +40,7 @@ public class UpdateWalletPasswordModelImpl implements IUpdateWalletPasswordModel
         String url = NetConfig.SERVICE
                 + NetConfig.UPDATE_WALLET_PASSWORD
                 +"userId=" + userId
-                +"&password=" + password;
+                +"&password=" + Md5Encode.getEd5EncodePassword(password+"");
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

@@ -17,6 +17,8 @@ import com.wnw.lovebaby.util.LogUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/4/11.
  */
@@ -39,13 +41,18 @@ public class InsertDealModelImpl implements IInsertDealModel{
      * use volley to get the data
      * */
     private void sendRequestWithVolley(Deal deal){
+        String productName = "";
+        try{
+            productName = URLEncoder.encode(deal.getProductName(), "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         String url = NetConfig.SERVICE + NetConfig.INSERT_DEAL
                 + "orderId="+deal.getOrderId()
                 +"&productId="+ deal.getProductId()
-                +"&productName="+ deal.getProductName()
+                +"&productName="+ productName
                 +"&productCount="+ deal.getProductCount()
                 +"&sumPrice=" + deal.getSumPrice();
-
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

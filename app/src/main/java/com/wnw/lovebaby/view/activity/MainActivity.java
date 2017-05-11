@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.login.ActivityCollector;
+import com.wnw.lovebaby.view.fragment.ArticleFragment;
 import com.wnw.lovebaby.view.fragment.CollegeFragment;
 import com.wnw.lovebaby.view.fragment.HomepageFragment;
 import com.wnw.lovebaby.view.fragment.MyFragment;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * */
     private FragmentManager fragmentManager;
     private HomepageFragment homepageFragment;
-    private CollegeFragment collegeFragment;
+    //private CollegeFragment collegeFragment;
+    private ArticleFragment articleFragment;
     private ShoppingCarFragment shoppingCarFragment;
     private MyFragment myFragment;
 
@@ -150,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.icon_college:
                 if(CURRENT_FRAGMENT != COLLEGE_FRAGMENT) {
-                    if(collegeFragment == null){
-                        collegeFragment = new CollegeFragment();
+                    if(articleFragment == null){
+                        articleFragment = new ArticleFragment();
                     }
                     resetBtn();
                     CURRENT_FRAGMENT = COLLEGE_FRAGMENT;
                     setSelectedBtnType();
-                    changeFragment(collegeFragment);
+                    changeFragment(articleFragment);
                 }
                 break;
             case R.id.icon_shopping_car:

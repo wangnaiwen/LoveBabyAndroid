@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.bean.ArticleCoverItem;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**

@@ -17,6 +17,8 @@ import com.wnw.lovebaby.model.modelInterface.IUpdateReceAddressModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/3/10.
  */
@@ -38,14 +40,28 @@ public class UpdateReceAddressModelImp implements IUpdateReceAddressModel {
      * */
     private void sendRequestWithVolley(ReceAddress address){
         String url = NetConfig.SERVICE + NetConfig.UPDATE_RECE_ADDRESS;
+        String receiver = "";
+        String province = "";
+        String city = "";
+        String county = "";
+        String detailAddress = "";
+        try{
+            receiver = URLEncoder.encode(address.getReceiver(), "UTF-8");
+            province = URLEncoder.encode(address.getProvince(), "UTF-8");
+            city = URLEncoder.encode(address.getCity(), "UTF-8");
+            county = URLEncoder.encode(address.getCounty(), "UTF-8");
+            detailAddress = URLEncoder.encode(address.getDetailAddress(), "UTF-8");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         url = url +"id="+address.getId()
                 + "&userId="+ address.getUserId()
                 +"&receiver="+ address.getReceiver()
-                +"&province="+ address.getProvince()
-                +"&city=" + address.getCity()
-                +"&county="+ address.getCounty()
-                +"&detailAddress="
-                + address.getDetailAddress()
+                +"&province="+ province
+                +"&city=" + city
+                +"&county="+ county
+                +"&detailAddress=" + detailAddress
                 +"&phone=" + address.getPhone()
                 +"&postcode="+ address.getPostcode();
         RequestQueue queue = Volley.newRequestQueue(context);

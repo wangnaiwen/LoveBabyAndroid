@@ -16,6 +16,8 @@ import com.wnw.lovebaby.model.modelInterface.IUpdateDealModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/4/11.
  */
@@ -37,11 +39,17 @@ public class UpdateDealModelImpl implements IUpdateDealModel {
      * use volley to get the data
      * */
     private void sendRequestWithVolley(Deal deal){
+        String productName = "";
+        try{
+            productName = URLEncoder.encode(deal.getProductName(), "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         String url = NetConfig.SERVICE + NetConfig.UPDATE_DEAL
                 +"id=" + deal.getId()
                 +"&orderId="+deal.getOrderId()
                 +"&productId="+ deal.getProductId()
-                +"&productName="+ deal.getProductName()
+                +"&productName="+ productName
                 +"&productCount="+ deal.getProductCount()
                 +"&sumPrice=" + deal.getSumPrice();
         RequestQueue queue = Volley.newRequestQueue(context);

@@ -17,6 +17,8 @@ import com.wnw.lovebaby.model.modelInterface.IInsertPrModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Created by wnw on 2017/4/4.
  */
@@ -37,15 +39,24 @@ public class InsertPrModelImpl implements IInsertPrModel {
      * */
     private void sendRequestWithVolley(Pr pr){
         String url = NetConfig.SERVICE + NetConfig.INSERT_PR;
+        String userNickName = "";
+        String evaluation = "";
+        try{
+            userNickName = URLEncoder.encode(pr.getUserNickName(), "UTF-8");
+            evaluation = URLEncoder.encode(pr.getEvaluation(), "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         url = url
                 + "userId="+pr.getUserId()
                 +"&dealId="+ pr.getDealId()
                 +"&productId="+ pr.getProductId()
-                +"&userNickName="+ pr.getUserNickName()
+                +"&userNickName="+ userNickName
                 +"&productScore=" + pr.getProductScore()
                 +"&serviceScore="+ pr.getServiceScore()
                 +"&logisticsScore="+ pr.getLogisticsScore()
-                +"&evaluation="+ pr.getEvaluation()
+                +"&evaluation="+ evaluation
                 +"&time="+ pr.getTime();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

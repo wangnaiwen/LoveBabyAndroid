@@ -38,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="邮箱"
-        android:paddingLeft="20dp"/>
+        android:paddingLeft="20dp"
+        android:inputType="textWebEmailAddress"/>
 
     <TextView
         android:layout_width="match_parent"
