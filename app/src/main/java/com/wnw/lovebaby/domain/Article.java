@@ -1,6 +1,8 @@
 package com.wnw.lovebaby.domain;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable{
 	private int id;
 	private String author;
 	private String time;

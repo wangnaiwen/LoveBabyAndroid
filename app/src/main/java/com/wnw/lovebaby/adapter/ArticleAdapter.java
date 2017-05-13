@@ -62,7 +62,7 @@ public class ArticleAdapter  extends BaseAdapter {
             articleHolder = (ArticleHolder)view.getTag();
         }
         Article article = articleList.get(i);
-        Glide.with(context).load(article.getContent()).into(articleHolder.imageView);
+        Glide.with(context).load(article.getCoverImg()).into(articleHolder.imageView);
         articleHolder.titleTv.setText(article.getTitle());
         articleHolder.timeTv.setText(article.getTime());
         articleHolder.readNumTv.setText(article.getReadTimes()+"");

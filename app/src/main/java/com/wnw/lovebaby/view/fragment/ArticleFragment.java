@@ -1,7 +1,9 @@
 package com.wnw.lovebaby.view.fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import com.wnw.lovebaby.adapter.ArticleAdapter;
 import com.wnw.lovebaby.domain.Article;
 import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.FindAllArticlePresenter;
+import com.wnw.lovebaby.view.activity.ArticleDetailActivity;
 import com.wnw.lovebaby.view.viewInterface.IFindAllArticleView;
 
 import java.util.ArrayList;
@@ -135,12 +138,34 @@ public class ArticleFragment extends Fragment implements AdapterView.OnItemClick
         }
     }
 
+    private int position;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.college_lv:
+                if (NetUtil.getNetworkState(context) == NetUtil.NETWORN_NONE){
+                    Toast.makeText(context, "请确认网络已打开", Toast.LENGTH_SHORT).show();
+                }else {
+                    position = i;
+                    Intent intent = new Intent(context, ArticleDetailActivity.class);
+                    intent.putExtra("article", articleList.get(i));
+                    startActivityForResult(intent, 1);
+                    ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }
+                 break;
+        }
+    }
 
-                break;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK){
+            int likeTimes = data.getIntExtra("likeTimes", 0);
+            if (likeTimes == 1){
+                articleList.get(position).setLikeTimes(articleList.get(position).getLikeTimes() + 1);
+            }
+            articleList.get(position).setReadTimes(articleList.get(position).getReadTimes() + 1);
+            articleAdapter.setArticleList(articleList);
+            articleAdapter.notifyDataSetChanged();
         }
     }
 

@@ -88,7 +88,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     private void showDialogs(){
         if(dialog == null){
             dialog = new ProgressDialog(this);
-            dialog.setMessage("订单正在提交中...");
+            dialog.setMessage("正在努力中...");
         }
         if(!dialog.isShowing()){
             dialog.show();
