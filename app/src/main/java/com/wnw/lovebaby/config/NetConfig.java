@@ -18,6 +18,7 @@ public class NetConfig {
     //userInfo
     public final static String FIND_USER_INFO_BY_USER_ID = "findUserInfoByUserId?";
     public final static String UPDATE_USER_INFO = "updateUserInfo?";
+    public final static String UPDATE_USER_IMG = "updateUserImg?";
 
     //ShoppingCar updateShoppingCarProductCount
     public final static String DELETE_SHOPPING_CAR = "deleteShoppingCar?";
@@ -65,6 +66,8 @@ public class NetConfig {
     public final static String FIND_PRODUCT_BY_ID = "findProductById?";
     public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
     public final static String FIND_PRODUCT_BY_KEY = "findProductByKey?";
+    public final static String UPDATE_PRODUCT_COUONT_BY_ID = "updateProductCountById?";
+    public final static String FIND_PRODUCT_COUONT_BY_ID = "findProductCountById?";
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";

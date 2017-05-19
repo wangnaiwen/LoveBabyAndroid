@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,15 +27,21 @@ import com.wnw.lovebaby.bean.ShoppingCarItem;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.login.ActivityCollector;
 import com.wnw.lovebaby.model.modelInterface.IDeleteShoppingCarModel;
+import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.DeleteShoppingCarPresenter;
+import com.wnw.lovebaby.presenter.FindProductCountByIdPresenter;
 import com.wnw.lovebaby.presenter.InsertDealPresenter;
 import com.wnw.lovebaby.presenter.InsertOrderPresenter;
 import com.wnw.lovebaby.presenter.UpdateOrderPresenter;
+import com.wnw.lovebaby.presenter.UpdateProductCountByIdPresenter;
 import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.viewInterface.IDeleteShoppingCarView;
+import com.wnw.lovebaby.view.viewInterface.IFindProductByIdView;
+import com.wnw.lovebaby.view.viewInterface.IFindProductCountByIdView;
 import com.wnw.lovebaby.view.viewInterface.IInsertDealView;
 import com.wnw.lovebaby.view.viewInterface.IInsertOrderView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateOrderView;
+import com.wnw.lovebaby.view.viewInterface.IUpdateProductCountByIdView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -44,7 +51,8 @@ import java.util.List;
  */
 
 public class OrderConfirmationActivity extends Activity implements View.OnClickListener,
-        IInsertOrderView,IInsertDealView,IDeleteShoppingCarView,IUpdateOrderView{
+        IInsertOrderView,IInsertDealView,IDeleteShoppingCarView,IUpdateOrderView
+        ,IFindProductCountByIdView, IUpdateProductCountByIdView{
     private ListView orderListView;
     private LinearLayout changeAddress;
     private LinearLayout pickAddress;
@@ -57,6 +65,8 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
     private TextView orderReceAddress;
     private RelativeLayout picShopRl;       //选择店铺
     private TextView disShopNameTv;         //显示店铺名称
+
+    private int[] counts;  //产品库存
 
     private OrderLvAdapter orderLvAdapter;
     private List<ShoppingCarItem> shoppingCarItemList;    //shopping car item List
@@ -74,6 +84,8 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
     private int insertDealPosition = 0;        //标志插入Deal到达哪一个位置了
     private int deleteShoppingCarPosition = 0; //标志删除ShoppingCar到达哪一个位置
 
+    private FindProductCountByIdPresenter findProductCountByIdPresenter;
+    private UpdateProductCountByIdPresenter updateProductCountByIdPresenter;
     private InsertOrderPresenter insertOrderPresenter;
     private InsertDealPresenter insertDealPresenter;
     private DeleteShoppingCarPresenter deleteShoppingCarPresenter;
@@ -128,6 +140,8 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         insertDealPresenter = new InsertDealPresenter(this, this);
         deleteShoppingCarPresenter = new DeleteShoppingCarPresenter(this, this);
         updateOrderPresenter = new UpdateOrderPresenter(this, this);
+        updateProductCountByIdPresenter = new UpdateProductCountByIdPresenter(this,this);
+        findProductCountByIdPresenter = new FindProductCountByIdPresenter(this, this);
     }
 
     //get List of shopping car and shopping car item
@@ -136,6 +150,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         shoppingCarItemList = (List<ShoppingCarItem>) intent.getSerializableExtra("checkedShoppingCarItemList");
         shoppingCarList = (List<ShoppingCar>) intent.getSerializableExtra("checkedShoppingCarList");
         sumPrice = intent.getIntExtra("sumPrice",0);
+        counts = new int[shoppingCarItemList.size()];
     }
 
     //set adapter
@@ -186,9 +201,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
 
     //start delete from shopping car
     private void startDeleteShoppingCar(){
-
         deleteShoppingCarPresenter.deleteShoppingCar(shoppingCarItemList.get(deleteShoppingCarPosition).getId());
-
     }
 
     //start update order order_type = 1
@@ -196,6 +209,75 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         order.setOrderType(1);
         updateOrderPresenter.updateOrder(order);
     }
+
+    private int findCountPosition = 0;
+    private void startFindProductCount(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
+        }else {
+            if (findCountPosition != shoppingCarList.size()){
+                findProductCountByIdPresenter.findProductCountById(shoppingCarList.get(findCountPosition).getProductId());
+            }else {
+                //查找结束，开始匹配库存和购物车
+                int length = counts.length;
+                boolean isEnough = true;
+                int i = 0;
+                for ( i= 0; i < length; i++){
+                    if (counts[i] < shoppingCarList.get(0).getProductCount()){
+                        isEnough = false;
+                        break;
+                    }
+                }
+
+                if (isEnough){
+                    //开始插入订单
+                    startInsertOrder();
+                }else {
+                    dismissDialogs();
+                    Toast.makeText(this, shoppingCarList.get(i).getProductName()+"库存不足", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private int updateCountPosition = 0;
+    //update product count
+    private void startUpdateProductCount(){
+        if (updateCountPosition != counts.length){
+            updateProductCountByIdPresenter.updateProductCountById(shoppingCarList.get(updateCountPosition).getProductId(),
+                    shoppingCarList.get(updateCountPosition).getProductCount());
+        }else {
+            dismissDialogs();
+            Toast.makeText(this,"订单提交成功",Toast.LENGTH_SHORT).show();
+            //订单提交成功，跳转到支付页面，并且finish当前页面
+            Intent intent = new Intent(this, PayActivity.class);
+            intent.putExtra("tag", 0);
+            intent.putExtra("sumPrice", sumPrice);
+            intent.putExtra("order", order);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    public void showProductCount(int count) {
+        Log.d("wnw", findCountPosition + " "+ count);
+        counts[findCountPosition] = count;
+        findCountPosition ++;
+        startFindProductCount();
+    }
+
+    @Override
+    public void showUpdateProductCountResult(boolean isSuccess) {
+        if (isSuccess){
+            updateCountPosition ++;
+            startUpdateProductCount();
+        }else {
+            //重新
+            startUpdateProductCount();
+        }
+    }
+
 
     @Override
     public void showDialog() {
@@ -269,16 +351,8 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
 
     @Override
     public void showUpdateOrderResult(boolean isSuccess) {
-        dismissDialogs();
         if(isSuccess){
-            Toast.makeText(this,"订单提交成功",Toast.LENGTH_SHORT).show();
-            //订单提交成功，跳转到支付页面，并且finish当前页面
-            Intent intent = new Intent(this, PayActivity.class);
-            intent.putExtra("tag", 0);
-            intent.putExtra("sumPrice", sumPrice);
-            intent.putExtra("order", order);
-            startActivity(intent);
-            finish();
+            startUpdateProductCount();
         }else {
             Toast.makeText(this,"订单提交失败",Toast.LENGTH_SHORT).show();
         }
@@ -301,7 +375,8 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
                 if(receAddress == null){
                     Toast.makeText(this, "请选择地址", Toast.LENGTH_SHORT).show();
                 }else {
-                    startInsertOrder();
+                    findCountPosition = 0;
+                    startFindProductCount();
                 }
                 break;
             case R.id.rl_pick_shop:

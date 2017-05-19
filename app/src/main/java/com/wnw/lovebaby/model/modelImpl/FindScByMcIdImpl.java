@@ -77,9 +77,10 @@ public class FindScByMcIdImpl implements IFindScByMcIdModel{
                     scList.add(sc);
                 }
             }else {
-                //Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
+                scList = null;
             }
         }catch (JSONException e){
+            scList = null;
             e.printStackTrace();
         }
         /**
