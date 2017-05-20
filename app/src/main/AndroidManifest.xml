@@ -59,6 +59,7 @@
         <activity android:name=".view.activity.EditMyShopActivity"/>
         <activity android:name=".view.activity.WithdrawActivity"/>
         <activity android:name=".view.activity.ArticleDetailActivity"/>
+        <activity android:name=".view.activity.ImgUploadActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

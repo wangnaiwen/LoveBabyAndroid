@@ -8,6 +8,11 @@ public class NetConfig {
     //public final static String SERVICE = "http://192.168.31.106:8089/babyTest/";
     public final static String SERVICE = "http://119.29.40.196:8080/babyTest/";
 
+    public final static String IMAGE_PATH = "http://119.29.40.196:8080/babyTest";
+
+
+    public final static String IMAGE_UPLOAD = "http://119.29.40.196:8080/babyTest/upload";
+
     //User
 
     public final static String LOGIN = "login?";

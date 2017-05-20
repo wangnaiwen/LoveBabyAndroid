@@ -44,7 +44,6 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
         initView();
     }
 
-
     private void initView(){
 
         ActivityCollector.addActivity(this);
