@@ -40,6 +40,7 @@ public class FindHotSaleModelImpl implements IFindHotSaleModel {
 
     private void sendRequestWithVolley(){
         String url = NetConfig.SERVICE + NetConfig.FIND_HOT_SALE;
+        Log.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

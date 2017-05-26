@@ -41,7 +41,17 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //如果已经登录过，并且没有退出账号，默认登录，直接跳转到MainActivity
+        SharedPreferences sharedPreferences = getSharedPreferences("account", MODE_PRIVATE);
+        if(sharedPreferences != null){
+            int id = sharedPreferences.getInt("id", 0);
+            if( id != 0){  //说明已经登录
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+        }
         initView();
+
     }
 
     private void initView(){

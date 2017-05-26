@@ -5,27 +5,38 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.adapter.ProductImageAdapter;
 import com.wnw.lovebaby.domain.Product;
+import com.wnw.lovebaby.domain.ProductImage;
 import com.wnw.lovebaby.domain.ShoppingCar;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.login.ActivityCollector;
+import com.wnw.lovebaby.net.NetUtil;
+import com.wnw.lovebaby.presenter.FindImagesByProductIdPresenter;
 import com.wnw.lovebaby.presenter.InsertShoppingCarPresenter;
 import com.wnw.lovebaby.util.TypeConverters;
+import com.wnw.lovebaby.view.viewInterface.IFindImagesByProductIdView;
 import com.wnw.lovebaby.view.viewInterface.IInsertShoppingCarView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wnw on 2017/4/2.
  */
 
-public class ProductDetailActivity extends Activity implements View.OnClickListener, IInsertShoppingCarView{
+public class ProductDetailActivity extends Activity implements View.OnClickListener, IInsertShoppingCarView,
+        IFindImagesByProductIdView {
 
     /**
      * 能点击的部分
@@ -41,6 +52,7 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
     private ImageView mCoverImg;          //图片封面
     private TextView mPriceTv;         //价格
     private TextView mTitleTv;   //标题
+
     /**
      * 商品描述部分
      * */
@@ -48,6 +60,12 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
     private TextView mNameTv;         //名字
     private TextView mBrandTv;        //品牌
     private TextView mDescriptionTv;    //描述
+
+    private ListView imageLv;
+    private ProductImageAdapter imageAdapter;
+    private List<ProductImage> imageList = new ArrayList<>();
+    private FindImagesByProductIdPresenter findImagesByProductIdPresenter;
+
 
     private Product product;         //当前页显示的Product对象
 
@@ -63,8 +81,10 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         insertShoppingCarPresenter = new InsertShoppingCarPresenter(this,this);
         getUser();
         initView();
+        initPresenter();
         getProductFromLastActivity();
         setShoppingCar();
+        startFindImages();
     }
 
     //get the current user
@@ -75,6 +95,41 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         user.setPhone(preferences.getString("phone", ""));
         user.setType(preferences.getInt("type",0));
     }
+
+    private void initPresenter(){
+        findImagesByProductIdPresenter = new FindImagesByProductIdPresenter(this, this);
+    }
+
+    private void startFindImages(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(ProductDetailActivity.this,"请检查网络",Toast.LENGTH_LONG).show();
+        }else {
+            findImagesByProductIdPresenter.findImagesByProductId(product.getId());
+        }
+    }
+
+    @Override
+    public void showProductImages(List<ProductImage> images) {
+        dismissDialogs();
+        if (images == null){
+
+        }else {
+            this.imageList = images;
+            setAdapter();
+        }
+    }
+
+    private void setAdapter(){
+        if (imageAdapter != null){
+            imageAdapter.setImageList(imageList);
+            imageAdapter.notifyDataSetChanged();
+        }else{
+            Log.d("www", imageList.size()+"");
+            imageAdapter = new ProductImageAdapter(this, imageList);
+            imageLv.setAdapter(imageAdapter);
+        }
+    }
+
     /**
      * 初始化界面
      * */
@@ -96,6 +151,9 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         mNameTv = (TextView)findViewById(R.id.product_detail_of_name);
         mBrandTv = (TextView)findViewById(R.id.product_detail_of_brand);
         mDescriptionTv = (TextView)findViewById(R.id.product_detail_of_description);
+
+        imageLv = (ListView)findViewById(R.id.lv_image);
+        imageLv.setDivider(null);
     }
 
     //setShoppingCat

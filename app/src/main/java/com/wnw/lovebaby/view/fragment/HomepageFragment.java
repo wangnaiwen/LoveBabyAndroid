@@ -272,9 +272,11 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     private void setImagePagerList(){
         dotViewList = new ArrayList<ImageView>();
         list = new ArrayList<ImageView>();
+        currentItem = 0;
         int count = hotSaleProductList.size();
         for(int i = 0; i < count; i++){
-            ImageView img = (ImageView) mInflater.inflate(R.layout.vp_image_item, null);
+            View view =  mInflater.inflate(R.layout.vp_image_item, null);
+            ImageView img = (ImageView) view.findViewById(R.id.img);
             Glide.with(context).load(hotSaleProductList.get(i).getCoverImg()).into(img);
             list.add(img);
         }
@@ -344,7 +346,6 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
                 mviewPager.setCurrentItem(currentItem);
             }else if(msg.what == IMAGE_PAGER){ //图片轮播里的点击事件传递出来
                 int position = msg.arg1;
-                Toast.makeText(context, position+"", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra("product",hotSaleProductList.get(position));
                 context.startActivity(intent);
