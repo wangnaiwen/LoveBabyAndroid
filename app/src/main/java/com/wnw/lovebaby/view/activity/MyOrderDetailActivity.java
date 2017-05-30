@@ -24,12 +24,14 @@ import com.wnw.lovebaby.presenter.FindDealByOrderIdPresenter;
 import com.wnw.lovebaby.presenter.FindProductByIdPresenter;
 import com.wnw.lovebaby.presenter.FindReceAddressByIdPresenter;
 import com.wnw.lovebaby.presenter.UpdateOrderPresenter;
+import com.wnw.lovebaby.presenter.UpdateOrderTypePresenter;
 import com.wnw.lovebaby.util.OrderTypeConvert;
 import com.wnw.lovebaby.util.TimeConvert;
 import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.viewInterface.IFindDealByOrderIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindProductByIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindReceAddressByIdView;
+import com.wnw.lovebaby.view.viewInterface.IUpdateOrderTypeView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateOrderView;
 
 import java.io.Serializable;
@@ -46,7 +48,7 @@ import java.util.List;
 
 public class MyOrderDetailActivity extends Activity implements View.OnClickListener,
         AdapterView.OnItemClickListener, IUpdateOrderView, IFindDealByOrderIdView,
-        IFindReceAddressByIdView, IFindProductByIdView{
+        IFindReceAddressByIdView, IFindProductByIdView, IUpdateOrderTypeView{
 
     private ImageView back;           //返回键
     private TextView orderTypeTv;     //订单状态
@@ -62,6 +64,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     private TextView payTv;           //支付
     private TextView confirmReceiptTv;//确认收货
     private TextView submitEvaluatioinTv; //立即评价
+    private TextView quitOrderTv; //取消订单
 
     private Order order;             //当前的Order
     private List<Deal> dealList = new ArrayList<>();
@@ -72,6 +75,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     private UpdateOrderPresenter updateOrderPresenter;
     private FindReceAddressByIdPresenter findReceAddressByIdPresenter;
     private FindProductByIdPresenter findProductByIdPresenter;
+    private UpdateOrderTypePresenter updateOrderTypePresenter;
 
     private OrderLvAdapter orderLvAdapter;
 
@@ -108,24 +112,28 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
         dealLv = (ListView) findViewById(R.id.lv_order_deal);
         confirmReceiptTv = (TextView)findViewById(R.id.tv_confirm_receipt);
         submitEvaluatioinTv = (TextView)findViewById(R.id.tv_submit_evaluation);
+        quitOrderTv = (TextView)findViewById(R.id.tv_quit_order);
 
         back.setOnClickListener(this);
         payTv.setOnClickListener(this);
         confirmReceiptTv.setOnClickListener(this);
         dealLv.setOnItemClickListener(this);
         submitEvaluatioinTv.setOnClickListener(this);
-
+        quitOrderTv.setOnClickListener(this);
         //设初始值
         int orderType = order.getOrderType();
 
         orderTypeTv.setText(OrderTypeConvert.getStringType(orderType));
         orderNumberTv.setText("订单号:"+order.getOrderNumber());
         createTimeTv.setText("创建时间:"+ TimeConvert.getTime(order.getCreateTime()));
-
+        if (orderType == -1){
+            payTv.setVisibility(View.GONE);
+        }
         if(orderType == 1){
             payTimeTv.setVisibility(View.GONE);
             finishTimeTv.setVisibility(View.GONE);
             payTv.setVisibility(View.VISIBLE);
+            quitOrderTv.setVisibility(View.VISIBLE);
         }else if(orderType == 2){
             payTimeTv.setText("付款时间:"+TimeConvert.getTime(order.getPayTime()));
             finishTimeTv.setVisibility(View.GONE);
@@ -152,6 +160,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
         updateOrderPresenter = new UpdateOrderPresenter(this,this);
         findReceAddressByIdPresenter = new FindReceAddressByIdPresenter(this, this);
         findProductByIdPresenter = new FindProductByIdPresenter(this,this);
+        updateOrderTypePresenter = new UpdateOrderTypePresenter(this, this);
     }
 
     private void startFindDeals(){
@@ -173,6 +182,14 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     private int position = 0;
     private void startFindProduct(){
         findProductByIdPresenter.findProductById(dealList.get(position).getProductId());
+    }
+
+    private void updateOrderType(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络出小差了", Toast.LENGTH_SHORT).show();
+        }else {
+            updateOrderTypePresenter.updateOrderType(order.getId(), -1);
+        }
     }
 
     @Override
@@ -234,6 +251,18 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
     }
 
     @Override
+    public void showUpdateQuitOrderResult(boolean isSuccess) {
+        dismissDialogs();
+        if(isSuccess){
+            Toast.makeText(this, "订单已取消", Toast.LENGTH_SHORT).show();
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }else{
+            Toast.makeText(this, "订单取消失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void showReceAddressFindById(ReceAddress address) {
         if(address != null){
             nameTv.setText(address.getReceiver());
@@ -254,7 +283,7 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
                 shoppingCarItem.setProductId(productList.get(i).getId());
                 shoppingCarItem.setGoodsNum(dealList.get(i).getProductCount());
                 shoppingCarItem.setGoodsImg(productList.get(i).getCoverImg());
-                shoppingCarItem.setGoodsPrice((int)productList.get(i).getRetailPrice());
+                shoppingCarItem.setGoodsPrice((int)dealList.get(i).getPrice());
                 shoppingCarItem.setGoodsTitle(productList.get(i).getName());
 
                 shoppingCarItemList.add(shoppingCarItem);
@@ -300,6 +329,9 @@ public class MyOrderDetailActivity extends Activity implements View.OnClickListe
                 intent1.putExtra("order", order);
                 startActivityForResult(intent1, 2);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.tv_quit_order:
+                updateOrderType();
                 break;
         }
     }

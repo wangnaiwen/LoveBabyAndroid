@@ -23,8 +23,10 @@ import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.FindUserImgPresenter;
 import com.wnw.lovebaby.view.activity.ImgUploadActivity;
 import com.wnw.lovebaby.view.activity.MyOrderActivity;
+import com.wnw.lovebaby.view.activity.QuitOrdersActivity;
 import com.wnw.lovebaby.view.activity.SettingActivity;
 import com.wnw.lovebaby.view.activity.UserInfoActivity;
+import com.wnw.lovebaby.view.activity.WalletActivity;
 import com.wnw.lovebaby.view.viewInterface.IFindUserImgView;
 
 /**
@@ -46,6 +48,7 @@ public class MyFragment extends Fragment implements View.OnClickListener, IFindU
     private RelativeLayout beReceivedView;
     private RelativeLayout beEvaluatedView;
     private RelativeLayout rerundsView;
+    private RelativeLayout walletView;
     private TextView disPhone;
 
     private int id;
@@ -77,6 +80,7 @@ public class MyFragment extends Fragment implements View.OnClickListener, IFindU
         beReceivedView = (RelativeLayout)mView.findViewById(R.id.mine_be_received);
         beEvaluatedView = (RelativeLayout)mView.findViewById(R.id.mine_be_evaluated);
         rerundsView = (RelativeLayout)mView.findViewById(R.id.mine_refunds);
+        walletView = (RelativeLayout)mView.findViewById(R.id.mine_my_wallet);
         disPhone = (TextView)mView.findViewById(R.id.mine_dis_phone);
 
         userImg.setOnClickListener(this);
@@ -88,6 +92,7 @@ public class MyFragment extends Fragment implements View.OnClickListener, IFindU
         beReceivedView.setOnClickListener(this);
         beEvaluatedView.setOnClickListener(this);
         rerundsView.setOnClickListener(this);
+        walletView.setOnClickListener(this);
     }
 
     private void initPresenter(){
@@ -175,7 +180,14 @@ public class MyFragment extends Fragment implements View.OnClickListener, IFindU
                 openMyOrderActivity(4);
                 break;
             case R.id.mine_refunds:
-
+                Intent intent2 = new Intent(mContext, QuitOrdersActivity.class);
+                startActivity(intent2);
+                ((Activity)mContext).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                break;
+            case R.id.mine_my_wallet:
+                Intent intent1 = new Intent(mContext, WalletActivity.class);
+                startActivity(intent1);
+                ((Activity)mContext).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }

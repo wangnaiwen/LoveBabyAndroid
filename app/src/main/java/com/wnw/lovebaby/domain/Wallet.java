@@ -1,10 +1,12 @@
 package com.wnw.lovebaby.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by wnw on 2017/4/16.
  */
 
-public class Wallet {
+public class Wallet implements Serializable{
     private int id;
     private int userId;
     private int money;

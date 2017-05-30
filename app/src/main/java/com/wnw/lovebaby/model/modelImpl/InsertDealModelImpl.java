@@ -52,7 +52,8 @@ public class InsertDealModelImpl implements IInsertDealModel{
                 +"&productId="+ deal.getProductId()
                 +"&productName="+ productName
                 +"&productCount="+ deal.getProductCount()
-                +"&sumPrice=" + deal.getSumPrice();
+                +"&sumPrice=" + deal.getSumPrice()
+                +"&price=" + deal.getPrice();
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

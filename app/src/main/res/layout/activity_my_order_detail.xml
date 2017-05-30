@@ -190,6 +190,17 @@
                 android:text="立即评价"
                 android:layout_margin="10dp"
                 android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_quit_order"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_pay"
+                android:textColor="#ffff"
+                android:gravity="center"
+                android:text="取消订单"
+                android:layout_margin="10dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

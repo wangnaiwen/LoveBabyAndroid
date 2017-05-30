@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:fadingEdge="vertical"
-        android:background="#f7f0f0"
+        android:background="#a9e4e3e3"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
         <LinearLayout
@@ -70,13 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#ffff">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="买买买"/>
-
+                    android:layout_marginTop="14dp"
+                    android:src="@mipmap/list_28"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,17 +100,17 @@
                         android:layout_toLeftOf="@id/mine_entry_img"/>
                 </RelativeLayout>
             </RelativeLayout>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="#ffff"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                android:background="#ffff">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="待付款"/>
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/ic_personal_pending_pay"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -135,18 +135,17 @@
                         android:layout_toLeftOf="@id/mine_entry_img1"/>
                 </RelativeLayout>
             </RelativeLayout>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="#ffff"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                android:background="#ffff">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="待发货"/>
-
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/ic_to_be_shipped"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -171,18 +170,17 @@
                         android:layout_toLeftOf="@id/mine_entry_img2"/>
                 </RelativeLayout>
             </RelativeLayout>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="#ffff"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                android:background="#ffff">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="待收货"/>
-
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/ic_receipt_of_goods"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -206,18 +204,17 @@
                         android:layout_toLeftOf="@id/mine_entry_img3"/>
                 </RelativeLayout>
             </RelativeLayout>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="#ffff"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                android:background="#ffff">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="待评价"/>
-
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/ic_to_be_comment"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -246,13 +243,12 @@
                 android:layout_height="48dp"
                 android:background="#ffff"
                 android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="退款"/>
-
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/overseas_product_header_sub_2"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -271,9 +267,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="退款订单"
+                        android:text="已取消订单"
                         android:textColor="@color/colorIconSelected"
                         android:layout_toLeftOf="@id/mine_entry_img5"/>
+                </RelativeLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#ffff"
+                android:layout_marginTop="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/overseas_product_header_sub_1"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/mine_my_wallet"
+                    android:clickable="true">
+                    <ImageView
+                        android:id="@+id/mine_entry_img6"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/mine_entry_img"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="15dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="我的钱包"
+                        android:textColor="@color/colorIconSelected"
+                        android:layout_toLeftOf="@id/mine_entry_img6"/>
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>

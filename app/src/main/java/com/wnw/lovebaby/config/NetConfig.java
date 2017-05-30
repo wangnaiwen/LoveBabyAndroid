@@ -38,6 +38,8 @@ public class NetConfig {
     public final static String FIND_ORDER_BY_USER_ID = "findOrderByUserId?";
     public final static String FIND_ORDER_BY_SHOP_ID = "findOrderByShopId?";
     public final static String FIND_ORDER_BY_INVITEE = "findOrderByInvitee?";
+    public final static String FIND_QUIT_ORDERS = "findQuitOrders?";
+    public final static String UPDATE_ORDER_TYPE = "updateOrderType?";
 
     //shop
     public final static String INSERT_SHOP = "insertShop?";

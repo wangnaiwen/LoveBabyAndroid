@@ -51,7 +51,8 @@ public class UpdateDealModelImpl implements IUpdateDealModel {
                 +"&productId="+ deal.getProductId()
                 +"&productName="+ productName
                 +"&productCount="+ deal.getProductCount()
-                +"&sumPrice=" + deal.getSumPrice();
+                +"&sumPrice=" + deal.getSumPrice()
+                +"&price=" + deal.getPrice();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

@@ -21,6 +21,8 @@ import com.wnw.lovebaby.view.activity.MainActivity;
 import com.wnw.lovebaby.view.viewInterface.ILoginView;
 import com.wnw.lovebaby.view.viewInterface.MvpBaseActivity;
 
+import c.b.BP;
+
 /**
  * Created by wnw on 2016/10/17.88498646
  */
@@ -37,10 +39,16 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
 
     private User user;
 
+    private final static String applicationID = "5cabe18e84634c12ed625bddc9a755b9";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //支付初始化
+        BP.init(applicationID);
+
         //如果已经登录过，并且没有退出账号，默认登录，直接跳转到MainActivity
         SharedPreferences sharedPreferences = getSharedPreferences("account", MODE_PRIVATE);
         if(sharedPreferences != null){

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,6 +27,10 @@ import com.wnw.lovebaby.view.viewInterface.IValiteWalletView;
 
 import java.text.SimpleDateFormat;
 
+import c.b.BP;
+import c.b.PListener;
+import c.b.QListener;
+
 /**
  * Created by wnw on 2017/4/13.
  */
@@ -37,6 +42,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
     private TextView payNumberTv;
     private TextView surePayTv;
     private EditText passwordEt;
+    private TextView alipayTv;
 
     private int userId;
 
@@ -82,8 +88,11 @@ public class PayActivity extends Activity implements View.OnClickListener,
         payNumberTv = (TextView)findViewById(R.id.tv_pay_number);
         surePayTv = (TextView)findViewById(R.id.tv_sure_pay);
         passwordEt = (EditText)findViewById(R.id.et_pay_password);
+        alipayTv = (TextView)findViewById(R.id.tv_alipay);
+
         back.setOnClickListener(this);
         surePayTv.setOnClickListener(this);
+        alipayTv.setOnClickListener(this);
     }
 
     //inti presenter
@@ -195,6 +204,8 @@ public class PayActivity extends Activity implements View.OnClickListener,
         }
     }
 
+
+    private String payOrderId ;  //支付宝支付的订单号
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -218,7 +229,50 @@ public class PayActivity extends Activity implements View.OnClickListener,
                     }
                 }
                 break;
+            case R.id.tv_alipay:
+                startAlipay();
+                break;
         }
+    }
+
+    private void startAlipay(){
+        double price = ((double)sumPrice)/100;
+        BP.pay("母婴产品", "宝宝的产品", price, true, new PListener() {
+            @Override
+            public void orderId(String s) {
+                payOrderId = s;
+            }
+
+            @Override
+            public void succeed() {
+                findPayResult();
+            }
+
+            @Override
+            public void fail(int i, String s) {
+                Log.d("code", i + "  " + s);
+            }
+
+            @Override
+            public void unknow() {
+                Log.d("code", "unknow");
+            }
+        });
+    }
+
+    private void findPayResult(){
+        BP.query(payOrderId, new QListener() {
+            @Override
+            public void succeed(String s) {
+                //说明支付成功
+                startUpdateOrder();
+            }
+
+            @Override
+            public void fail(int i, String s) {
+                Log.d("code", i + "  " + s);
+            }
+        });
     }
 
     @Override

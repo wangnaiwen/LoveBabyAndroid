@@ -63,6 +63,7 @@ public class FindDealByIdModelImpl implements IFindDealByIdModel{
                 returnData.setProductId(resultObject.getInt("productId"));
                 returnData.setProductCount(resultObject.getInt("productCount"));
                 returnData.setSumPrice(resultObject.getLong("sumPrice"));
+                returnData.setPrice(resultObject.getLong("price"));
                 returnData.setProductName(resultObject.getString("productName"));
             }
         }catch (JSONException e){

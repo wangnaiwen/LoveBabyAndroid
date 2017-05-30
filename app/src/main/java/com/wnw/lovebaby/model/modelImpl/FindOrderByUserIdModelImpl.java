@@ -43,7 +43,7 @@ public class FindOrderByUserIdModelImpl implements IFindOrderByUserIdModel {
     private void sendRequestWithVolley(int userId){
         String url = NetConfig.SERVICE+NetConfig.FIND_ORDER_BY_USER_ID
                 +"userId="+userId;
-
+        Log.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
