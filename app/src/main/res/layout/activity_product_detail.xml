@@ -31,16 +31,14 @@
             android:gravity="center_vertical"
             android:textColor="#ffffff"
             android:layout_centerInParent="true"/>
-        <TextView
-            android:id="@+id/tv_product_share"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="分享"
-            android:gravity="center_vertical"
-            android:textColor="#ffffff"
+        <ImageView
+            android:id="@+id/img_product_share"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentRight="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="13dp"
+            android:src="@drawable/ic_share_white"/>
     </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"

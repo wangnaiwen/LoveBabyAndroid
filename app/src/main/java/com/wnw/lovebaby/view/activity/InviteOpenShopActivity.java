@@ -3,6 +3,7 @@ package com.wnw.lovebaby.view.activity;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.domain.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,11 +34,20 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
     private ImageView backInviteOpenShop;
     private TextView inviteOpenShop;
 
+    private int userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_open_shop);
+        getUser();
         initView();
+    }
+
+    //get the current user
+    private void getUser(){
+        SharedPreferences preferences = getSharedPreferences("account", MODE_PRIVATE);
+        userId = preferences.getInt("id", 0);
     }
 
     private void initView(){
@@ -66,7 +77,7 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
     AlertDialog shareDialog;
     private void showShareDialog(){
         final List<String> list = new ArrayList<>();
-        String[] sharePlatform = new String[]{"微信","朋友圈","QQ好友","QQ空间"};
+        String[] sharePlatform = new String[]{"微信","QQ好友"};
         for(int  i = 0; i < sharePlatform.length; i++){
             list.add(sharePlatform[i]);
         }
@@ -96,11 +107,7 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
         if(i == 0){
             shareToWxFriend();
         }else if(i == 1){
-            shareToTimeLine();
-        }else if(i == 2){
             shareToQQFriend();
-        }else if(i == 3){
-
         }
     }
 
@@ -114,7 +121,8 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
         intent.setComponent(componentName);
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, "我正在利用爱婴岛APP发送此条分享");
+        intent.putExtra(Intent.EXTRA_TEXT, "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，宝宝护理的文章，" +
+                "还可以免费开店赚钱，我的邀请码是:"+userId );
         startActivity(intent);
     }
 
@@ -128,11 +136,11 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
         intent.setComponent(componentName);
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, "我正在利用爱婴岛APP发送此条分享");
+        intent.putExtra(Intent.EXTRA_TEXT, "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，还有宝宝护理的文章，" +
+                "还可以免费开店赚钱，我的邀请码是:"+userId );
         startActivity(intent);
     }
 
-    //intent.setType(“video/*;image/*”);//同时选择视频和图片
     /**
      * 分享信息到朋友圈
      * 假如图片的路径为path，那么file = new File(path);

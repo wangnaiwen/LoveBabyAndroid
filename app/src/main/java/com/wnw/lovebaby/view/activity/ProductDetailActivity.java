@@ -2,12 +2,20 @@ package com.wnw.lovebaby.view.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +36,8 @@ import com.wnw.lovebaby.util.TypeConverters;
 import com.wnw.lovebaby.view.viewInterface.IFindImagesByProductIdView;
 import com.wnw.lovebaby.view.viewInterface.IInsertShoppingCarView;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +54,7 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
     private ImageView mBack;          //返回键
     private TextView mShoppingCar;    //加入购物车
     private RelativeLayout mReview;   //查看评论
-    private TextView mShareTv;         //分享按钮
+    private ImageView mShareTv;         //分享按钮
 
     /**
      * 商品信息部分
@@ -137,7 +147,7 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         mBack = (ImageView)findViewById(R.id.product_detail_back);
         mReview = (RelativeLayout)findViewById(R.id.product_detail_of_review);
         mShoppingCar = (TextView)findViewById(R.id.product_detail_action_shopping_car);
-        mShareTv = (TextView)findViewById(R.id.tv_product_share);
+        mShareTv = (ImageView) findViewById(R.id.img_product_share);
         mBack.setOnClickListener(this);
         mReview.setOnClickListener(this);
         mShoppingCar.setOnClickListener(this);
@@ -238,8 +248,8 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
-            case R.id.tv_product_share:
-
+            case R.id.img_product_share:
+                showShareDialog();
                 break;
         }
     }
@@ -257,6 +267,84 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         insertShoppingCarPresenter.setView(null);
         insertShoppingCarPresenter = null;
         ActivityCollector.removeActivity(this);
+    }
+
+    AlertDialog shareDialog;
+    private void showShareDialog(){
+        final List<String> list = new ArrayList<>();
+        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        for(int  i = 0; i < sharePlatform.length; i++){
+            list.add(sharePlatform[i]);
+        }
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final LinearLayout linearLayout =(LinearLayout) inflater.inflate(R.layout.dialog_lv_platform_share,null);
+        ListView listView = (ListView)linearLayout.findViewById(R.id.lv_dialog);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.dialog_lv_item, list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openShare(i);
+            }
+        });
+
+        shareDialog = new AlertDialog.Builder(this).create();
+        shareDialog.setView(linearLayout);
+        shareDialog.show();
+    }
+
+    //根据用户的选择来打开相应的
+    private void openShare(int i){
+        if(shareDialog.isShowing()){
+            shareDialog.dismiss();
+        }
+        if(i == 0){
+            shareToWxFriend();
+        }else if(i == 1){
+            shareToQQFriend();
+        }
+    }
+
+    /**
+     * 分享到QQ好友
+     *
+     */
+    private void shareToQQFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, "'"+product.getName()+"'这个产品还挺好的，而且在爱婴粑粑APP上买只要" +TypeConverters.LongConvertToString(product.getRetailPrice()));
+        startActivity(intent);
+    }
+
+    /**
+     * 分享信息到朋友
+     *
+     */
+    private void shareToWxFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, "'"+product.getName()+"'这个产品还挺好的，而且在爱婴粑粑APP上买只要" +TypeConverters.LongConvertToString(product.getRetailPrice()));
+        startActivity(intent);
+    }
+
+    /**
+     * 分享信息到朋友圈
+     * 假如图片的路径为path，那么file = new File(path);
+     */
+    private void shareToTimeLine() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, URI.create(product.getCoverImg()));
+        intent.setType("image/*");
+        startActivity(intent);
     }
 }
 

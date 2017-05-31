@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:background="@color/colorPrimary"
         android:layout_alignParentTop="true">
         <ImageView
             android:id="@+id/back"
-            android:layout_width="50dp"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_clip_back"/>
         <TextView
@@ -20,6 +20,14 @@
             android:textColor="#ffffff"
             android:layout_centerInParent="true"
             android:gravity="center"/>
+        <ImageView
+            android:id="@+id/img_share"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="13dp"
+            android:src="@drawable/ic_share_white"/>
     </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"

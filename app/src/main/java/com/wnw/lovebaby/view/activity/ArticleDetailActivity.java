@@ -1,12 +1,22 @@
 package com.wnw.lovebaby.view.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +30,10 @@ import com.wnw.lovebaby.presenter.UpdateArticleReadTimesPresenter;
 import com.wnw.lovebaby.view.viewInterface.IUpdateArticleLikeTimesView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateArticleReadTimesView;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by wnw on 2017/5/11.
@@ -32,6 +46,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     private ImageView praiseImg;
     private TextView numTv;
     private WebView articleWv;
+    private ImageView shareImg;
 
     private Article article;
 
@@ -60,6 +75,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         numTv = (TextView)findViewById(R.id.article_praise_num);
         articleWv = (WebView)findViewById(R.id.wv_article);
         praiseImg = (ImageView)findViewById(R.id.article_praise_icon);
+        shareImg = (ImageView)findViewById(R.id.img_share);
 
         WebSettings webSettings = articleWv.getSettings();
         webSettings.setJavaScriptEnabled(true); //支持js
@@ -73,7 +89,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         articleWv.loadUrl(article.getContent());
         back.setOnClickListener(this);
         praiseImg.setOnClickListener(this);
-
+        shareImg.setOnClickListener(this);
         numTv.setText(article.getLikeTimes()+"");
     }
 
@@ -93,10 +109,14 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
                     startUpdateArticleLikeTime();
                 }
                 break;
+            case R.id.img_share:
+                showShareDialog();
+                break;
         }
     }
 
     private void startUpdateArticleLikeTime(){
+
         if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
             Toast.makeText(this, "请确认网络已打开", Toast.LENGTH_SHORT).show();
         }else {
@@ -110,11 +130,30 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
 
     @Override
     public void showDialog() {
-
+        showDialogs();
     }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
 
     @Override
     public void showUpdateLikeTimesResult(boolean isSuccess) {
+        dismissDialogs();
         if (isSuccess){
             praiseNum = 1;
         }
@@ -124,7 +163,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
 
     @Override
     public void showUpdateReadTimesResult(boolean isSuccess) {
-
+        dismissDialogs();
     }
 
     @Override
@@ -138,5 +177,85 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    AlertDialog shareDialog;
+    private void showShareDialog(){
+        final List<String> list = new ArrayList<>();
+        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        for(int  i = 0; i < sharePlatform.length; i++){
+            list.add(sharePlatform[i]);
+        }
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final LinearLayout linearLayout =(LinearLayout) inflater.inflate(R.layout.dialog_lv_platform_share,null);
+        ListView listView = (ListView)linearLayout.findViewById(R.id.lv_dialog);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.dialog_lv_item, list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openShare(i);
+            }
+        });
+
+        shareDialog = new AlertDialog.Builder(this).create();
+        shareDialog.setView(linearLayout);
+        shareDialog.show();
+    }
+
+    //根据用户的选择来打开相应的
+    private void openShare(int i){
+        if(shareDialog.isShowing()){
+            shareDialog.dismiss();
+        }
+        if(i == 0){
+            shareToWxFriend();
+        }else if(i == 1){
+            shareToQQFriend();
+        }
+    }
+
+    /**
+     * 分享到QQ好友
+     *
+     */
+    private void shareToQQFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, article.getTitle()+"：" +article.getContent());
+        startActivity(intent);
+    }
+
+    /**
+     * 分享信息到朋友
+     *
+     */
+    private void shareToWxFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, article.getTitle()+article.getContent());
+        startActivity(intent);
+    }
+
+    //intent.setType(“video/*;image/*”);//同时选择视频和图片
+    /**
+     * 分享信息到朋友圈
+     * 假如图片的路径为path，那么file = new File(path);
+     */
+    private void shareToTimeLine() {
+        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/temp.jpg");
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.setType("image/*");
+        startActivity(intent);
     }
 }

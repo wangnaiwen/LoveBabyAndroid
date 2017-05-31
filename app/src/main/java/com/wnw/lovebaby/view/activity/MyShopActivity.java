@@ -2,12 +2,21 @@ package com.wnw.lovebaby.view.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DisplayContext;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +32,10 @@ import com.wnw.lovebaby.view.viewInterface.IFindIncomeByInviteeView;
 import com.wnw.lovebaby.view.viewInterface.IFindIncomeByShopIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindShopByUserIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindWithdrawMoneyByUserIdView;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wnw on 2017/4/10.
@@ -198,6 +211,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
                 break;
             case R.id.img_share_my_shop:
                 //分享键
+                showShareDialog();
                 break;
             case R.id.rl_shop_orders:
                 //商店订单
@@ -248,5 +262,87 @@ public class MyShopActivity extends Activity implements View.OnClickListener ,
         findIncomeByInviteePresenter.setView(null);
         findIncomeByShopIdPresenter.setView(null);
         findShopByUserIdPresenter.setFindShopByUserIdView(null);
+    }
+
+
+    AlertDialog shareDialog;
+    private void showShareDialog(){
+        final List<String> list = new ArrayList<>();
+        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        for(int  i = 0; i < sharePlatform.length; i++){
+            list.add(sharePlatform[i]);
+        }
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final LinearLayout linearLayout =(LinearLayout) inflater.inflate(R.layout.dialog_lv_platform_share,null);
+        ListView listView = (ListView)linearLayout.findViewById(R.id.lv_dialog);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.dialog_lv_item, list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openShare(i);
+            }
+        });
+
+        shareDialog = new AlertDialog.Builder(this).create();
+        shareDialog.setView(linearLayout);
+        shareDialog.show();
+    }
+
+    //根据用户的选择来打开相应的
+    private void openShare(int i){
+        if(shareDialog.isShowing()){
+            shareDialog.dismiss();
+        }
+
+        if(i == 0){
+            shareToWxFriend();
+        }else if(i == 1){
+            shareToQQFriend();
+        }
+    }
+
+    /**
+     * 分享到QQ好友
+     *
+     */
+    private void shareToQQFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, "我在爱婴粑粑这个母婴APP上面开店了，谢谢各位朋友支持，我的店铺购买码是："+userId);
+        startActivity(intent);
+    }
+
+    /**
+     * 分享信息到朋友
+     *
+     */
+    private void shareToWxFriend() {
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        intent.putExtra(Intent.EXTRA_TEXT, "我在爱婴粑粑这个母婴APP上面开店了，谢谢各位朋友支持，我的店铺购买码是："+userId);
+        startActivity(intent);
+    }
+
+    //intent.setType(“video/*;image/*”);//同时选择视频和图片
+    /**
+     * 分享信息到朋友圈
+     * 假如图片的路径为path，那么file = new File(path);
+     */
+    private void shareToTimeLine() {
+        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/temp.jpg");
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+        intent.setComponent(componentName);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.setType("image/*");
+        startActivity(intent);
     }
 }

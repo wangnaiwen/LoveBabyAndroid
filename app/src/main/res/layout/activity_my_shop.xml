@@ -83,10 +83,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"/>
             </RelativeLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#a9e4e3e3"/>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp">
@@ -127,10 +124,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"/>
             </RelativeLayout>
-            <TextView
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="#a9e4e3e3"/>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp">
@@ -173,10 +167,7 @@
                     android:textColor="@color/btn_color_yes"
                     android:gravity="center_vertical"/>
             </RelativeLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#a9e4e3e3"/>
+            <include layout="@layout/divider_line"/>
             <RelativeLayout
                 android:id="@+id/rl_shop_balance"
                 android:layout_width="match_parent"
