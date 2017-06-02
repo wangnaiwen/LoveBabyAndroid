@@ -272,6 +272,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     private void setImagePagerList(){
         dotViewList = new ArrayList<ImageView>();
         list = new ArrayList<ImageView>();
+        dotLayout.removeAllViews();
         currentItem = 0;
         int count = hotSaleProductList.size();
         for(int i = 0; i < count; i++){
@@ -299,6 +300,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
             }
             dotLayout.addView(dotView, params);
             dotViewList.add(dotView);
+            Log.d("wnwDot", dotViewList.size()+"");
         }
 
         //图片和点都准备好了，开始加载Viewpager的属性并且设置它

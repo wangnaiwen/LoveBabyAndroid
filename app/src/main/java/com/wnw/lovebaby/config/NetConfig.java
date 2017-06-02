@@ -114,6 +114,7 @@ public class NetConfig {
     public final static String UPDATE_ARTICLE_READ_TIMES = "updateArticleReadTimes?";
     public final static String UPDATE_ARTICLE_LIKE_TIMES = "updateArticleLikeTimes?";
     public final static String FIND_ALL_ARTICLE = "findAllArticles?";
+    public final static String VALIDATE_ARTICLE_LIKE = "validateArticleLike?";
 
     public final static String FIND_PRODUCT_IMAGES_BY_PRODUCT_ID = "findImagesByProductId?";
 

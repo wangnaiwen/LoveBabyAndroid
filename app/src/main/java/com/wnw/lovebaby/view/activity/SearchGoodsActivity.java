@@ -135,7 +135,7 @@ public class SearchGoodsActivity extends Activity implements View.OnClickListene
      * set hot search flow layout data
      * */
     private void setFlowView(){
-        String[] mTexts = new String[]{"奶粉", "止尿布","故事书", "纸巾","浴缸"};
+        String[] mTexts = new String[]{"奶粉", "拉拉裤","尿不湿", "纸巾","故事书"};
         TextView tv;
         for (int i=0;i<mTexts.length;i++) {
             tv = (TextView) LayoutInflater.from(this).inflate(R.layout.flow_item, hotKeyWord, false);

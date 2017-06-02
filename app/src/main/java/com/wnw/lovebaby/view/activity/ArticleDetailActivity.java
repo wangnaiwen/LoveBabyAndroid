@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,8 +28,10 @@ import com.wnw.lovebaby.model.modelInterface.IUpdateArticleReadTimes;
 import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.UpdateArticleLikeTimesPresenter;
 import com.wnw.lovebaby.presenter.UpdateArticleReadTimesPresenter;
+import com.wnw.lovebaby.presenter.ValidateArticleLikePresenter;
 import com.wnw.lovebaby.view.viewInterface.IUpdateArticleLikeTimesView;
 import com.wnw.lovebaby.view.viewInterface.IUpdateArticleReadTimesView;
+import com.wnw.lovebaby.view.viewInterface.IValidateArticleLikeView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ import java.util.List;
  */
 
 public class ArticleDetailActivity extends Activity implements View.OnClickListener,
-        IUpdateArticleReadTimesView,IUpdateArticleLikeTimesView{
+        IUpdateArticleReadTimesView,IUpdateArticleLikeTimesView, IValidateArticleLikeView{
 
     private ImageView back;
     private ImageView praiseImg;
@@ -50,24 +53,34 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
 
     private Article article;
 
+    private int userId;
+
     private int praiseNum = 0;
 
     private UpdateArticleLikeTimesPresenter updateArticleLikeTimesPresenter;
     private UpdateArticleReadTimesPresenter updateArticleReadTimesPresenter;
+    private ValidateArticleLikePresenter validateArticleLikePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_detail);
         getArticle();
+        getUserId();
         initView();
         initPresenter();
         startUpdateArticleReadTime();
+        startValidateArticleLike();
     }
 
     private void getArticle(){
         Intent intent = getIntent();
         article = (Article)intent.getSerializableExtra("article");
+    }
+
+    private void getUserId(){
+        SharedPreferences sharedPreferences = getSharedPreferences("account", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("id", 0);
     }
 
     private void initView(){
@@ -96,6 +109,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     private void initPresenter(){
         updateArticleLikeTimesPresenter = new UpdateArticleLikeTimesPresenter(this, this);
         updateArticleReadTimesPresenter = new UpdateArticleReadTimesPresenter(this, this);
+        validateArticleLikePresenter = new ValidateArticleLikePresenter(this,this);
     }
 
     @Override
@@ -120,7 +134,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
             Toast.makeText(this, "请确认网络已打开", Toast.LENGTH_SHORT).show();
         }else {
-            updateArticleLikeTimesPresenter.updateLikeTimes(article.getId());
+            updateArticleLikeTimesPresenter.updateLikeTimes(userId, article.getId());
         }
     }
 
@@ -128,6 +142,9 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         updateArticleReadTimesPresenter.updateReadTimes(article.getId());
     }
 
+    private void startValidateArticleLike(){
+        validateArticleLikePresenter.validateArticleLike(userId, article.getId());
+    }
     @Override
     public void showDialog() {
         showDialogs();
@@ -167,6 +184,17 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     }
 
     @Override
+    public void showValidateArticleLikeResult(boolean isSuccess) {
+        if (isSuccess){
+            //说明已经点赞过了
+            praiseImg.setImageResource(R.drawable.ic_praised);
+            praiseImg.setClickable(false);
+        }else {
+
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         returnLastActivity();
     }
@@ -177,6 +205,14 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        validateArticleLikePresenter.setView(null);
+        updateArticleLikeTimesPresenter.setView(null);
+        updateArticleReadTimesPresenter.setView(null);
     }
 
     AlertDialog shareDialog;
@@ -243,19 +279,4 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         startActivity(intent);
     }
 
-    //intent.setType(“video/*;image/*”);//同时选择视频和图片
-    /**
-     * 分享信息到朋友圈
-     * 假如图片的路径为path，那么file = new File(path);
-     */
-    private void shareToTimeLine() {
-        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/temp.jpg");
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        intent.setType("image/*");
-        startActivity(intent);
-    }
 }

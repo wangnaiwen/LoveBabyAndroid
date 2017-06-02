@@ -1,6 +1,5 @@
 package com.wnw.lovebaby.login;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +38,7 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
 
     private User user;
 
-    private final static String applicationID = "5cabe18e84634c12ed625bddc9a755b9";
+    private final static String applicationID = "ad79a3a3e87af691ca27287b912172d1";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

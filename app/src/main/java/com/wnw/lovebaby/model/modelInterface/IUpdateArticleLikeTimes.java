@@ -10,7 +10,7 @@ public interface IUpdateArticleLikeTimes {
     /**
      * 加载数据
      * */
-    void updateArticle(Context context, int id, ArticleUpdateLikeTimesListener articleUpdateLikeTimesListener );
+    void updateArticle(Context context, int userId, int articleId, ArticleUpdateLikeTimesListener articleUpdateLikeTimesListener );
 
     /**
      * 加载数据完成的回调

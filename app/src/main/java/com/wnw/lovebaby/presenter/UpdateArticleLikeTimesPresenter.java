@@ -29,12 +29,12 @@ public class UpdateArticleLikeTimesPresenter {
     }
 
     //加载数据
-    public void updateLikeTimes(int id) {
+    public void updateLikeTimes(int userId, int articleId) {
         //加载进度条
         updateArticleLikeTimesView.showDialog();
         //model进行数据获取
         if (updateArticleLikeTimes != null){
-            updateArticleLikeTimes.updateArticle(context, id, new IUpdateArticleLikeTimes.ArticleUpdateLikeTimesListener() {
+            updateArticleLikeTimes.updateArticle(context, userId,articleId, new IUpdateArticleLikeTimes.ArticleUpdateLikeTimesListener() {
                 @Override
                 public void complete(boolean isSuccess) {
                     if (updateArticleLikeTimesView != null){

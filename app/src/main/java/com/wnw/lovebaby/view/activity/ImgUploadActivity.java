@@ -47,7 +47,7 @@ public class ImgUploadActivity extends Activity implements View.OnClickListener 
 
     private static final int PICK_CODE =1;
 
-    private CircleImageView userImg;
+    private ImageView userImg;
     private ImageView back;
     private TextView upload;
     private String ImagePath=null;
@@ -74,14 +74,16 @@ public class ImgUploadActivity extends Activity implements View.OnClickListener 
 
     //初始化View
     private void initView(){
-        userImg = (CircleImageView) findViewById(R.id.img_user);
+        userImg = (ImageView) findViewById(R.id.img_user);
         back = (ImageView)findViewById(R.id.back_upload);
         upload = (TextView)findViewById(R.id.upload);
         userImg.setOnClickListener(this);
         back.setOnClickListener(this);
         upload.setOnClickListener(this);
-
-        Glide.with(this).load(url).error(R.drawable.user).into(userImg);
+        if (url.equals("")  || url.equals("null")){
+        }else{
+            Glide.with(this).load(url).error(R.drawable.user).into(userImg);
+        }
     }
 
     private void initPresenter(){
