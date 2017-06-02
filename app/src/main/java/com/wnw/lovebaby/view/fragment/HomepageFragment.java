@@ -34,6 +34,7 @@ import com.wnw.lovebaby.presenter.FindHotSalePresenter;
 import com.wnw.lovebaby.presenter.FindNewProductPresenter;
 import com.wnw.lovebaby.presenter.FindShopByUserIdPresenter;
 import com.wnw.lovebaby.presenter.FindSpecialPricePresenter;
+import com.wnw.lovebaby.presenter.RecommendProductPresenter;
 import com.wnw.lovebaby.view.activity.EditMyShopActivity;
 import com.wnw.lovebaby.view.activity.InviteOpenShopActivity;
 import com.wnw.lovebaby.view.activity.MyShopActivity;
@@ -47,6 +48,8 @@ import com.wnw.lovebaby.view.viewInterface.IFindHotSaleView;
 import com.wnw.lovebaby.view.viewInterface.IFindNewProductView;
 import com.wnw.lovebaby.view.viewInterface.IFindShopByUserIdView;
 import com.wnw.lovebaby.view.viewInterface.IFindSpecialPriceView;
+import com.wnw.lovebaby.view.viewInterface.IRecommendProductView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -59,7 +62,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomepageFragment extends Fragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
-        IFindHotSaleView, IFindSpecialPriceView,IFindNewProductView,IFindShopByUserIdView{
+        IFindHotSaleView, IFindSpecialPriceView, IRecommendProductView, IFindShopByUserIdView{
 
     public static int IMAGE_PAGER = 1;   //图片轮播的Handler发送的消息
     /**
@@ -85,7 +88,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     private GoodsGridView youLoveProductView = null;        //猜你喜欢商品区
     private ProductAdapter youLoveProductAdapter = null;    //猜你喜欢商品的Adapter
     List<Product> youLoveProductList = null;                //猜你喜欢商品
-    FindNewProductPresenter youLovePricePresenter = null;  //猜你喜欢商品Presenter
+    RecommendProductPresenter recommendProductPresenter = null;  //猜你喜欢商品Presenter
 
     /**
      * 限时抢购的内容
@@ -169,7 +172,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     private void initPresenter(){
         findHotSalePresenter = new FindHotSalePresenter(context,this);
         findSpecialPricePresenter = new FindSpecialPricePresenter(context,this);
-        youLovePricePresenter = new FindNewProductPresenter(context,this);
+        recommendProductPresenter = new RecommendProductPresenter(context,this);
         findShopByUserIdPresenter = new FindShopByUserIdPresenter(context ,this);
     }
 
@@ -182,7 +185,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
         }else{
             findHotSalePresenter.load();
             findSpecialPricePresenter.load();
-            youLovePricePresenter.load();
+            recommendProductPresenter.findRecommendProducr(userId);
         }
     }
 
@@ -229,7 +232,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void showNewProduct(List<Product> products) {
+    public void showRecommendProducts(List<Product> products) {
         dismissDialogs();
         if(homepageSwipRefresh.isRefreshing()){
             homepageSwipRefresh.setRefreshing(false);

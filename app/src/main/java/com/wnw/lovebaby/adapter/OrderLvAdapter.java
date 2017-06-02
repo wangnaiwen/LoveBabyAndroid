@@ -66,8 +66,7 @@ public class OrderLvAdapter extends BaseAdapter {
         ShoppingCarItem shoppingCarItem = shoppingCarItemList.get(i);
         Glide.with(context).load(shoppingCarItem.getGoodsImg()).into(orderLvHolder.orderIcon);
         orderLvHolder.orderTitle.setText(shoppingCarItem.getGoodsTitle());
-        TypeConverters typeConverters = new TypeConverters();
-        orderLvHolder.unitPrice.setText(typeConverters.IntConvertToString(shoppingCarItem.getGoodsPrice()));
+        orderLvHolder.unitPrice.setText(TypeConverters.IntConvertToString(shoppingCarItem.getGoodsPrice()));
         orderLvHolder.goodsNum.setText(shoppingCarItem.getGoodsNum()+"");
         return view;
     }

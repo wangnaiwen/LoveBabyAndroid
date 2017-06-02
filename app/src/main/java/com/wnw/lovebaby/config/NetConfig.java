@@ -74,7 +74,8 @@ public class NetConfig {
     public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
     public final static String FIND_PRODUCT_BY_KEY = "findProductByKey?";
     public final static String UPDATE_PRODUCT_COUONT_BY_ID = "updateProductCountById?";
-    public final static String FIND_PRODUCT_COUONT_BY_ID = "findProductCountById?";
+    public final static String FIND_PRODUCT_COUNT_BY_ID = "findProductCountById?";
+    public final static String RECOMMEND_PRODUCT = "recommendProduct?";
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";

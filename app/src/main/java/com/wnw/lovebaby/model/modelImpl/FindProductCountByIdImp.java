@@ -37,7 +37,7 @@ public class FindProductCountByIdImp implements IFindProductCountByIdModel{
      * */
 
     private void sendRequestWithVolley(int id){
-        String url = NetConfig.SERVICE+NetConfig.FIND_PRODUCT_COUONT_BY_ID
+        String url = NetConfig.SERVICE+NetConfig.FIND_PRODUCT_COUNT_BY_ID
                 +"id="+id;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);

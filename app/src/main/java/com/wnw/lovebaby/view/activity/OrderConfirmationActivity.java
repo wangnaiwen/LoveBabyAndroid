@@ -195,6 +195,7 @@ public class OrderConfirmationActivity extends Activity implements View.OnClickL
         deal.setProductId(shoppingCarItem.getProductId());
         deal.setProductName(shoppingCarItem.getGoodsTitle());
         deal.setProductCount(shoppingCarItem.getGoodsNum());
+        deal.setPrice(shoppingCarItem.getGoodsPrice());
         deal.setSumPrice(shoppingCarItem.getGoodsNum()*shoppingCarItem.getGoodsPrice());
         insertDealPresenter.insertDeal(deal);
     }
