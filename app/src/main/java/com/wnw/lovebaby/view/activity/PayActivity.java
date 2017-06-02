@@ -136,7 +136,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
     private void showDialogs(){
         if(dialog == null){
             dialog = new ProgressDialog(this);
-            dialog.setMessage("订单正在提交中...");
+            dialog.setMessage("正在努力中...");
         }
         if(!dialog.isShowing()){
             dialog.show();
@@ -230,6 +230,7 @@ public class PayActivity extends Activity implements View.OnClickListener,
                 }
                 break;
             case R.id.tv_alipay:
+                showDialogs();
                 startAlipay();
                 break;
         }
@@ -258,6 +259,12 @@ public class PayActivity extends Activity implements View.OnClickListener,
                 Log.d("code", "unknow");
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dismissDialogs();
     }
 
     private void findPayResult(){

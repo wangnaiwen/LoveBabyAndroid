@@ -35,6 +35,7 @@ public class InviteeShopOrderActivity extends Activity implements View.OnClickLi
     private TextView noOrderTv;
     private MyOrderAdapter myOrderAdapter;
     private List<Order> orderList = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>();
 
     private int page = 1; //当前是第一页
     private boolean isEnd = false;  //是否是最后一页，已经加载完
@@ -105,7 +106,7 @@ public class InviteeShopOrderActivity extends Activity implements View.OnClickLi
 
 
     @Override
-    public void showOrdersByInvitee(List<Order> orders) {
+    public void showOrdersByInvitee(List<Order> orders, List<String> names) {
         dismissDialogs();
         page ++;
         if(orders != null){
@@ -114,6 +115,7 @@ public class InviteeShopOrderActivity extends Activity implements View.OnClickLi
             }
 
             orderList.addAll(orders);
+            nameList.addAll(names);
             if(orderList.size() == 0){
                 //没有
                 noOrderTv.setVisibility(View.VISIBLE);
@@ -140,10 +142,11 @@ public class InviteeShopOrderActivity extends Activity implements View.OnClickLi
 
     private void setOrderAdapter(){
         if(myOrderAdapter == null){
-            myOrderAdapter = new MyOrderAdapter(this, orderList);
+            myOrderAdapter = new MyOrderAdapter(this, orderList, nameList);
             myOrderLv.setAdapter(myOrderAdapter);
         }else {
             myOrderAdapter.setOrderList(orderList);
+            myOrderAdapter.setNameList(nameList);
             myOrderAdapter.notifyDataSetChanged();
         }
     }

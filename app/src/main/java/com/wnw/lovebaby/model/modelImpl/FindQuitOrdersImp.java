@@ -28,6 +28,8 @@ public class FindQuitOrdersImp implements IFindQuitOrders {
     private Context context;
     private FindQuitOrdersListener findQuitOrdersListener;
     private List<Order> orders;
+    private List<String> nameList;
+
     @Override
     public void findQuitOrders(Context context, int userId, FindQuitOrdersListener findQuitOrdersListener) {
         this.context = context;
@@ -81,10 +83,21 @@ public class FindQuitOrdersImp implements IFindQuitOrders {
                     order.setRemark(object.getString("remark"));
                     orders.add(order);
                 }
+
+
+                JSONArray nameArray = jsonObject.getJSONArray("nameList");
+                if (nameArray != null){
+                    nameList = new ArrayList<>();
+                    int length1 = nameArray.length();
+                    for (int i= 0; i < length1; i++){
+                        nameList.add(nameArray.getString(i));
+                    }
+                }
             }else {
                 orders = null;
                 Toast.makeText(context, "找不到", Toast.LENGTH_SHORT).show();
             }
+
         }catch (JSONException e){
             orders = null;
             e.printStackTrace();
@@ -101,7 +114,7 @@ public class FindQuitOrdersImp implements IFindQuitOrders {
 
     private void retData(){
         if(findQuitOrdersListener != null){
-            findQuitOrdersListener.complete(orders);
+            findQuitOrdersListener.complete(orders, nameList);
         }
     }
 }

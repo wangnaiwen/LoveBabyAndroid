@@ -31,6 +31,7 @@ public class FindOrderByInviteeImpl implements IFindOrderByInviteeModel {
     private Context context;
     private OrderFindByInviteeListener orderFindByInviteeListener;
     private List<Order> returnData;
+    private List<String> nameList;
 
     @Override
     public void findOrderByInvitee(Context context, int invitee, int number, OrderFindByInviteeListener orderFindByInviteeListener) {
@@ -84,6 +85,15 @@ public class FindOrderByInviteeImpl implements IFindOrderByInviteeModel {
                     order.setOrderType(object.getInt("orderType"));
                     returnData.add(order);
                 }
+                JSONArray nameArray = jsonObject.getJSONArray("nameList");
+                if (nameArray != null){
+                    nameList = new ArrayList<>();
+                    int length1 = nameArray.length();
+                    for (int i= 0; i < length1; i++){
+                        nameList.add(nameArray.getString(i));
+                    }
+                }
+
             }else {
                 //Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
@@ -103,7 +113,7 @@ public class FindOrderByInviteeImpl implements IFindOrderByInviteeModel {
 
     private void retData(){
         if(orderFindByInviteeListener != null){
-            orderFindByInviteeListener.complete(returnData);
+            orderFindByInviteeListener.complete(returnData, nameList);
         }
     }
 }

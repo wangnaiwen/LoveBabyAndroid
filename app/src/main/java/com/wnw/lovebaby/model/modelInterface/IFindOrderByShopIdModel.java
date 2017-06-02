@@ -20,6 +20,6 @@ public interface IFindOrderByShopIdModel {
      * 加载数据完成的回调
      * */
     interface OrderFindByShopIdListener{
-        void complete(List<Order> orders);
+        void complete(List<Order> orders, List<String> names);
     }
 }

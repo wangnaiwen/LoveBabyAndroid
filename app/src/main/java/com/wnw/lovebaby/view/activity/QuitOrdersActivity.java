@@ -35,7 +35,7 @@ public class QuitOrdersActivity  extends Activity implements AdapterView.OnItemC
 
     private MyOrderAdapter myOrderAdapter;
     private List<Order> orderList = new ArrayList<>();
-
+    private List<String> nameList = new ArrayList<>();
     private FindQuitOrdersPresenter findQuitOrdersPresenter;
 
     private int userId;
@@ -131,7 +131,7 @@ public class QuitOrdersActivity  extends Activity implements AdapterView.OnItemC
     }
 
     @Override
-    public void showOrders(List<Order> orders) {
+    public void showOrders(List<Order> orders, List<String> names) {
         dismissDialogs();
         if (orders == null){
             noOrder.setVisibility(View.VISIBLE);
@@ -145,6 +145,7 @@ public class QuitOrdersActivity  extends Activity implements AdapterView.OnItemC
                 orderLv.setVisibility(View.VISIBLE);
                 noOrder.setVisibility(View.GONE);
                 orderList.addAll(orders);
+                nameList.addAll(names);
                 setAdapter();
             }
         }
@@ -152,10 +153,11 @@ public class QuitOrdersActivity  extends Activity implements AdapterView.OnItemC
 
     private void setAdapter(){
         if (myOrderAdapter == null){
-            myOrderAdapter = new MyOrderAdapter(this, orderList);
+            myOrderAdapter = new MyOrderAdapter(this, orderList,nameList);
             orderLv.setAdapter(myOrderAdapter);
         }else{
             myOrderAdapter.setOrderList(orderList);
+            myOrderAdapter.setNameList(nameList);
             myOrderAdapter.notifyDataSetChanged();
         }
     }

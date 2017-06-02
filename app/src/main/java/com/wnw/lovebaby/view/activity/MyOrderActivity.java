@@ -55,6 +55,12 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
     private List<Order> beReceivedList = new ArrayList<>();    //待收货
     private List<Order> beEvaluatedList = new ArrayList<>();   //待评价
 
+    private List<String> nameList = new ArrayList<>();
+    private List<String> bePayNameList = new ArrayList<>();
+    private List<String> beSentNameList = new ArrayList<>();
+    private List<String> beReceivedNameList = new ArrayList<>();
+    private List<String> beEvaluatedNameList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,14 +179,20 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
     }
 
     @Override
-    public void showOrdersByUserId(List<Order> orders) {
+    public void showOrdersByUserId(List<Order> orders, List<String> names) {
 
         if(orders != null){
             this.orderList = orders;
+            this.nameList = names;
             bePayOrderList.clear();
             beSentOrderList.clear();
             beReceivedList.clear();
             beEvaluatedList.clear();
+
+            bePayNameList.clear();
+            beSentNameList.clear();
+            beReceivedNameList.clear();
+            beEvaluatedNameList.clear();
         }
 
         //对订单分类，并且加载到各个Tab中
@@ -189,21 +201,25 @@ public class MyOrderActivity extends FragmentActivity implements View.OnClickLis
             int type = orderList.get(i).getOrderType();
             if(type == 1){          //待付款
                 bePayOrderList.add(orderList.get(i));
+                bePayNameList.add(nameList.get(i));
             }else if(type == 2){    //待发货
                 beSentOrderList.add(orderList.get(i));
+                beSentNameList.add(nameList.get(i));
             }else if(type == 3){    //待收货
                 beReceivedList.add(orderList.get(i));
+                beReceivedNameList.add(nameList.get(i));
             }else if(type == 4){     //待评价
                 beEvaluatedList.add(orderList.get(i));
+                beEvaluatedNameList.add(nameList.get(i));
             }
         }
 
         //加载到各个Tab中
-        tabOrder.setOrderList(orderList);
-        tabBePay.setOrderList(bePayOrderList);
-        tabBeSent.setOrderList(beSentOrderList);
-        tabBeReceived.setOrderList(beReceivedList);
-        tabBeEvaluated.setOrderList(beEvaluatedList);
+        tabOrder.setOrderList(orderList, nameList);
+        tabBePay.setOrderList(bePayOrderList, bePayNameList);
+        tabBeSent.setOrderList(beSentOrderList, beSentNameList);
+        tabBeReceived.setOrderList(beReceivedList, beReceivedNameList);
+        tabBeEvaluated.setOrderList(beEvaluatedList, beEvaluatedNameList);
         initView();
         dismissDialogs();
     }

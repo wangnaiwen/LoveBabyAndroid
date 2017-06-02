@@ -251,7 +251,7 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
             shoppingCarItemList.remove(deletePosition);
             reSetShoppingCarAdapter(); //更新Adapter
             setSumPrice();            //重新计算总价
-            Toast.makeText(context, "删除成功",Toast.LENGTH_SHORT).show();
+
         }else {
             Toast.makeText(context, "删除失败",Toast.LENGTH_SHORT).show();
         }
@@ -266,7 +266,7 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
             shoppingCarItemList.get(updatePosition).setGoodsNum(goodsCount);
             reSetShoppingCarAdapter();
             setSumPrice();          //重新计算总价
-            Toast.makeText(context, "更新成功",Toast.LENGTH_SHORT).show();
+
         }else {
             Toast.makeText(context, "更新失败",Toast.LENGTH_SHORT).show();
         }

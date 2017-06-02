@@ -58,6 +58,7 @@ public class InsertPrModelImpl implements IInsertPrModel {
                 +"&logisticsScore="+ pr.getLogisticsScore()
                 +"&evaluation="+ evaluation
                 +"&time="+ pr.getTime();
+        Log.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

@@ -29,7 +29,7 @@ public class FindOrderByShopIdModelImpl implements IFindOrderByShopIdModel {
     private Context context;
     private OrderFindByShopIdListener orderFindByShopIdListener;
     private List<Order> returnData;
-
+    private List<String> nameList;
     @Override
     public void findOrderByShopId(Context context, int shopId,int number, OrderFindByShopIdListener orderFindByShopIdListener) {
         this.context = context;
@@ -82,6 +82,14 @@ public class FindOrderByShopIdModelImpl implements IFindOrderByShopIdModel {
                     order.setOrderType(object.getInt("orderType"));
                     returnData.add(order);
                 }
+                JSONArray nameArray = jsonObject.getJSONArray("nameList");
+                if (nameArray != null){
+                    nameList = new ArrayList<>();
+                    int length1 = nameArray.length();
+                    for (int i= 0; i < length1; i++){
+                        nameList.add(nameArray.getString(i));
+                    }
+                }
             }else {
                 //Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
@@ -101,7 +109,7 @@ public class FindOrderByShopIdModelImpl implements IFindOrderByShopIdModel {
 
     private void retData(){
         if(orderFindByShopIdListener != null){
-            orderFindByShopIdListener.complete(returnData);
+            orderFindByShopIdListener.complete(returnData, nameList);
         }
     }
 }

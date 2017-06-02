@@ -38,8 +38,8 @@ public class FindOrderByShopIdPresenter {
         if(findOrderByShopIdModel != null) {
             findOrderByShopIdModel.findOrderByShopId(context, shopId,number, new IFindOrderByShopIdModel.OrderFindByShopIdListener() {
                 @Override
-                public void complete(List<Order> orders) {
-                    findOrderByShopIdView.showOrdersByShopId(orders);
+                public void complete(List<Order> orders, List<String> names) {
+                    findOrderByShopIdView.showOrdersByShopId(orders,names);
                 }
             });
         }

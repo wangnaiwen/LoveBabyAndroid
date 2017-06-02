@@ -41,6 +41,7 @@ public class TabOrder extends Fragment implements AdapterView.OnItemClickListene
     private TextView noOrder;
     private MyOrderAdapter myOrderAdapter;
     private List<Order> orderList = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>();
 
 
     @Nullable
@@ -69,14 +70,16 @@ public class TabOrder extends Fragment implements AdapterView.OnItemClickListene
     }
 
     private void initAdapter(){
-        myOrderAdapter = new MyOrderAdapter(context, orderList);
+        myOrderAdapter = new MyOrderAdapter(context, orderList, nameList);
         myOrderLv.setAdapter(myOrderAdapter);
     }
 
-    public void setOrderList(List<Order> orderList){
+    public void setOrderList(List<Order> orderList, List<String> names){
         this.orderList = orderList;
+        this.nameList = names;
         if(myOrderAdapter != null){
             myOrderAdapter.setOrderList(orderList);
+            myOrderAdapter.setNameList(nameList);
             myOrderAdapter.notifyDataSetChanged();
         }
     }

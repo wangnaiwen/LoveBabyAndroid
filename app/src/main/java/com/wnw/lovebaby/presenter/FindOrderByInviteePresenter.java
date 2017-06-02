@@ -38,9 +38,9 @@ public class FindOrderByInviteePresenter {
         if(findOrderByInviteeModel != null) {
             findOrderByInviteeModel.findOrderByInvitee(context, invitee, number, new IFindOrderByInviteeModel.OrderFindByInviteeListener() {
                 @Override
-                public void complete(List<Order> orders) {
+                public void complete(List<Order> orders, List<String> names) {
                     if(findOrderByInviteeView != null){
-                        findOrderByInviteeView.showOrdersByInvitee(orders);
+                        findOrderByInviteeView.showOrdersByInvitee(orders,names);
                     }
                 }
             });

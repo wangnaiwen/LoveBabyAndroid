@@ -17,5 +17,5 @@ public interface IFindOrderByShopIdView {
     /**
      * 返回数据
      * */
-    void showOrdersByShopId(List<Order> orders);
+    void showOrdersByShopId(List<Order> orders, List<String> names);
 }

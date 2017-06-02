@@ -37,9 +37,9 @@ public class FindQuitOrdersPresenter {
         if(findQuitOrders != null) {
             findQuitOrders.findQuitOrders(context, userId, new IFindQuitOrders.FindQuitOrdersListener() {
                 @Override
-                public void complete(List<Order> orders) {
+                public void complete(List<Order> orders, List<String> nameList) {
                     if (findQuitOrdersView != null){
-                        findQuitOrdersView.showOrders(orders);
+                        findQuitOrdersView.showOrders(orders, nameList);
                     }
                 }
             });

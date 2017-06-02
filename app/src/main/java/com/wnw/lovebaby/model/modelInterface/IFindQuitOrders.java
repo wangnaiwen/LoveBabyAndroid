@@ -21,6 +21,6 @@ public interface IFindQuitOrders {
      * 加载数据完成的回调
      * */
     interface FindQuitOrdersListener{
-        void complete(List<Order> orders);
+        void complete(List<Order> orders, List<String> names);
     }
 }

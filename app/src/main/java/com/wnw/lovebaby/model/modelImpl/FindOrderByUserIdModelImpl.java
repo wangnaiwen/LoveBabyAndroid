@@ -29,6 +29,8 @@ public class FindOrderByUserIdModelImpl implements IFindOrderByUserIdModel {
     private Context context;
     private OrderFindByUserIdListener orderFindByUserIdListener;
     private List<Order> returnData;
+    private List<String> nameList;
+
     @Override
     public void findOrderByUserId(Context context, int userId, OrderFindByUserIdListener orderFindByUserIdListener) {
         this.context = context;
@@ -80,6 +82,15 @@ public class FindOrderByUserIdModelImpl implements IFindOrderByUserIdModel {
                     order.setOrderType(object.getInt("orderType"));
                     returnData.add(order);
                 }
+
+                JSONArray nameArray = jsonObject.getJSONArray("nameList");
+                if (nameArray != null){
+                    nameList = new ArrayList<>();
+                    int length1 = nameArray.length();
+                    for (int i = length1-1 ; i >= 0 ; i--){
+                        nameList.add(nameArray.getString(i));
+                    }
+                }
             }else {
                 //Toast.makeText(context, "找不到收货地址", Toast.LENGTH_SHORT).show();
             }
@@ -99,7 +110,7 @@ public class FindOrderByUserIdModelImpl implements IFindOrderByUserIdModel {
 
     private void retData(){
         if(orderFindByUserIdListener != null){
-            orderFindByUserIdListener.complete(returnData);
+            orderFindByUserIdListener.complete(returnData, nameList);
         }
     }
 }

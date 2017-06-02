@@ -38,8 +38,8 @@ public class FindOrderByUserIdPresenter {
         if(findOrderByUserIdModel != null) {
             findOrderByUserIdModel.findOrderByUserId(context, userId, new IFindOrderByUserIdModel.OrderFindByUserIdListener() {
                 @Override
-                public void complete(List<Order> orders) {
-                    findOrderByUserIdView.showOrdersByUserId(orders);
+                public void complete(List<Order> orders, List<String> names) {
+                    findOrderByUserIdView.showOrdersByUserId(orders, names);
                 }
             });
         }

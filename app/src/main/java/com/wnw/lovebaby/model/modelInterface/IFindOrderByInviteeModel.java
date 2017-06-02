@@ -20,6 +20,6 @@ public interface IFindOrderByInviteeModel {
      * 加载数据完成的回调
      * */
     interface OrderFindByInviteeListener{
-        void complete(List<Order> orders);
+        void complete(List<Order> orders, List<String> names);
     }
 }

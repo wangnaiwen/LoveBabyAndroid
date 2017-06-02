@@ -17,5 +17,5 @@ public interface IFindOrderByInviteeView {
     /**
      * 返回数据
      * */
-    void showOrdersByInvitee(List<Order> orders);
+    void showOrdersByInvitee(List<Order> orders, List<String> names);
 }
