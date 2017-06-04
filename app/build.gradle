@@ -47,4 +47,9 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
+
+
+
+    //微信分享
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 }

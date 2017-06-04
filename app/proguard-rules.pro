@@ -20,3 +20,13 @@
 -keepclasseswithmembers class c.b.** { *; }
 -keep interface c.b.PListener{ *; }
  -keep interface c.b.QListener{ *; }
+
+ -keep class com.tencent.mm.opensdk.** {
+    *;
+ }
+ -keep class com.tencent.wxop.** {
+    *;
+ }
+ -keep class com.tencent.mm.sdk.** {
+    *;
+ }

@@ -22,8 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wnw.lovebaby.R;
 import com.wnw.lovebaby.adapter.ProductImageAdapter;
+import com.wnw.lovebaby.config.MyKeys;
 import com.wnw.lovebaby.domain.Product;
 import com.wnw.lovebaby.domain.ProductImage;
 import com.wnw.lovebaby.domain.ShoppingCar;
@@ -75,7 +81,7 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
     private ProductImageAdapter imageAdapter;
     private List<ProductImage> imageList = new ArrayList<>();
     private FindImagesByProductIdPresenter findImagesByProductIdPresenter;
-
+    private IWXAPI api;
 
     private Product product;         //当前页显示的Product对象
 
@@ -89,12 +95,19 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_product_detail);
         ActivityCollector.addActivity(this);
         insertShoppingCarPresenter = new InsertShoppingCarPresenter(this,this);
+        initAPI();
         getUser();
         initView();
         initPresenter();
         getProductFromLastActivity();
         setShoppingCar();
         startFindImages();
+    }
+    private void initAPI(){
+        //微信分享初始化
+        api = WXAPIFactory.createWXAPI(this, MyKeys.AppID, true);
+        api.registerApp(MyKeys.AppID);
+
     }
 
     //get the current user
@@ -272,7 +285,7 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
     AlertDialog shareDialog;
     private void showShareDialog(){
         final List<String> list = new ArrayList<>();
-        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        String[] sharePlatform = new String[]{"微信","朋友圈", "QQ好友"};
         for(int  i = 0; i < sharePlatform.length; i++){
             list.add(sharePlatform[i]);
         }
@@ -300,8 +313,10 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
         }
         if(i == 0){
             shareToWxFriend();
-        }else if(i == 1){
+        }else if(i == 2){
             shareToQQFriend();
+        }else if(i == 1){
+            shareToTimeLine();
         }
     }
 
@@ -324,27 +339,37 @@ public class ProductDetailActivity extends Activity implements View.OnClickListe
      *
      */
     private void shareToWxFriend() {
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, "'"+product.getName()+"'这个产品还挺好的，而且在爱婴粑粑APP上买只要" +TypeConverters.LongConvertToString(product.getRetailPrice()));
-        startActivity(intent);
+        String text = "这个产品还挺好的，而且在爱婴粑粑APP上买只要"+TypeConverters.LongConvertToString(product.getRetailPrice());
+
+        //初始化一个网页
+        WXTextObject textObject = new WXTextObject();
+        textObject.text = text;
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObject;
+        msg.description = text;
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneSession;
+        api.sendReq(req);
     }
 
-    /**
-     * 分享信息到朋友圈
-     * 假如图片的路径为path，那么file = new File(path);
-     */
     private void shareToTimeLine() {
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM, URI.create(product.getCoverImg()));
-        intent.setType("image/*");
-        startActivity(intent);
+        String text = "这个产品还挺好的，而且在爱婴粑粑APP上买只要"+TypeConverters.LongConvertToString(product.getRetailPrice());
+
+        //初始化一个网页
+        WXTextObject textObject = new WXTextObject();
+        textObject.text = text;
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObject;
+        msg.description = text;
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        api.sendReq(req);
     }
 }
 

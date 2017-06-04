@@ -12,7 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.config.MyKeys;
 import com.wnw.lovebaby.domain.User;
 import com.wnw.lovebaby.net.NetUtil;
 import com.wnw.lovebaby.presenter.LoginPresenter;
@@ -38,15 +41,13 @@ public class LoginActivity extends MvpBaseActivity<ILoginView, LoginPresenter> i
 
     private User user;
 
-    private final static String applicationID = "ad79a3a3e87af691ca27287b912172d1";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         //支付初始化
-        BP.init(applicationID);
+        BP.init(MyKeys.applicationID);
 
         //如果已经登录过，并且没有退出账号，默认登录，直接跳转到MainActivity
         SharedPreferences sharedPreferences = getSharedPreferences("account", MODE_PRIVATE);

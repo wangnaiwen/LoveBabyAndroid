@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +23,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.config.MyKeys;
 import com.wnw.lovebaby.domain.Article;
 import com.wnw.lovebaby.model.modelInterface.IUpdateArticleLikeTimes;
 import com.wnw.lovebaby.model.modelInterface.IUpdateArticleReadTimes;
@@ -56,6 +66,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     private int userId;
 
     private int praiseNum = 0;
+    private IWXAPI api;
 
     private UpdateArticleLikeTimesPresenter updateArticleLikeTimesPresenter;
     private UpdateArticleReadTimesPresenter updateArticleReadTimesPresenter;
@@ -65,12 +76,20 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_detail);
+        initAPI();
         getArticle();
         getUserId();
         initView();
         initPresenter();
         startUpdateArticleReadTime();
         startValidateArticleLike();
+    }
+
+    private void initAPI(){
+        //微信分享初始化
+        api = WXAPIFactory.createWXAPI(this, MyKeys.AppID, true);
+        api.registerApp(MyKeys.AppID);
+
     }
 
     private void getArticle(){
@@ -218,7 +237,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
     AlertDialog shareDialog;
     private void showShareDialog(){
         final List<String> list = new ArrayList<>();
-        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        String[] sharePlatform = new String[]{"微信","朋友圈","QQ好友"};
         for(int  i = 0; i < sharePlatform.length; i++){
             list.add(sharePlatform[i]);
         }
@@ -245,8 +264,10 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
             shareDialog.dismiss();
         }
         if(i == 0){
-            shareToWxFriend();
+            shareToWechat();
         }else if(i == 1){
+            shareTimeLine();
+        }else if(i == 2){
             shareToQQFriend();
         }
     }
@@ -265,18 +286,42 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         startActivity(intent);
     }
 
-    /**
-     * 分享信息到朋友
-     *
-     */
-    private void shareToWxFriend() {
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, article.getTitle()+article.getContent());
-        startActivity(intent);
+
+    //分享网页到微信
+    private void shareToWechat(){
+        //初始化一个网页
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = article.getContent();
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = article.getTitle();
+        msg.description = article.getTitle();
+        //这里替换一张自己工程里的图片资源
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.drawable.cover);
+        msg.setThumbImage(thumb);
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneSession;
+        api.sendReq(req);
     }
 
+    //分享网页到朋友圈
+    private void shareTimeLine(){
+        //初始化一个网页
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = article.getContent();
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = article.getTitle();
+        msg.description = article.getTitle();
+        //这里替换一张自己工程里的图片资源
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.drawable.cover);
+        msg.setThumbImage(thumb);
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        api.sendReq(req);
+    }
 }

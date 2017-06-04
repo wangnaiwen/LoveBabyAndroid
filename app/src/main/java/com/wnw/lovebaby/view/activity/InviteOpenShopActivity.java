@@ -18,7 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wnw.lovebaby.R;
+import com.wnw.lovebaby.config.MyKeys;
 import com.wnw.lovebaby.domain.User;
 
 import java.io.File;
@@ -35,13 +41,20 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
     private TextView inviteOpenShop;
 
     private int userId;
-
+    private IWXAPI api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_open_shop);
         getUser();
+        initAPI();
         initView();
+    }
+
+    private void initAPI(){
+        //微信分享初始化
+        api = WXAPIFactory.createWXAPI(this, MyKeys.AppID, true);
+        api.registerApp(MyKeys.AppID);
     }
 
     //get the current user
@@ -77,7 +90,7 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
     AlertDialog shareDialog;
     private void showShareDialog(){
         final List<String> list = new ArrayList<>();
-        String[] sharePlatform = new String[]{"微信","QQ好友"};
+        String[] sharePlatform = new String[]{"微信","朋友圈", "QQ好友"};
         for(int  i = 0; i < sharePlatform.length; i++){
             list.add(sharePlatform[i]);
         }
@@ -106,8 +119,10 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
 
         if(i == 0){
             shareToWxFriend();
-        }else if(i == 1){
+        }else if(i == 2){
             shareToQQFriend();
+        }else if(i == 1){
+            shareToTimeLine();
         }
     }
 
@@ -116,13 +131,14 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
      *
      */
     private void shareToQQFriend() {
+        String text = "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，还有宝宝护理的文章，" +
+                "还可以免费开店赚钱，我的邀请码是:"+userId;
         Intent intent = new Intent();
         ComponentName componentName = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
         intent.setComponent(componentName);
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，宝宝护理的文章，" +
-                "还可以免费开店赚钱，我的邀请码是:"+userId );
+        intent.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(intent);
     }
 
@@ -131,29 +147,40 @@ public class InviteOpenShopActivity extends Activity implements View.OnClickList
      *
      */
     private void shareToWxFriend() {
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，还有宝宝护理的文章，" +
-                "还可以免费开店赚钱，我的邀请码是:"+userId );
-        startActivity(intent);
+        String text = "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，还有宝宝护理的文章，" +
+                "还可以免费开店赚钱，我的邀请码是:"+userId;
+
+        //初始化一个网页
+        WXTextObject textObject = new WXTextObject();
+        textObject.text = text;
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObject;
+        msg.description = text;
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneSession;
+        api.sendReq(req);
     }
 
-    /**
-     * 分享信息到朋友圈
-     * 假如图片的路径为path，那么file = new File(path);
-     */
     private void shareToTimeLine() {
-        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/temp.jpg");
-        Intent intent = new Intent();
-        ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-        intent.setComponent(componentName);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        intent.setType("image/*");
-        startActivity(intent);
+
+        String text = "向大家推荐一个叫爱婴粑粑的APP，上面有很丰富的母婴产品，还有宝宝护理的文章，" +
+                "还可以免费开店赚钱，我的邀请码是:"+userId;
+
+        //初始化一个网页
+        WXTextObject textObject = new WXTextObject();
+        textObject.text = text;
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObject;
+        msg.description = text;
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        api.sendReq(req);
     }
 
     @Override
