@@ -26,7 +26,6 @@ public class SettingActivity extends Activity implements View.OnClickListener{
 
     private ImageView backSetting;
     private RelativeLayout checkMyReceAddress;
-    private RelativeLayout checkMyShop;
     private RelativeLayout aboutVersion;
     private RelativeLayout aboutLoveBaby;
     private TextView exitLogin;
@@ -42,14 +41,11 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     private void initView(){
         backSetting = (ImageView)findViewById(R.id.setting_back);
         checkMyReceAddress = (RelativeLayout)findViewById(R.id.my_rece_address);
-        checkMyShop = (RelativeLayout)findViewById(R.id.my_shop);
         aboutLoveBaby = (RelativeLayout)findViewById(R.id.about_lovebaby);
         aboutVersion = (RelativeLayout)findViewById(R.id.about_version);
         exitLogin = (TextView)findViewById(R.id.exit_login);
-
         backSetting.setOnClickListener(this);
         checkMyReceAddress.setOnClickListener(this);
-        checkMyShop.setOnClickListener(this);
         aboutLoveBaby.setOnClickListener(this);
         aboutVersion.setOnClickListener(this);
         exitLogin.setOnClickListener(this);
@@ -67,9 +63,6 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                 intent1.putExtra("lastAty", 1);
                 startActivity(intent1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                break;
-            case R.id.my_shop:
-
                 break;
             case R.id.about_lovebaby:
                 Intent intent = new Intent(this, AboutLoveBabyActivity.class);
